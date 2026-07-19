@@ -49,24 +49,24 @@ export default function RegisterPage() {
     }
     if (name === "name" && !value) error = "กรุณากรอก Username";
     if (name === "email" && !value) error = "กรุณากรอกอีเมล";
-    
+
     setErrors(prev => ({ ...prev, [name]: error }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
-    
+
     if (touched[name as keyof typeof touched]) {
       validateField(name, value);
     }
-    
+
     // Re-validate confirm password if password changes
     if (name === "password" && touched.confirmPassword) {
       if (form.confirmPassword && form.confirmPassword !== value) {
-         setErrors(prev => ({ ...prev, confirmPassword: "รหัสผ่านไม่ตรงกัน" }));
+        setErrors(prev => ({ ...prev, confirmPassword: "รหัสผ่านไม่ตรงกัน" }));
       } else if (form.confirmPassword === value) {
-         setErrors(prev => ({ ...prev, confirmPassword: "" }));
+        setErrors(prev => ({ ...prev, confirmPassword: "" }));
       }
     }
   };
@@ -89,10 +89,10 @@ export default function RegisterPage() {
     if (!form.email) { newErrors.email = "กรุณากรอกอีเมล"; isValid = false; }
     if (!form.phone) { newErrors.phone = "กรุณากรอกเบอร์โทรศัพท์ (จำเป็นต้องระบุ)"; isValid = false; }
     else if (!/^0\d{9}$/.test(form.phone)) { newErrors.phone = "เบอร์โทรศัพท์ต้องมี 10 หลักและขึ้นต้นด้วย 0"; isValid = false; }
-    
+
     if (!form.password) { newErrors.password = "กรุณากรอกรหัสผ่าน (จำเป็นต้องระบุ)"; isValid = false; }
     else if (form.password.length < 8) { newErrors.password = "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร"; isValid = false; }
-    
+
     if (!form.confirmPassword) { newErrors.confirmPassword = "กรุณายืนยันรหัสผ่าน (จำเป็นต้องระบุ)"; isValid = false; }
     else if (form.password !== form.confirmPassword) { newErrors.confirmPassword = "รหัสผ่านไม่ตรงกัน"; isValid = false; }
 
@@ -120,7 +120,7 @@ export default function RegisterPage() {
 
       localStorage.setItem("token", data.access_token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      
+
       window.location.href = "/";
     } catch (err: any) {
       setMainError(err.message);
@@ -211,7 +211,7 @@ export default function RegisterPage() {
                 />
               </label>
               {errors.password && <p className="text-error text-xs mt-1 ml-1 font-semibold">{errors.password}</p>}
-              
+
               {/* Password Strength Indicator */}
               {form.password && (
                 <div className="mt-2">
@@ -220,8 +220,8 @@ export default function RegisterPage() {
                     <span className={`font-semibold ${strengthColor.replace('bg-', 'text-')}`}>{strengthText}</span>
                   </div>
                   <div className="w-full bg-base-300 rounded-full h-1.5">
-                    <div 
-                      className={`h-1.5 rounded-full transition-all duration-300 ${strengthColor}`} 
+                    <div
+                      className={`h-1.5 rounded-full transition-all duration-300 ${strengthColor}`}
                       style={{ width: `${strength}%` }}
                     ></div>
                   </div>

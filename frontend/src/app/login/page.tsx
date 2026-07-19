@@ -32,7 +32,7 @@ export default function LoginPage() {
 
       localStorage.setItem("token", data.access_token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      
+
       // Force reload to update Navbar state
       window.location.href = "/";
     } catch (err: any) {

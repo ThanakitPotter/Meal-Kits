@@ -52,14 +52,12 @@ export default function Navbar() {
           </ul>
         </div>
         <Link href="/" className="btn btn-ghost h-auto hover:bg-transparent py-1 gap-2">
-          <Image 
-            src="/logo/logo_MealKits.png" 
-            alt="MK340 Meal Kits Logo" 
-            width={320} 
-            height={120} 
-            className="object-contain w-auto h-16 md:h-20 lg:h-[96px]" 
-            priority
-          />
+          <div className="flex items-center gap-2">
+            <span className="text-2xl md:text-3xl">🍳</span>
+            <span className="text-xl md:text-2xl font-extrabold tracking-tight">
+              Meal <span className="text-primary">Kits</span>
+            </span>
+          </div>
         </Link>
       </div>
 

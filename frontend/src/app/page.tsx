@@ -5,23 +5,47 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { Menu } from "@/types";
-import { Clock, Users, Leaf, Package, Truck, UtensilsCrossed, ChefHat, ShoppingBag, ArrowDownCircle } from "lucide-react";
+import { Clock, Users, Leaf, Package, Truck, UtensilsCrossed, ChefHat, ShoppingBag, ArrowDownCircle, Star, Quote } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
   const [menus, setMenus] = useState<Menu[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("ทั้งหมด");
   const categories = ["ทั้งหมด", "ผัด", "ต้ม-แกง", "ทอด-ย่าง"];
 
   useEffect(() => {
-    fetch("/api/menus")
-      .then((res) => res.json())
-      .then((data) => {
-        setMenus(data);
+    Promise.all([
+      fetch("/api/menus").then((res) => res.json()),
+      fetch("/api/reviews").then((res) => res.json())
+    ])
+      .then(([menusData, reviewsData]) => {
+        setMenus(menusData);
+        if (Array.isArray(reviewsData)) {
+          // Format date for UI
+          const formattedReviews = reviewsData.map((r: any) => {
+            const date = new Date(r.createdAt);
+            const now = new Date();
+            const diffTime = Math.abs(now.getTime() - date.getTime());
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            let dateStr = "เมื่อวาน";
+            if (diffDays <= 1) dateStr = "วันนี้";
+            else if (diffDays < 7) dateStr = `${diffDays} วันที่แล้ว`;
+            else if (diffDays < 30) dateStr = `${Math.floor(diffDays / 7)} สัปดาห์ที่แล้ว`;
+            else dateStr = `${Math.floor(diffDays / 30)} เดือนที่แล้ว`;
+
+            return { ...r, dateStr };
+          });
+          setReviews(formattedReviews);
+        }
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   }, []);
 
   const handleAddToCart = (menuId: string) => {
@@ -31,31 +55,38 @@ export default function Home() {
   return (
     <div>
       {/* ─── Hero Section ─── */}
-      <section className="hero min-h-[60vh] relative overflow-hidden bg-base-200">
-        <Image 
-          src="/images/hero-bg.jpg" 
-          alt="Fresh ingredients on a wooden table" 
+      <section className="hero min-h-screen relative overflow-hidden bg-base-200">
+        <Image
+          src="/images/hero-bg.jpg"
+          alt="Fresh ingredients on a wooden table"
           fill
           priority
           className="object-cover z-0"
         />
         <div className="absolute inset-0 bg-black/60 z-10"></div>
         <div className="hero-content text-center text-white py-20 relative z-20">
-          <div className="max-w-2xl animate-fade-in-up">
-            <h1 className="mb-5 text-5xl md:text-6xl font-extrabold tracking-tight">
-              <span className="text-primary">Meal Kits</span>
-            </h1>
+          <div className="max-w-4xl animate-fade-in-up w-full">
+            <div className="flex justify-center mb-8">
+              <Image
+                src="/logo/logo_MealKits.png"
+                alt="MK340 Meal Kits Logo"
+                width={800}
+                height={320}
+                className="object-contain drop-shadow-2xl brightness-0 invert opacity-95"
+                priority
+              />
+            </div>
             <p className="mb-8 text-lg md:text-xl text-white/90 leading-relaxed max-w-xl mx-auto">
               ชุดอาหารพร้อมทำ ส่งถึงบ้านคุณทุกสัปดาห์<br className="hidden sm:block" />
               ปรุงง่าย อร่อยเป๊ะ เหมือนเชฟมาเอง
             </p>
-            <a 
-              href="#menus" 
+            <a
+              href="#menus"
               onClick={(e) => {
                 e.preventDefault();
                 const target = document.getElementById("menus");
                 if (!target) return;
-                
+
                 const targetPosition = target.getBoundingClientRect().top + window.scrollY;
                 const startPosition = window.scrollY;
                 const distance = targetPosition - startPosition;
@@ -66,10 +97,10 @@ export default function Home() {
                   if (!start) start = timestamp;
                   const progress = timestamp - start;
                   const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-                  
+
                   const percent = Math.min(progress / duration, 1);
                   window.scrollTo(0, startPosition + distance * easeInOutCubic(percent));
-                  
+
                   if (progress < duration) {
                     window.requestAnimationFrame(step);
                   }
@@ -102,11 +133,10 @@ export default function Home() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`btn rounded-full px-6 transition-all shadow-sm border-none ${
-                selectedCategory === cat
-                  ? "btn-primary shadow-md scale-105"
-                  : "btn-ghost bg-base-200 hover:bg-base-300 text-base-content"
-              }`}
+              className={`btn rounded-full px-6 transition-all shadow-sm border-none ${selectedCategory === cat
+                ? "btn-primary shadow-md scale-105"
+                : "btn-ghost bg-base-200 hover:bg-base-300 text-base-content"
+                }`}
             >
               {cat}
             </button>
@@ -142,10 +172,10 @@ export default function Home() {
                       </span>
                     </div>
                   </figure>
-                  
+
                   <div className="card-body">
                     <h2 className="card-title text-2xl font-bold">{menu.name}</h2>
-                    
+
                     <div className="flex flex-wrap items-center gap-2 my-2">
                       <div className="badge badge-ghost font-semibold gap-1">
                         <Clock size={12} /> ใช้เวลา {menu.prepTime}
@@ -180,7 +210,7 @@ export default function Home() {
                     </div>
 
                     <div className="card-actions justify-end mt-4">
-                      <button 
+                      <button
                         onClick={() => handleAddToCart(menu.id)}
                         className="btn btn-primary w-full"
                       >
@@ -225,6 +255,60 @@ export default function Home() {
                   {feat.icon}
                   <h3 className="card-title text-lg">{feat.title}</h3>
                   <p className="text-base-content/60 text-sm">{feat.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Customer Reviews Section ─── */}
+      <section className="py-20 bg-base-100">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
+              รีวิวจากลูกค้าที่สั่งไปแล้ว
+            </h2>
+            <p className="text-base-content/60 max-w-lg mx-auto">
+              เสียงตอบรับจากลูกค้าจริง ที่การันตีความอร่อยและความสะดวกสบาย
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 pt-8">
+            {reviews.map((review, i) => (
+              <div
+                key={i}
+                className={`card bg-base-100 shadow-lg border border-base-200 hover:-translate-y-3 transition-all duration-300 hover:shadow-2xl relative overflow-hidden group ${i === 1 ? 'md:translate-y-8' : ''
+                  }`}
+              >
+                <div className="absolute -top-6 -right-6 text-primary/5 rotate-12 group-hover:scale-110 group-hover:text-primary/10 transition-transform duration-500">
+                  <Quote size={120} />
+                </div>
+                <div className="card-body relative z-10">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex text-warning">
+                      {[...Array(review.rating)].map((_, j) => (
+                        <Star key={j} size={18} fill="currentColor" />
+                      ))}
+                    </div>
+                    <span className="text-[10px] text-base-content/50 bg-base-200 px-3 py-1 rounded-full font-medium">
+                      {review.dateStr}
+                    </span>
+                  </div>
+                  <p className="text-base-content/80 mb-8 leading-relaxed font-medium">
+                    "{review.review}"
+                  </p>
+                  <div className="flex items-center gap-4 mt-auto">
+                    <div className="avatar">
+                      <div className="w-12 h-12 rounded-full ring-2 ring-primary/20 ring-offset-base-100 ring-offset-2 group-hover:ring-primary transition-all duration-300">
+                        <img src={review.image} alt={review.name} />
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm">{review.userName}</h4>
+                      <p className="text-xs text-base-content/50">{review.role}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
