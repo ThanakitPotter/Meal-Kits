@@ -58,19 +58,19 @@ export default function RootLayout({
                 <div>
                   <h6 className="text-[#E0A800] font-bold text-lg mb-4 tracking-wide">บริการของเรา</h6>
                   <ul className="space-y-3 text-sm">
-                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">เมนูยอดฮิต</a></li>
-                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">วิธีการสั่งซื้อ</a></li>
-                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">พื้นที่ให้บริการ</a></li>
-                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">คำถามที่พบบ่อย (FAQ)</a></li>
+                    <li><a href="/#menus" className="hover:text-[#E0A800] transition-colors">เมนูยอดฮิต</a></li>
+                    <li><a href="/how-to-order" className="hover:text-[#E0A800] transition-colors">วิธีการสั่งซื้อ</a></li>
+                    <li><a href="/service-areas" className="hover:text-[#E0A800] transition-colors">พื้นที่ให้บริการ</a></li>
+                    <li><a href="/faq" className="hover:text-[#E0A800] transition-colors">คำถามที่พบบ่อย (FAQ)</a></li>
                   </ul>
                 </div>
                 <div>
                   <h6 className="text-[#E0A800] font-bold text-lg mb-4 tracking-wide">เกี่ยวกับเรา</h6>
                   <ul className="space-y-3 text-sm">
-                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">เรื่องราวของเรา</a></li>
-                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">ติดต่อเรา</a></li>
-                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">ร่วมงานกับเรา</a></li>
-                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">ข้อกำหนดและเงื่อนไข</a></li>
+                    <li><a href="/about" className="hover:text-[#E0A800] transition-colors">เรื่องราวของเรา</a></li>
+                    <li><a href="/contact" className="hover:text-[#E0A800] transition-colors">ติดต่อเรา</a></li>
+                    <li><a href="/careers" className="hover:text-[#E0A800] transition-colors">ร่วมงานกับเรา</a></li>
+                    <li><a href="/terms" className="hover:text-[#E0A800] transition-colors">ข้อกำหนดและเงื่อนไข</a></li>
                   </ul>
                 </div>
               </div>
@@ -79,9 +79,9 @@ export default function RootLayout({
                   © {new Date().getFullYear()} MK340 Meal Kits — สงวนลิขสิทธิ์
                 </p>
                 <div className="flex justify-center md:justify-end gap-4 text-white/50">
-                  <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                  <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
                   <span>|</span>
-                  <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+                  <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
                 </div>
               </div>
             </div>

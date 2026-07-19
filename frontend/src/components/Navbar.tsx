@@ -55,9 +55,9 @@ export default function Navbar() {
           <Image 
             src="/logo/logo_MealKits.png" 
             alt="MK340 Meal Kits Logo" 
-            width={200} 
-            height={80} 
-            className="object-contain w-auto h-12 md:h-16 lg:h-20" 
+            width={320} 
+            height={120} 
+            className="object-contain w-auto h-16 md:h-20 lg:h-[96px]" 
             priority
           />
         </Link>
