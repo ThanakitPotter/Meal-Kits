@@ -111,8 +111,8 @@ export default function UserOrdersPage() {
                         <div className="text-xs opacity-60 mt-0.5">{formatDate(order.createdAt)}</div>
                       </td>
                       <td>
-                        <div className="font-bold">{order.menuName}</div>
-                        <div className="text-xs opacity-60 mt-0.5">{order.servings} ท่าน</div>
+                        <div className="font-bold">{order.items && order.items.length > 0 ? order.items[0].menuName : 'N/A'}</div>
+                        <div className="text-xs opacity-60 mt-0.5">{order.items && order.items.length > 0 ? order.items[0].servings : 0} ท่าน {order.items && order.items.length > 1 ? `(+${order.items.length - 1} รายการ)` : ''}</div>
                       </td>
                       <td className="font-bold text-primary">
                         ฿{order.totalPrice.toLocaleString()}
