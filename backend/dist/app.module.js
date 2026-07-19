@@ -8,14 +8,40 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
+const typeorm_1 = require("@nestjs/typeorm");
 const menus_module_1 = require("./menus/menus.module");
 const orders_module_1 = require("./orders/orders.module");
+const menu_entity_1 = require("./menus/menu.entity");
+const order_entity_1 = require("./orders/order.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [menus_module_1.MenusModule, orders_module_1.OrdersModule],
+        imports: [
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+            }),
+            typeorm_1.TypeOrmModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                useFactory: (configService) => ({
+                    type: 'postgres',
+                    url: configService.get('DATABASE_URL'),
+                    entities: [menu_entity_1.Menu, order_entity_1.Order],
+                    synchronize: true,
+                    ssl: true,
+                    extra: {
+                        ssl: {
+                            rejectUnauthorized: false,
+                        },
+                    },
+                }),
+                inject: [config_1.ConfigService],
+            }),
+            menus_module_1.MenusModule,
+            orders_module_1.OrdersModule,
+        ],
         controllers: [],
         providers: [],
     })

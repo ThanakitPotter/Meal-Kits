@@ -1,7 +1,10 @@
-import type { Menu } from './menus.interface';
+import { Repository } from 'typeorm';
+import { Menu } from './menu.entity';
 export declare class MenusService {
-    private readonly menus;
-    findAll(): Menu[];
-    findOne(id: string): Menu | undefined;
-    findBySlug(slug: string): Menu | undefined;
+    private menusRepository;
+    constructor(menusRepository: Repository<Menu>);
+    findAll(): Promise<Menu[]>;
+    findOne(id: string): Promise<Menu | null>;
+    findBySlug(slug: string): Promise<Menu | null>;
+    seedMenus(): Promise<string>;
 }

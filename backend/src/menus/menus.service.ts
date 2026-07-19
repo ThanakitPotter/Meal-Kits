@@ -1,20 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import type { Menu } from './menus.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Menu } from './menu.entity';
 import { MOCK_MENUS } from './menus.interface';
 
 @Injectable()
 export class MenusService {
-  private readonly menus: Menu[] = MOCK_MENUS;
+  constructor(
+    @InjectRepository(Menu)
+    private menusRepository: Repository<Menu>,
+  ) {}
 
-  findAll(): Menu[] {
-    return this.menus.filter((menu) => menu.isActive);
+  findAll(): Promise<Menu[]> {
+    return this.menusRepository.find({ where: { isActive: true } });
   }
 
-  findOne(id: string): Menu | undefined {
-    return this.menus.find((menu) => menu.id === id);
+  findOne(id: string): Promise<Menu | null> {
+    return this.menusRepository.findOne({ where: { id } });
   }
 
-  findBySlug(slug: string): Menu | undefined {
-    return this.menus.find((menu) => menu.slug === slug);
+  findBySlug(slug: string): Promise<Menu | null> {
+    return this.menusRepository.findOne({ where: { slug } });
+  }
+
+  async seedMenus(): Promise<string> {
+    const count = await this.menusRepository.count();
+    if (count === 0) {
+      for (const menuData of MOCK_MENUS) {
+        // Exclude the mock string ID to let postgres generate a UUID
+        const { id, ...data } = menuData;
+        const newMenu = this.menusRepository.create(data);
+        await this.menusRepository.save(newMenu);
+      }
+      return 'Seeded menus successfully!';
+    }
+    return 'Menus already exist, no seeding needed.';
   }
 }
