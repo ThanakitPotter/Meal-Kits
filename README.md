@@ -6,17 +6,43 @@
 
 โปรเจกต์นี้ถูกแบ่งออกเป็น 2 ส่วนหลักคือ Frontend และ Backend:
 
-### Frontend (ระบบหน้าบ้าน)
-- **Framework:** [Next.js 16](https://nextjs.org/) (App Router)
-- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
-- **UI/UX:** โทนสี Clean & Premium (สีเหลืองมัสตาร์ด และ สีเทาเข้ม) เน้นการแสดงภาพอาหารให้ดูน่ารับประทาน
-- **Fonts:** Noto Sans Thai และ Inter
+### Frontend (ระบบหน้าเว็บ)
+- **Framework:** [Next.js 15+](https://nextjs.org/) (App Router)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/) + [DaisyUI](https://daisyui.com/)
+- **State Management:** React Context API (CartContext)
+- **Deployment:** [Vercel](https://vercel.com/)
+- **UI/UX:** โทนสี Clean & Premium (สีเหลืองมัสตาร์ด และ สีเทาเข้ม) เน้นการแสดงภาพอาหารให้ดูน่ารับประทาน และรองรับ Mobile Responsive 100%
 
-### Backend (ระบบหลังบ้าน)
+### Backend (ระบบ API)
 - **Framework:** [NestJS 11](https://nestjs.com/)
 - **Language:** TypeScript
-- **Database:** PostgreSQL (ผ่าน TypeORM) พร้อมเชื่อมต่อฐานข้อมูลบน Cloud
+- **Database:** PostgreSQL โฮสต์บน [Supabase](https://supabase.com/) (รองรับ Connection Pooling สำหรับ IPv4/IPv6)
+- **ORM:** TypeORM
 - **Security:** ระบบ Authentication ด้วย JWT (JSON Web Token) และ bcrypt สำหรับการเข้ารหัสรหัสผ่าน
+- **Deployment:** [Render](https://render.com/)
+
+---
+
+## 💡 ฟีเจอร์ที่พัฒนาแล้ว (Completed Features)
+
+### 🛒 สำหรับลูกค้า (Customer Features)
+- **ระบบสมาชิก:** 
+  - สมัครสมาชิกใหม่พร้อมแถบวัดระดับความปลอดภัยของรหัสผ่าน (Password Strength)
+  - เข้าสู่ระบบ (Login) ด้วยอีเมลและรหัสผ่าน
+- **แคตตาล็อกเมนู:** แสดงรายการเมนู Meal Kits หมวดหมู่ต่างๆ พร้อมรูปภาพ วัตถุดิบ และเวลาเตรียมอาหาร
+- **ระบบตะกร้าสินค้า (Cart):**
+  - เลือกเมนูและระบุจำนวนผู้ทานได้ (1 ท่าน, 2 ท่าน, หรือ 4 ท่านแบบครอบครัว) พร้อมคำนวณราคาที่คุ้มค่ากว่าให้อัตโนมัติ
+  - เพิ่ม/ลด จำนวนสินค้าในตะกร้า
+  - **เงื่อนไขบังคับเข้าสู่ระบบ:** หากยังไม่ได้เข้าสู่ระบบ เมื่อกดปุ่ม "สั่งซื้อชุดนี้" ระบบจะแสดง Popup แจ้งเตือนให้เข้าสู่ระบบก่อน
+- **ระบบชำระเงิน (Checkout):** ยืนยันคำสั่งซื้อพร้อมระบบคำนวณราคาสุทธิ
+- **ประวัติการสั่งซื้อ (Order History):** ลูกค้าสามารถตรวจสอบสถานะคำสั่งซื้อของตนเองได้ (รอดำเนินการ, กำลังจัดเตรียม, จัดส่งแล้ว)
+
+### 🛡️ สำหรับผู้ดูแลระบบ (Admin Features)
+- **ระบบเข้าสู่ระบบสำหรับ Admin:** แยกระบบล็อกอินเฉพาะสำหรับพนักงาน (Admin Login)
+- **แอดมินแดชบอร์ด (Admin Dashboard):** 
+  - ดูรายการออเดอร์ทั้งหมดจากลูกค้า
+  - สรุปรายได้และสถิติคำสั่งซื้อ
+  - กดเปลี่ยนสถานะการจัดส่งได้ทันที (Status Tracking)
 
 ---
 
@@ -24,7 +50,7 @@
 
 ### 1. โคลนโปรเจกต์
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/ThanakitPotter/Meal-Kits.git
 cd "Meal Kits"
 ```
 
@@ -34,7 +60,7 @@ cd backend
 npm install
 npm run start:dev
 ```
-> API จะรันอยู่ที่: `http://localhost:3001`
+> API จะรันอยู่ที่: `http://localhost:3001` (ต้องตั้งค่า `.env` สำหรับเชื่อมต่อฐานข้อมูล Supabase ก่อน)
 
 ### 3. รัน Frontend (Next.js)
 ให้เปิดอีก Terminal หนึ่งแล้วรันคำสั่งต่อไปนี้:
@@ -43,43 +69,7 @@ cd frontend
 npm install
 npm run dev
 ```
-> เว็บไซต์จะรันอยู่ที่: `http://localhost:3000`
-
----
-
-## 📂 โครงสร้างโปรเจกต์ (Project Structure)
-
-```text
-Meal Kits/
-├── backend/                  # ระบบ API สำหรับจัดการข้อมูล
-│   ├── src/
-│   │   ├── menus/            # จัดการข้อมูลเมนูอาหาร (ดึงข้อมูล, ค้นหา)
-│   │   ├── orders/           # จัดการคำสั่งซื้อ (สร้างออเดอร์, อัปเดตสถานะ)
-│   │   └── users/            # จัดการผู้ใช้งานและระบบ Login (JWT Authentication)
-│   └── .env                  # ตั้งค่าพอร์ตและฐานข้อมูล (DATABASE_URL)
-│
-└── frontend/                 # ระบบหน้าเว็บแอปพลิเคชัน
-    ├── src/
-    │   ├── app/
-    │   │   ├── admin/        # แดชบอร์ดสำหรับแอดมินดูคำสั่งซื้อ
-    │   │   │   └── login/    # หน้าจอเข้าสู่ระบบสำหรับแอดมิน
-    │   │   ├── order/[id]/   # หน้าจอสำหรับกดสั่งซื้อและเลือกจำนวนคน
-    │   │   └── page.tsx      # หน้าหลักแสดงรายการเมนู
-    │   ├── components/       # UI Components เช่น Navbar
-    │   └── types.ts          # TypeScript interfaces (Menu, Order, User)
-    ├── public/images/        # รูปภาพเมนูอาหาร (AI-generated)
-    └── .env                  # ตั้งค่า API URL
-```
-
----
-
-## 💡 ฟีเจอร์หลัก (Key Features)
-
-- **หน้าแคตตาล็อกเมนู:** แสดงรายการเมนู Meal Kits พร้อมรูปภาพ วัตถุดิบ และเวลาเตรียมอาหาร
-- **ระบบสั่งอาหาร:** เลือกระบุจำนวนผู้ทานได้ (1 ท่าน หรือ 2 ท่าน) โดยระบบจะคำนวณราคาที่คุ้มค่ากว่าให้อัตโนมัติ
-- **ระบบเข้าสู่ระบบ (Authentication):** มีระบบล็อกอินสำหรับผู้ดูแลระบบที่มีความปลอดภัยด้วยการใช้ JWT Token และเข้ารหัสรหัสผ่านด้วย bcrypt
-- **ระบบแอดมิน (Admin Dashboard):** หน้าจอสำหรับพนักงานในการดูรายการออเดอร์ทั้งหมด สรุปรายได้ และกดเปลี่ยนสถานะการจัดส่ง (รอดำเนินการ -> กำลังจัดเตรียม -> จัดส่งแล้ว)
-- **Responsive Design:** รองรับการใช้งานทั้งบนคอมพิวเตอร์และโทรศัพท์มือถือ
+> เว็บไซต์จะรันอยู่ที่: `http://localhost:3000` (ต้องตั้งค่า `.env` สำหรับชี้ไปยัง API)
 
 ---
 
