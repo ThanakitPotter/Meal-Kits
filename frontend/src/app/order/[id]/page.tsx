@@ -162,13 +162,26 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
-      <nav className="flex items-center gap-2 text-sm text-gray-400 mb-8">
-        <Link href="/" className="hover:text-mustard-600 transition-colors">
-          หน้าแรก
-        </Link>
-        <span>/</span>
-        <span className="text-charcoal-700 font-medium">สั่ง {menu.name}</span>
-      </nav>
+      {/* ─── Stepper UI ─── */}
+      <div className="mb-10">
+        <div className="flex items-center justify-between relative">
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-gray-200 -z-10"></div>
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[100%] h-1 bg-mustard-400 -z-10"></div>
+          
+          <div className="flex flex-col items-center gap-2 bg-white px-2">
+            <div className="w-10 h-10 rounded-full bg-mustard-400 text-charcoal-900 font-bold flex items-center justify-center shadow-md">1</div>
+            <span className="text-sm font-semibold text-charcoal-900">เลือกแพ็กเกจ</span>
+          </div>
+          <div className="flex flex-col items-center gap-2 bg-white px-2">
+            <div className="w-10 h-10 rounded-full bg-mustard-400 text-charcoal-900 font-bold flex items-center justify-center shadow-md">2</div>
+            <span className="text-sm font-semibold text-charcoal-900">ยืนยันเมนู</span>
+          </div>
+          <div className="flex flex-col items-center gap-2 bg-white px-2">
+            <div className="w-10 h-10 rounded-full bg-mustard-400 text-charcoal-900 font-bold flex items-center justify-center shadow-md">3</div>
+            <span className="text-sm font-semibold text-charcoal-900">จัดส่งและชำระเงิน</span>
+          </div>
+        </div>
+      </div>
 
       <div className="grid lg:grid-cols-5 gap-10">
         {/* Left: Menu Info */}
@@ -301,17 +314,51 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
                 </div>
               </div>
 
-              <div className="bg-charcoal-50 rounded-xl p-5 border border-gray-100 mt-6">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="text-sm text-gray-500 mb-0.5">ยอดรวมที่ต้องชำระ</p>
-                    <p className="text-sm font-medium text-charcoal-900">
-                      {menu.name} (สำหรับ {form.servings} ท่าน)
-                    </p>
-                  </div>
-                  <p className="text-3xl font-extrabold text-mustard-600">
-                    ฿{totalPrice.toLocaleString()}
-                  </p>
+              <div className="border-t border-gray-100 pt-6 mt-6">
+                <h3 className="text-lg font-bold text-charcoal-900 mb-4">ช่องทางการชำระเงิน</h3>
+                <div className="space-y-3">
+                  <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:border-mustard-400 transition-all">
+                    <input type="radio" name="payment" defaultChecked className="w-5 h-5 text-mustard-500" />
+                    <span className="font-medium text-charcoal-900">โอนเงินผ่านธนาคาร (PromptPay)</span>
+                  </label>
+                  <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:border-mustard-400 transition-all">
+                    <input type="radio" name="payment" className="w-5 h-5 text-mustard-500" />
+                    <span className="font-medium text-charcoal-900">บัตรเครดิต / เดบิต</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Order Summary Data Table */}
+              <div className="mt-8">
+                <h3 className="text-lg font-bold text-charcoal-900 mb-4">สรุปคำสั่งซื้อ</h3>
+                <div className="overflow-hidden rounded-lg">
+                  <table className="w-full text-left text-sm border-2 border-[#c594a1]">
+                    <thead className="bg-gray-50 border-b-2 border-[#c594a1]">
+                      <tr>
+                        <th className="px-4 py-3 font-semibold text-charcoal-900 border-r-2 border-[#c594a1]">รายการ</th>
+                        <th className="px-4 py-3 font-semibold text-charcoal-900 border-r-2 border-[#c594a1] w-24 text-center">จำนวน</th>
+                        <th className="px-4 py-3 font-semibold text-charcoal-900 w-32 text-right">ราคา</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y-2 divide-[#c594a1]">
+                      <tr>
+                        <td className="px-4 py-4 border-r-2 border-[#c594a1]">
+                          <span className="font-medium text-charcoal-900">{menu.name}</span>
+                          <span className="block text-xs text-gray-500 mt-1">สำหรับ {form.servings} ท่าน</span>
+                        </td>
+                        <td className="px-4 py-4 border-r-2 border-[#c594a1] text-center">1</td>
+                        <td className="px-4 py-4 text-right">฿{totalPrice.toLocaleString()}</td>
+                      </tr>
+                      <tr>
+                        <td colSpan={2} className="px-4 py-3 font-bold text-charcoal-900 border-r-2 border-[#c594a1] text-right">
+                          ยอดรวมทั้งสิ้น
+                        </td>
+                        <td className="px-4 py-3 font-extrabold text-mustard-600 text-lg text-right">
+                          ฿{totalPrice.toLocaleString()}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
 

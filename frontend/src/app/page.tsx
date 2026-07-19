@@ -67,7 +67,7 @@ export default function Home() {
             href="#menus"
             className="inline-flex items-center gap-2 bg-mustard-400 text-charcoal-900 font-bold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl hover:bg-mustard-300 hover:scale-105 active:scale-95 transition-all duration-300 animate-fade-in-up-delay-3"
           >
-            ดูเมนูอาหาร ↓
+            สั่งซื้อชุดอาหารเลย ↓
           </a>
         </div>
       </section>
@@ -133,13 +133,17 @@ export default function Home() {
                         </h3>
                       </div>
                       
-                      <div className="flex items-center gap-4 mb-4 text-sm font-medium text-gray-500">
-                        <span className="flex items-center gap-1.5">
-                          ⏱️ {menu.prepTime}
+                      <div className="flex flex-wrap items-center gap-2 mb-4 text-xs font-semibold">
+                        <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded-md">
+                          ใช้เวลา {menu.prepTime}
                         </span>
-                        <span className="flex items-center gap-1.5">
-                          ฿{menu.price} <span className="text-xs font-normal">/ชุด (1 ท่าน)</span>
+                        <span className="bg-mustard-50 text-mustard-700 px-2 py-1 rounded-md">
+                          สำหรับ 2 ท่าน
                         </span>
+                      </div>
+                      
+                      <div className="mb-4 text-lg font-bold text-charcoal-900">
+                        ฿{menu.price}
                       </div>
 
                       <p className="text-gray-500 text-sm mb-5 leading-relaxed line-clamp-2">
@@ -173,9 +177,9 @@ export default function Home() {
 
                       <Link
                         href={`/order/${menu.id}`}
-                        className="block w-full text-center bg-charcoal-900 text-white font-semibold py-3.5 rounded-xl hover:bg-mustard-400 hover:text-charcoal-900 transition-colors duration-300 shadow-md active:scale-[0.98]"
+                        className="block w-full text-center bg-mustard-400 text-charcoal-900 font-bold py-3.5 rounded-xl hover:bg-mustard-300 transition-colors duration-300 shadow-md active:scale-[0.98]"
                       >
-                        สั่งซื้อเมนูนี้
+                        Add to Cart
                       </Link>
                     </div>
                   </div>
