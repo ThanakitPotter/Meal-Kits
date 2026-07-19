@@ -8,6 +8,9 @@ export class Order {
   @Column()
   menuId!: string;
 
+  @Column({ nullable: true })
+  userId?: string;
+
   @Column()
   menuName!: string;
 

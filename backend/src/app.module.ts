@@ -3,8 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MenusModule } from './menus/menus.module';
 import { OrdersModule } from './orders/orders.module';
+import { UsersModule } from './users/users.module';
 import { Menu } from './menus/menu.entity';
 import { Order } from './orders/order.entity';
+import { User } from './users/user.entity';
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ import { Order } from './orders/order.entity';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
-        entities: [Menu, Order],
+        entities: [Menu, Order, User],
         synchronize: true, // Note: Set to false in production
         ssl: true, // Required for Supabase and most managed Postgres providers
         extra: {
@@ -29,6 +31,7 @@ import { Order } from './orders/order.entity';
     }),
     MenusModule,
     OrdersModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],

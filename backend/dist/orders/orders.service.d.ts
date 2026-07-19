@@ -7,6 +7,7 @@ export declare class OrdersService {
     private readonly menusService;
     constructor(ordersRepository: Repository<Order>, menusService: MenusService);
     findAll(): Promise<Order[]>;
+    findByUserId(userId: string): Promise<Order[]>;
     findOne(id: string): Promise<Order | null>;
     create(createOrderDto: CreateOrderDto): Promise<Order>;
     updateStatus(id: string, status: 'รอดำเนินการ' | 'กำลังจัดเตรียม' | 'จัดส่งแล้ว'): Promise<Order | null>;

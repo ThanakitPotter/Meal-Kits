@@ -12,8 +12,10 @@ const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const menus_module_1 = require("./menus/menus.module");
 const orders_module_1 = require("./orders/orders.module");
+const users_module_1 = require("./users/users.module");
 const menu_entity_1 = require("./menus/menu.entity");
 const order_entity_1 = require("./orders/order.entity");
+const user_entity_1 = require("./users/user.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -28,7 +30,7 @@ exports.AppModule = AppModule = __decorate([
                 useFactory: (configService) => ({
                     type: 'postgres',
                     url: configService.get('DATABASE_URL'),
-                    entities: [menu_entity_1.Menu, order_entity_1.Order],
+                    entities: [menu_entity_1.Menu, order_entity_1.Order, user_entity_1.User],
                     synchronize: true,
                     ssl: true,
                     extra: {
@@ -41,6 +43,7 @@ exports.AppModule = AppModule = __decorate([
             }),
             menus_module_1.MenusModule,
             orders_module_1.OrdersModule,
+            users_module_1.UsersModule,
         ],
         controllers: [],
         providers: [],

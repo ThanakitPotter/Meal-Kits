@@ -14,6 +14,7 @@ const typeorm_1 = require("typeorm");
 let Order = class Order {
     id;
     menuId;
+    userId;
     menuName;
     customerName;
     customerPhone;
@@ -32,6 +33,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Order.prototype, "menuId", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], Order.prototype, "userId", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)

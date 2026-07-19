@@ -1,29 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Order } from "@/types";
+import { RefreshCw, BarChart, ShoppingBag, Clock, Package, Truck, Inbox } from "lucide-react";
 
 const statusConfig: Record<
   string,
-  { label: string; bg: string; text: string; dot: string }
+  { label: string; badge: string; icon: any }
 > = {
   "รอดำเนินการ": {
     label: "รอดำเนินการ",
-    bg: "bg-red-50",
-    text: "text-red-600",
-    dot: "bg-red-500",
+    badge: "badge-error",
+    icon: Clock,
   },
   "กำลังจัดเตรียม": {
     label: "กำลังจัดเตรียม",
-    bg: "bg-mustard-50",
-    text: "text-mustard-700",
-    dot: "bg-mustard-500",
+    badge: "badge-warning",
+    icon: Package,
   },
   "จัดส่งแล้ว": {
     label: "จัดส่งแล้ว",
-    bg: "bg-green-50",
-    text: "text-green-700",
-    dot: "bg-green-500",
+    badge: "badge-success",
+    icon: Truck,
   },
 };
 
@@ -34,9 +33,22 @@ const statusOptions: Array<Order["status"]> = [
 ];
 
 export default function AdminPage() {
+  const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      router.push("/admin/login");
+      return;
+    }
+    const user = JSON.parse(storedUser);
+    if (user.role !== "admin") {
+      router.push("/");
+    }
+  }, [router]);
 
   const fetchOrders = () => {
     setLoading(true);
@@ -97,121 +109,127 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-12">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+    <div className="container mx-auto px-4 py-8 md:py-12">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-extrabold text-charcoal-900">📊 จัดการออเดอร์</h1>
-          <p className="text-gray-500 mt-1">รายการสั่งซื้อ Meal Kits ทั้งหมด</p>
+          <h1 className="text-3xl font-extrabold flex items-center gap-3">
+            <BarChart className="text-primary" size={32} /> จัดการออเดอร์
+          </h1>
+          <p className="text-base-content/60 mt-1">รายการสั่งซื้อ Meal Kits ทั้งหมด</p>
         </div>
         <button
           onClick={fetchOrders}
           disabled={loading}
-          className="inline-flex items-center gap-2 bg-white border border-gray-200 text-charcoal-700 font-medium px-5 py-2.5 rounded-xl hover:bg-mustard-50 hover:text-mustard-700 hover:border-mustard-200 active:scale-95 transition-all shadow-sm disabled:opacity-50"
+          className="btn btn-outline"
         >
-          <svg
-            className={`w-4 h-4 ${loading ? "animate-spin" : ""}`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
+          <RefreshCw className={loading ? "animate-spin" : ""} size={18} />
           รีเฟรช
         </button>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <p className="text-sm text-gray-500 mb-1">คำสั่งซื้อทั้งหมด</p>
-          <p className="text-3xl font-extrabold text-charcoal-900">{orders.length}</p>
+      {/* ─── Stats ─── */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="card bg-base-100 shadow-sm border border-base-200">
+          <div className="card-body p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <ShoppingBag size={18} className="text-base-content/60" />
+              <p className="text-sm text-base-content/60 font-medium">คำสั่งซื้อทั้งหมด</p>
+            </div>
+            <p className="text-3xl font-extrabold">{orders.length}</p>
+          </div>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <p className="text-sm text-gray-500 mb-1">รายได้รวม</p>
-          <p className="text-3xl font-extrabold text-mustard-600">
-            ฿{totalRevenue.toLocaleString()}
-          </p>
+        <div className="card bg-base-100 shadow-sm border border-base-200">
+          <div className="card-body p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <BarChart size={18} className="text-primary" />
+              <p className="text-sm text-base-content/60 font-medium">รายได้รวม</p>
+            </div>
+            <p className="text-3xl font-extrabold text-primary">
+              ฿{totalRevenue.toLocaleString()}
+            </p>
+          </div>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <p className="text-sm text-gray-500 mb-1">รอดำเนินการ</p>
-          <p className="text-3xl font-extrabold text-red-500">
-            {statusCounts["รอดำเนินการ"] || 0}
-          </p>
+        <div className="card bg-base-100 shadow-sm border border-base-200">
+          <div className="card-body p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <Clock size={18} className="text-error" />
+              <p className="text-sm text-base-content/60 font-medium">รอดำเนินการ</p>
+            </div>
+            <p className="text-3xl font-extrabold text-error">
+              {statusCounts["รอดำเนินการ"] || 0}
+            </p>
+          </div>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <p className="text-sm text-gray-500 mb-1">กำลังจัดเตรียม</p>
-          <p className="text-3xl font-extrabold text-mustard-500">
-            {statusCounts["กำลังจัดเตรียม"] || 0}
-          </p>
+        <div className="card bg-base-100 shadow-sm border border-base-200">
+          <div className="card-body p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <Package size={18} className="text-warning" />
+              <p className="text-sm text-base-content/60 font-medium">กำลังจัดเตรียม</p>
+            </div>
+            <p className="text-3xl font-extrabold text-warning">
+              {statusCounts["กำลังจัดเตรียม"] || 0}
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="px-6 py-5 border-b border-gray-100">
-          <h2 className="text-lg font-bold text-charcoal-900">รายการล่าสุด</h2>
+      {/* ─── Orders Table ─── */}
+      <div className="card bg-base-100 shadow-sm border border-base-200 overflow-hidden">
+        <div className="p-6 border-b border-base-200">
+          <h2 className="card-title text-lg font-bold">รายการล่าสุด</h2>
         </div>
 
         {loading ? (
-          <div className="p-12 text-center">
-            <div className="inline-block h-8 w-8 border-4 border-mustard-100 border-t-mustard-500 rounded-full animate-spin" />
-            <p className="text-gray-400 mt-3 text-sm">กำลังโหลด...</p>
+          <div className="p-12 flex flex-col items-center justify-center">
+            <span className="loading loading-spinner loading-lg text-primary mb-4"></span>
+            <p className="text-base-content/50">กำลังโหลดข้อมูล...</p>
           </div>
         ) : orders.length === 0 ? (
-          <div className="p-12 text-center">
-            <p className="text-4xl mb-3">📭</p>
-            <p className="text-gray-400">ยังไม่มีคำสั่งซื้อ</p>
+          <div className="p-12 flex flex-col items-center justify-center text-base-content/40">
+            <Inbox size={48} className="mb-4" />
+            <p>ยังไม่มีคำสั่งซื้อ</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-charcoal-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  <th className="px-6 py-4">ID</th>
-                  <th className="px-6 py-4">ลูกค้า</th>
-                  <th className="px-6 py-4">เมนู</th>
-                  <th className="px-6 py-4">ราคา</th>
-                  <th className="px-6 py-4">สถานะ</th>
-                  <th className="px-6 py-4">วันที่สั่ง</th>
+            <table className="table w-full">
+              <thead className="bg-base-200/50 text-base-content">
+                <tr>
+                  <th>ID</th>
+                  <th>ลูกค้า</th>
+                  <th>เมนู</th>
+                  <th>ราคา</th>
+                  <th>สถานะ</th>
+                  <th>วันที่สั่ง</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody>
                 {orders.map((order) => {
-                  const status = statusConfig[order.status] || { label: order.status, bg: 'bg-gray-100', text: 'text-gray-600', dot: 'bg-gray-400' };
+                  const status = statusConfig[order.status] || { label: order.status, badge: 'badge-neutral', icon: Clock };
+                  const StatusIcon = status.icon;
+                  
                   return (
-                    <tr
-                      key={order.id}
-                      className="hover:bg-mustard-50/30 transition-colors"
-                    >
-                      <td className="px-6 py-4">
-                        <span className="font-mono font-semibold text-charcoal-700">
+                    <tr key={order.id} className="hover">
+                      <td>
+                        <span className="font-mono font-bold opacity-70">
                           #{order.id}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="font-semibold text-charcoal-900">
-                            {order.customerName}
-                          </p>
-                          <p className="text-xs text-gray-500 mt-0.5">
-                            📞 {order.customerPhone}
-                          </p>
-                        </div>
+                      <td>
+                        <div className="font-bold">{order.customerName}</div>
+                        <div className="text-xs opacity-60 mt-0.5">{order.customerPhone}</div>
                       </td>
-                      <td className="px-6 py-4">
-                        <p className="font-medium text-charcoal-900">{order.menuName}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">{order.servings} ท่าน</p>
+                      <td>
+                        <div className="font-bold">{order.menuName}</div>
+                        <div className="text-xs opacity-60 mt-0.5">{order.servings} ท่าน</div>
                       </td>
-                      <td className="px-6 py-4 font-semibold text-charcoal-900">
+                      <td className="font-bold text-primary">
                         ฿{order.totalPrice.toLocaleString()}
                       </td>
-                      <td className="px-6 py-4">
+                      <td>
                         <div className="flex items-center gap-2">
-                          <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${status.bg} ${status.text}`}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
-                            {status.label}
-                          </span>
+                          <div className={`badge ${status.badge} gap-1 font-bold`}>
+                            <StatusIcon size={12} /> {status.label}
+                          </div>
                           <select
                             value={order.status}
                             onChange={(e) =>
@@ -221,17 +239,15 @@ export default function AdminPage() {
                               )
                             }
                             disabled={updatingId === order.id}
-                            className="text-xs border border-gray-200 rounded-lg px-2 py-1 bg-white text-gray-600 hover:border-mustard-300 focus:border-mustard-400 focus:ring-1 focus:ring-mustard-100 outline-none transition-all cursor-pointer disabled:opacity-50"
+                            className="select select-bordered select-sm w-full max-w-[150px]"
                           >
                             {statusOptions.map((s) => (
-                              <option key={s} value={s}>
-                                → {s}
-                              </option>
+                              <option key={s} value={s}>{s}</option>
                             ))}
                           </select>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-400 text-xs whitespace-nowrap">
+                      <td className="text-xs opacity-60 whitespace-nowrap">
                         {formatDate(order.createdAt)}
                       </td>
                     </tr>

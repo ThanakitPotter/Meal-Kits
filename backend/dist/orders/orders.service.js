@@ -30,6 +30,12 @@ let OrdersService = class OrdersService {
             order: { createdAt: 'DESC' },
         });
     }
+    findByUserId(userId) {
+        return this.ordersRepository.find({
+            where: { userId },
+            order: { createdAt: 'DESC' },
+        });
+    }
     findOne(id) {
         return this.ordersRepository.findOne({ where: { id } });
     }
@@ -41,6 +47,7 @@ let OrdersService = class OrdersService {
             : basePrice;
         const newOrder = this.ordersRepository.create({
             menuId: createOrderDto.menuId,
+            userId: createOrderDto.userId,
             menuName: menu?.name ?? 'Unknown Menu',
             customerName: createOrderDto.customerName,
             customerPhone: createOrderDto.customerPhone,

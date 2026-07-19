@@ -1,6 +1,7 @@
 export declare class Order {
     id: string;
     menuId: string;
+    userId?: string;
     menuName: string;
     customerName: string;
     customerPhone: string;
