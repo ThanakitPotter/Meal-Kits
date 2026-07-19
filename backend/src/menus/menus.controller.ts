@@ -10,7 +10,7 @@ export class MenusController {
     return this.menusService.findAll();
   }
 
-  @Post('seed')
+  @Get('seed')
   seed() {
     return this.menusService.seedMenus();
   }
