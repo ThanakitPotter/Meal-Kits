@@ -2,31 +2,104 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { UserPlus, Mail, Lock, User, Phone } from "lucide-react";
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const [form, setForm] = useState({ name: "", email: "", password: "", phone: "" });
-  const [error, setError] = useState("");
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "", phone: "" });
+  const [errors, setErrors] = useState({ name: "", email: "", password: "", confirmPassword: "", phone: "" });
+  const [touched, setTouched] = useState({ name: false, email: false, password: false, confirmPassword: false, phone: false });
+  const [mainError, setMainError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Calculate password strength (0-100)
+  const getPasswordStrength = (pass: string) => {
+    let score = 0;
+    if (!pass) return score;
+    if (pass.length >= 8) score += 25;
+    if (pass.match(/[A-Z]/)) score += 25;
+    if (pass.match(/[a-z]/)) score += 25;
+    if (pass.match(/[0-9]/)) score += 25;
+    if (pass.match(/[^a-zA-Z0-9]/)) score += 25; // Bonus
+    return Math.min(100, score);
+  };
+
+  const strength = getPasswordStrength(form.password);
+  let strengthColor = "bg-base-300";
+  let strengthText = "";
+  if (form.password) {
+    if (strength <= 25) { strengthColor = "bg-error"; strengthText = "อ่อน (Weak)"; }
+    else if (strength <= 50) { strengthColor = "bg-warning"; strengthText = "ปานกลาง (Fair)"; }
+    else if (strength <= 75) { strengthColor = "bg-info"; strengthText = "ดี (Good)"; }
+    else { strengthColor = "bg-success"; strengthText = "แข็งแกร่ง (Strong)"; }
+  }
+
+  const validateField = (name: string, value: string) => {
+    let error = "";
+    if (name === "phone") {
+      if (!value) error = "กรุณากรอกเบอร์โทรศัพท์ (จำเป็นต้องระบุ)";
+      else if (!/^0\d{9}$/.test(value)) error = "เบอร์โทรศัพท์ต้องมี 10 หลักและขึ้นต้นด้วย 0";
+    }
+    if (name === "password") {
+      if (!value) error = "กรุณากรอกรหัสผ่าน (จำเป็นต้องระบุ)";
+      else if (value.length < 8) error = "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร";
+    }
+    if (name === "confirmPassword") {
+      if (!value) error = "กรุณายืนยันรหัสผ่าน (จำเป็นต้องระบุ)";
+      else if (value !== form.password) error = "รหัสผ่านไม่ตรงกัน";
+    }
+    if (name === "name" && !value) error = "กรุณากรอก Username";
+    if (name === "email" && !value) error = "กรุณากรอกอีเมล";
+    
+    setErrors(prev => ({ ...prev, [name]: error }));
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+    
+    if (touched[name as keyof typeof touched]) {
+      validateField(name, value);
+    }
+    
+    // Re-validate confirm password if password changes
+    if (name === "password" && touched.confirmPassword) {
+      if (form.confirmPassword && form.confirmPassword !== value) {
+         setErrors(prev => ({ ...prev, confirmPassword: "รหัสผ่านไม่ตรงกัน" }));
+      } else if (form.confirmPassword === value) {
+         setErrors(prev => ({ ...prev, confirmPassword: "" }));
+      }
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    validateField(name, value);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setMainError("");
 
-    // Validation
-    const phoneRegex = /^0\d{9}$/;
-    if (!phoneRegex.test(form.phone)) {
-      setError("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง (10 หลัก เริ่มต้นด้วย 0)");
-      return;
-    }
+    // Validate all on submit
+    let isValid = true;
+    const newErrors = { ...errors };
 
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
-    if (!passwordRegex.test(form.password)) {
-      setError("รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร และประกอบด้วยตัวอักษรและตัวเลข");
-      return;
-    }
+    if (!form.name) { newErrors.name = "กรุณากรอก Username"; isValid = false; }
+    if (!form.email) { newErrors.email = "กรุณากรอกอีเมล"; isValid = false; }
+    if (!form.phone) { newErrors.phone = "กรุณากรอกเบอร์โทรศัพท์ (จำเป็นต้องระบุ)"; isValid = false; }
+    else if (!/^0\d{9}$/.test(form.phone)) { newErrors.phone = "เบอร์โทรศัพท์ต้องมี 10 หลักและขึ้นต้นด้วย 0"; isValid = false; }
+    
+    if (!form.password) { newErrors.password = "กรุณากรอกรหัสผ่าน (จำเป็นต้องระบุ)"; isValid = false; }
+    else if (form.password.length < 8) { newErrors.password = "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร"; isValid = false; }
+    
+    if (!form.confirmPassword) { newErrors.confirmPassword = "กรุณายืนยันรหัสผ่าน (จำเป็นต้องระบุ)"; isValid = false; }
+    else if (form.password !== form.confirmPassword) { newErrors.confirmPassword = "รหัสผ่านไม่ตรงกัน"; isValid = false; }
+
+    setErrors(newErrors);
+    setTouched({ name: true, email: true, phone: true, password: true, confirmPassword: true });
+
+    if (!isValid) return;
 
     setLoading(true);
 
@@ -34,7 +107,12 @@ export default function RegisterPage() {
       const res = await fetch("http://localhost:3001/api/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          password: form.password
+        }),
       });
 
       const data = await res.json();
@@ -45,7 +123,7 @@ export default function RegisterPage() {
       
       window.location.href = "/";
     } catch (err: any) {
-      setError(err.message);
+      setMainError(err.message);
     } finally {
       setLoading(false);
     }
@@ -63,61 +141,115 @@ export default function RegisterPage() {
             <p className="text-base-content/60">สร้างบัญชีเพื่อสั่ง Meal Kits สุดพรีเมียม</p>
           </div>
 
-          {error && <div className="alert alert-error text-sm py-2 mb-4">{error}</div>}
+          {mainError && <div className="alert alert-error text-sm py-2 mb-4">{mainError}</div>}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <label className="input input-bordered flex items-center gap-3">
-              <User size={18} className="text-base-content/50" />
-              <input
-                type="text"
-                required
-                placeholder="ชื่อ-นามสกุล"
-                className="grow"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-              />
-            </label>
+            {/* Name */}
+            <div>
+              <label className={`input input-bordered flex items-center gap-3 ${errors.name ? 'input-error' : ''}`}>
+                <User size={18} className={errors.name ? 'text-error' : 'text-base-content/50'} />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Username"
+                  className="grow"
+                  value={form.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </label>
+              {errors.name && <p className="text-error text-xs mt-1 ml-1">{errors.name}</p>}
+            </div>
 
-            <label className="input input-bordered flex items-center gap-3">
-              <Mail size={18} className="text-base-content/50" />
-              <input
-                type="email"
-                required
-                placeholder="อีเมล"
-                className="grow"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-              />
-            </label>
+            {/* Email */}
+            <div>
+              <label className={`input input-bordered flex items-center gap-3 ${errors.email ? 'input-error' : ''}`}>
+                <Mail size={18} className={errors.email ? 'text-error' : 'text-base-content/50'} />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="อีเมล"
+                  className="grow"
+                  value={form.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </label>
+              {errors.email && <p className="text-error text-xs mt-1 ml-1">{errors.email}</p>}
+            </div>
 
-            <label className="input input-bordered flex items-center gap-3">
-              <Phone size={18} className="text-base-content/50" />
-              <input
-                type="tel"
-                required
-                placeholder="เบอร์โทรศัพท์"
-                className="grow"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              />
-            </label>
+            {/* Phone */}
+            <div>
+              <label className={`input input-bordered flex items-center gap-3 ${errors.phone ? 'input-error' : ''}`}>
+                <Phone size={18} className={errors.phone ? 'text-error' : 'text-base-content/50'} />
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="เบอร์โทรศัพท์"
+                  className="grow"
+                  value={form.phone}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  maxLength={10}
+                />
+              </label>
+              {errors.phone && <p className="text-error text-xs mt-1 ml-1 font-semibold">{errors.phone}</p>}
+            </div>
 
-            <label className="input input-bordered flex items-center gap-3">
-              <Lock size={18} className="text-base-content/50" />
-              <input
-                type="password"
-                required
-                placeholder="รหัสผ่าน"
-                className="grow"
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-              />
-            </label>
+            {/* Password */}
+            <div>
+              <label className={`input input-bordered flex items-center gap-3 ${errors.password ? 'input-error' : ''}`}>
+                <Lock size={18} className={errors.password ? 'text-error' : 'text-base-content/50'} />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="รหัสผ่าน"
+                  className="grow"
+                  value={form.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </label>
+              {errors.password && <p className="text-error text-xs mt-1 ml-1 font-semibold">{errors.password}</p>}
+              
+              {/* Password Strength Indicator */}
+              {form.password && (
+                <div className="mt-2">
+                  <div className="flex justify-between items-center mb-1 text-xs">
+                    <span className="text-base-content/70">ความปลอดภัยรหัสผ่าน:</span>
+                    <span className={`font-semibold ${strengthColor.replace('bg-', 'text-')}`}>{strengthText}</span>
+                  </div>
+                  <div className="w-full bg-base-300 rounded-full h-1.5">
+                    <div 
+                      className={`h-1.5 rounded-full transition-all duration-300 ${strengthColor}`} 
+                      style={{ width: `${strength}%` }}
+                    ></div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <label className={`input input-bordered flex items-center gap-3 ${errors.confirmPassword ? 'input-error' : ''}`}>
+                <Lock size={18} className={errors.confirmPassword ? 'text-error' : 'text-base-content/50'} />
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="ยืนยันรหัสผ่าน"
+                  className="grow"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </label>
+              {errors.confirmPassword && <p className="text-error text-xs mt-1 ml-1 font-semibold">{errors.confirmPassword}</p>}
+            </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary w-full mt-4"
+              className="btn btn-primary w-full mt-6"
             >
               {loading ? <span className="loading loading-spinner"></span> : "สมัครสมาชิก"}
             </button>

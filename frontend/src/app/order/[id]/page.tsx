@@ -12,7 +12,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState<Order | null>(null);
-  
+
   const [form, setForm] = useState({
     customerName: "",
     customerPhone: "",
@@ -52,8 +52,8 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
     form.customerPhone.trim() &&
     form.shippingAddress.trim();
 
-  const totalPrice = menu 
-    ? (form.servings === 2 ? Math.round(menu.price * 1.8) : menu.price) 
+  const totalPrice = menu
+    ? (form.servings === 2 ? Math.round(menu.price * 1.8) : menu.price)
     : 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -192,7 +192,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
               <p className="text-base-content/70 text-sm mb-4 pb-4 border-b border-base-200">
                 {menu.description}
               </p>
-              
+
               <h3 className="text-sm font-bold uppercase tracking-wide mb-3 text-base-content/80">
                 สิ่งที่จะได้รับในชุด
               </h3>
@@ -227,11 +227,10 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
                     <button
                       type="button"
                       onClick={() => updateField("servings", 1)}
-                      className={`btn h-auto py-4 flex-col gap-1 transition-all ${
-                        form.servings === 1 
-                          ? 'btn-primary' 
+                      className={`btn h-auto py-4 flex-col gap-1 transition-all ${form.servings === 1
+                          ? 'btn-primary'
                           : 'btn-outline border-base-300 text-base-content'
-                      }`}
+                        }`}
                     >
                       <span className="text-xl font-bold">1 ท่าน</span>
                       <span className="text-sm font-normal opacity-80">฿{menu.price}</span>
@@ -239,11 +238,10 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
                     <button
                       type="button"
                       onClick={() => updateField("servings", 2)}
-                      className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${
-                        form.servings === 2 
-                          ? 'btn-primary' 
+                      className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${form.servings === 2
+                          ? 'btn-primary'
                           : 'btn-outline border-base-300 text-base-content'
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center gap-2">
                         <span className="text-xl font-bold">2 ท่าน</span>
@@ -295,7 +293,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
                 </div>
 
                 <div className="divider">ช่องทางการชำระเงิน</div>
-                
+
                 <div className="space-y-3">
                   <label className="label cursor-pointer justify-start gap-4 p-4 border border-base-300 rounded-box hover:border-primary transition-colors">
                     <input type="radio" name="payment" className="radio radio-primary" defaultChecked />

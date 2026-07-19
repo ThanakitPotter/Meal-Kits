@@ -74,35 +74,35 @@ export default function Navbar() {
       <div className="navbar-end gap-2">
         {user ? (
           <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar placeholder">
-              <div className="bg-primary text-primary-content rounded-full w-10">
-                <span className="text-lg font-bold">{user.name.charAt(0)}</span>
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar placeholder hover:bg-base-200 focus:outline-none focus:ring-0 outline-none">
+              <div className="bg-primary text-primary-content flex items-center justify-center rounded-full w-10 ring ring-primary ring-offset-base-100 ring-offset-2">
+                <User size={20} />
               </div>
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+              className="menu menu-md dropdown-content bg-base-100 rounded-box z-[100] mt-4 w-60 p-2 shadow-xl border border-base-200"
             >
-              <li className="menu-title px-4 py-2 opacity-100">
-                <span className="text-base-content font-bold block">{user.name}</span>
-                <span className="text-xs text-base-content/60 block">{user.email}</span>
+              <li className="menu-title px-4 py-3 opacity-100 mb-1">
+                <span className="text-base-content font-extrabold block text-base">{user.name}</span>
+                <span className="text-xs text-base-content/60 block truncate font-medium">{user.email}</span>
               </li>
               <div className="divider my-0"></div>
               {user?.role === 'admin' && (
                 <li>
-                  <Link href="/admin" className="text-primary mt-1 font-medium">
-                    <LayoutDashboard size={16} /> จัดการระบบ (Admin)
+                  <Link href="/admin" className="text-primary mt-1 font-semibold py-3 hover:bg-primary/10">
+                    <LayoutDashboard size={18} /> จัดการระบบ (Admin)
                   </Link>
                 </li>
               )}
               <li>
-                <Link href="/orders" className="text-base-content mt-1">
-                  <ShoppingBag size={16} /> ประวัติการสั่งซื้อ
+                <Link href="/orders" className="text-base-content mt-1 font-medium py-3 hover:bg-base-200">
+                  <ShoppingBag size={18} /> ประวัติการสั่งซื้อ
                 </Link>
               </li>
               <li>
-                <button onClick={handleLogout} className="text-error">
-                  <LogOut size={16} /> ออกจากระบบ
+                <button onClick={handleLogout} className="text-error font-medium py-3 hover:bg-error/10">
+                  <LogOut size={18} /> ออกจากระบบ
                 </button>
               </li>
             </ul>
