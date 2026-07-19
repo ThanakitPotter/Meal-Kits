@@ -1,68 +1,66 @@
 import { Injectable } from '@nestjs/common';
 import type { Order } from './orders.interface';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { PackagesService } from '../packages/packages.service';
+import { MenusService } from '../menus/menus.service';
 
 @Injectable()
 export class OrdersService {
   private orders: Order[] = [
     {
       id: '1001',
-      packageId: '2',
-      packageName: 'สายซ้อมฮาล์ฟมาราธอน',
-      customerName: 'สมชาย วิ่งเร็ว',
-      customerEmail: 'somchai@email.com',
+      menuId: '1',
+      menuName: 'ผัดไทยกุ้งสด',
+      customerName: 'สมชาย มาลัย',
       customerPhone: '081-234-5678',
       shippingAddress: '123 ถ.พหลโยธิน แขวงจตุจักร เขตจตุจักร กรุงเทพฯ 10900',
-      deliveryMonth: '07/2026',
-      status: 'Preparing',
-      totalPrice: 1290,
-      createdAt: '2026-07-01T10:00:00Z',
+      servings: 2,
+      status: 'รอดำเนินการ',
+      totalPrice: 338,
+      createdAt: '2026-07-18T10:00:00Z',
     },
     {
       id: '1002',
-      packageId: '1',
-      packageName: 'สายวิ่ง 5K Starter',
-      customerName: 'สมหญิง รักวิ่ง',
-      customerEmail: 'somying@email.com',
+      menuId: '2',
+      menuName: 'ต้มยำกุ้งน้ำข้น',
+      customerName: 'สมหญิง รักทำกับข้าว',
       customerPhone: '089-876-5432',
-      shippingAddress: '456 ซ.สุขุมวิท 31 แขวงคลองตันเหนือ เขตวัฒนา กรุงเทพฯ 10110',
-      deliveryMonth: '07/2026',
-      status: 'Shipped',
-      totalPrice: 890,
-      createdAt: '2026-07-02T14:30:00Z',
+      shippingAddress:
+        '456 ซ.สุขุมวิท 31 แขวงคลองตันเหนือ เขตวัฒนา กรุงเทพฯ 10110',
+      servings: 1,
+      status: 'กำลังจัดเตรียม',
+      totalPrice: 219,
+      createdAt: '2026-07-18T14:30:00Z',
     },
     {
       id: '1003',
-      packageId: '3',
-      packageName: 'สายรีคัฟเวอรี่',
-      customerName: 'วิชัย มาราธอน',
-      customerEmail: 'wichai@email.com',
+      menuId: '3',
+      menuName: 'ไก่ทอดเกาหลี',
+      customerName: 'วิชัย กินดี',
       customerPhone: '092-111-2222',
       shippingAddress: '789 ม.3 ต.หนองปรือ อ.บางละมุง จ.ชลบุรี 20150',
-      deliveryMonth: '07/2026',
-      status: 'Delivered',
-      totalPrice: 990,
-      createdAt: '2026-06-28T09:15:00Z',
+      servings: 2,
+      status: 'จัดส่งแล้ว',
+      totalPrice: 358,
+      createdAt: '2026-07-17T09:15:00Z',
     },
     {
       id: '1004',
-      packageId: '2',
-      packageName: 'สายซ้อมฮาล์ฟมาราธอน',
+      menuId: '1',
+      menuName: 'ผัดไทยกุ้งสด',
       customerName: 'นภา สายลม',
-      customerEmail: 'napa@email.com',
       customerPhone: '085-333-4444',
-      shippingAddress: '321 ถ.นิมมานเหมินท์ ต.สุเทพ อ.เมือง จ.เชียงใหม่ 50200',
-      deliveryMonth: '08/2026',
-      status: 'Preparing',
-      totalPrice: 1290,
-      createdAt: '2026-07-15T16:45:00Z',
+      shippingAddress:
+        '321 ถ.นิมมานเหมินท์ ต.สุเทพ อ.เมือง จ.เชียงใหม่ 50200',
+      servings: 1,
+      status: 'รอดำเนินการ',
+      totalPrice: 189,
+      createdAt: '2026-07-19T16:45:00Z',
     },
   ];
 
   private nextId = 1005;
 
-  constructor(private readonly packagesService: PackagesService) {}
+  constructor(private readonly menusService: MenusService) {}
 
   findAll(): Order[] {
     return this.orders.sort(
@@ -76,23 +74,25 @@ export class OrdersService {
   }
 
   create(createOrderDto: CreateOrderDto): Order {
-    const pkg = this.packagesService.findOne(createOrderDto.packageId);
+    const menu = this.menusService.findOne(createOrderDto.menuId);
 
-    const now = new Date();
-    const deliveryMonth = `${String(now.getMonth() + 2).padStart(2, '0')}/${now.getFullYear()}`;
+    const basePrice = menu?.price ?? 0;
+    const totalPrice =
+      createOrderDto.servings === 2
+        ? Math.round(basePrice * 1.8)
+        : basePrice;
 
     const newOrder: Order = {
       id: String(this.nextId++),
-      packageId: createOrderDto.packageId,
-      packageName: pkg?.name ?? 'Unknown Package',
+      menuId: createOrderDto.menuId,
+      menuName: menu?.name ?? 'Unknown Menu',
       customerName: createOrderDto.customerName,
-      customerEmail: createOrderDto.customerEmail,
       customerPhone: createOrderDto.customerPhone,
       shippingAddress: createOrderDto.shippingAddress,
-      deliveryMonth,
-      status: 'Preparing',
-      totalPrice: pkg?.price ?? 0,
-      createdAt: now.toISOString(),
+      servings: createOrderDto.servings,
+      status: 'รอดำเนินการ',
+      totalPrice,
+      createdAt: new Date().toISOString(),
     };
 
     this.orders.push(newOrder);
@@ -101,7 +101,7 @@ export class OrdersService {
 
   updateStatus(
     id: string,
-    status: 'Preparing' | 'Shipped' | 'Delivered',
+    status: 'รอดำเนินการ' | 'กำลังจัดเตรียม' | 'จัดส่งแล้ว',
   ): Order | undefined {
     const order = this.orders.find((o) => o.id === id);
     if (order) {

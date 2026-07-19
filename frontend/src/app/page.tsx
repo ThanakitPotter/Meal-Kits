@@ -1,65 +1,225 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
+import type { Menu } from "@/types";
+
+const categoryConfig: Record<
+  string,
+  { emoji: string; badge: string; label: string }
+> = {
+  ผัด: {
+    emoji: "🍳",
+    badge: "bg-mustard-100 text-mustard-700",
+    label: "ผัด",
+  },
+  "ต้ม-แกง": {
+    emoji: "🍲",
+    badge: "bg-red-100 text-red-700",
+    label: "ต้ม/แกง",
+  },
+  "ทอด-ย่าง": {
+    emoji: "🍗",
+    badge: "bg-orange-100 text-orange-700",
+    label: "ทอด/ย่าง",
+  },
+};
 
 export default function Home() {
+  const [menus, setMenus] = useState<Menu[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/menus")
+      .then((res) => res.json())
+      .then((data) => {
+        setMenus(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div>
+      {/* ─── Hero Section ─── */}
+      <section className="relative overflow-hidden bg-charcoal-900">
+        {/* Decorative blobs */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-32 -right-32 h-80 w-80 rounded-full bg-mustard-400/20 blur-3xl" />
+          <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-charcoal-600/30 blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-64 rounded-full bg-mustard-500/10 blur-2xl" />
+        </div>
+
+        <div className="relative mx-auto max-w-6xl px-6 py-28 md:py-36 text-center text-white">
+          <p className="text-7xl md:text-8xl mb-6 drop-shadow-lg animate-fade-in-up">
+            👨‍🍳
+          </p>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-5 animate-fade-in-up-delay-1">
+            MK340 <span className="text-mustard-400">Meal Kits</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-lg sm:text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in-up-delay-2">
+            ชุดอาหารพร้อมทำ ส่งถึงบ้านคุณทุกสัปดาห์
+            <br className="hidden sm:block" />
+            อร่อยเหมือนมีเชฟส่วนตัวมาทำให้ที่บ้าน
+          </p>
+          <a
+            href="#menus"
+            className="inline-flex items-center gap-2 bg-mustard-400 text-charcoal-900 font-bold px-8 py-4 rounded-full shadow-xl hover:shadow-2xl hover:bg-mustard-300 hover:scale-105 active:scale-95 transition-all duration-300 animate-fade-in-up-delay-3"
+          >
+            ดูเมนูอาหาร ↓
+          </a>
+        </div>
+      </section>
+
+      {/* ─── Menus Grid ─── */}
+      <section id="menus" className="mx-auto max-w-6xl px-6 py-20">
+        <div className="text-center mb-14">
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-3 text-charcoal-900">
+            เมนูยอดฮิต
+          </h2>
+          <p className="text-gray-500 max-w-lg mx-auto">
+            เลือกเมนูที่ใช่ พร้อมวัตถุดิบสดใหม่ แพ็คอย่างดี ส่งตรงถึงครัวคุณ
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {loading ? (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl h-[520px] animate-pulse shadow-md border border-gray-100"
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {menus.length > 0 ? (
+              menus.map((menu, idx) => {
+                const config = categoryConfig[menu.category] || {
+                  emoji: "🍽️",
+                  badge: "bg-gray-100 text-gray-700",
+                  label: "อาหาร",
+                };
+                return (
+                  <div
+                    key={menu.id}
+                    className="group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:-translate-y-2 animate-fade-in-up flex flex-col"
+                    style={{ animationDelay: `${idx * 0.1}s` }}
+                  >
+                    {/* Image Header */}
+                    <div className="relative h-56 w-full overflow-hidden bg-gray-100">
+                      <Image
+                        src={menu.image}
+                        alt={menu.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                      <div className="absolute top-4 left-4">
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-sm backdrop-blur-md bg-white/90 ${config.badge.split(' ')[1]}`}
+                        >
+                          {config.emoji} {config.label}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="p-6 flex flex-col flex-1">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-xl font-bold text-charcoal-900">
+                          {menu.name}
+                        </h3>
+                      </div>
+                      
+                      <div className="flex items-center gap-4 mb-4 text-sm font-medium text-gray-500">
+                        <span className="flex items-center gap-1.5">
+                          ⏱️ {menu.prepTime}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          ฿{menu.price} <span className="text-xs font-normal">/ชุด (1 ท่าน)</span>
+                        </span>
+                      </div>
+
+                      <p className="text-gray-500 text-sm mb-5 leading-relaxed line-clamp-2">
+                        {menu.description}
+                      </p>
+
+                      {/* Ingredients list */}
+                      <div className="mb-6 flex-1">
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
+                          วัตถุดิบที่ให้มา
+                        </p>
+                        <ul className="space-y-1.5">
+                          {menu.ingredients.slice(0, 3).map((item, i) => (
+                            <li
+                              key={i}
+                              className="flex items-start gap-2 text-sm text-gray-600"
+                            >
+                              <span className="text-mustard-500 mt-0.5 flex-shrink-0 text-xs">
+                                ✦
+                              </span>
+                              <span className="line-clamp-1">{item}</span>
+                            </li>
+                          ))}
+                          {menu.ingredients.length > 3 && (
+                            <li className="text-xs text-gray-400 pl-4 mt-1 font-medium">
+                              +{menu.ingredients.length - 3} อย่างเพิ่มเติม
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+
+                      <Link
+                        href={`/order/${menu.id}`}
+                        className="block w-full text-center bg-charcoal-900 text-white font-semibold py-3.5 rounded-xl hover:bg-mustard-400 hover:text-charcoal-900 transition-colors duration-300 shadow-md active:scale-[0.98]"
+                      >
+                        สั่งซื้อเมนูนี้
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-span-full text-center py-20 text-gray-400">
+                ไม่มีเมนูในขณะนี้
+              </div>
+            )}
+          </div>
+        )}
+      </section>
+
+      {/* ─── Features Section ─── */}
+      <section className="bg-charcoal-50 border-t border-gray-100">
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <div className="grid sm:grid-cols-3 gap-8 text-center">
+            {[
+              {
+                emoji: "🥬",
+                title: "วัตถุดิบสดใหม่",
+                desc: "คัดสรรวัตถุดิบคุณภาพเยี่ยม ส่งตรงจากฟาร์มทุกวัน",
+              },
+              {
+                emoji: "🧊",
+                title: "แพ็คสุญญากาศ",
+                desc: "รักษาความสดและสะอาดด้วยระบบสุญญากาศ",
+              },
+              {
+                emoji: "🛵",
+                title: "ส่งเร็วถึงบ้าน",
+                desc: "จัดส่งแบบควบคุมอุณหภูมิ ถึงหน้าบ้านคุณ",
+              },
+            ].map((feat, i) => (
+              <div key={i} className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <span className="text-4xl block mb-4">{feat.emoji}</span>
+                <h3 className="text-lg font-bold mb-2 text-charcoal-900">{feat.title}</h3>
+                <p className="text-gray-500 text-sm">{feat.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </main>
+      </section>
     </div>
   );
 }

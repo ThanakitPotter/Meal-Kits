@@ -1,13 +1,13 @@
 import type { Order } from './orders.interface';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { PackagesService } from '../packages/packages.service';
+import { MenusService } from '../menus/menus.service';
 export declare class OrdersService {
-    private readonly packagesService;
+    private readonly menusService;
     private orders;
     private nextId;
-    constructor(packagesService: PackagesService);
+    constructor(menusService: MenusService);
     findAll(): Order[];
     findOne(id: string): Order | undefined;
     create(createOrderDto: CreateOrderDto): Order;
-    updateStatus(id: string, status: 'Preparing' | 'Shipped' | 'Delivered'): Order | undefined;
+    updateStatus(id: string, status: 'รอดำเนินการ' | 'กำลังจัดเตรียม' | 'จัดส่งแล้ว'): Order | undefined;
 }

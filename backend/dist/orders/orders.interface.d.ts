@@ -1,13 +1,12 @@
 export interface Order {
     id: string;
-    packageId: string;
-    packageName: string;
+    menuId: string;
+    menuName: string;
     customerName: string;
-    customerEmail: string;
     customerPhone: string;
     shippingAddress: string;
-    deliveryMonth: string;
-    status: 'Preparing' | 'Shipped' | 'Delivered';
+    servings: 1 | 2;
+    status: 'รอดำเนินการ' | 'กำลังจัดเตรียม' | 'จัดส่งแล้ว';
     totalPrice: number;
     createdAt: string;
 }

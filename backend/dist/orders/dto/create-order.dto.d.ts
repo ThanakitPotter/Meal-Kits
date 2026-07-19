@@ -1,7 +1,7 @@
 export declare class CreateOrderDto {
-    packageId: string;
+    menuId: string;
     customerName: string;
-    customerEmail: string;
     customerPhone: string;
     shippingAddress: string;
+    servings: 1 | 2;
 }

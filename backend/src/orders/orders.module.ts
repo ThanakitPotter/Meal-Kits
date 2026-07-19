@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
-import { PackagesModule } from '../packages/packages.module';
+import { MenusModule } from '../menus/menus.module';
 
 @Module({
-  imports: [PackagesModule],
+  imports: [MenusModule],
   controllers: [OrdersController],
   providers: [OrdersService],
 })

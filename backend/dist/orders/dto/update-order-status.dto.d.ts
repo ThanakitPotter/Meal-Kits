@@ -1,3 +1,3 @@
 export declare class UpdateOrderStatusDto {
-    status: 'Preparing' | 'Shipped' | 'Delivered';
+    status: 'รอดำเนินการ' | 'กำลังจัดเตรียม' | 'จัดส่งแล้ว';
 }
