@@ -91,10 +91,10 @@ export default function UserOrdersPage() {
             <table className="table w-full">
               <thead className="bg-base-200/50 text-base-content">
                 <tr>
-                  <th>ออเดอร์</th>
-                  <th>เมนู</th>
-                  <th>ราคา</th>
-                  <th>สถานะ</th>
+                  <th className="whitespace-nowrap">ออเดอร์</th>
+                  <th className="whitespace-nowrap">เมนู</th>
+                  <th className="whitespace-nowrap">ราคา</th>
+                  <th className="whitespace-nowrap">สถานะ</th>
                 </tr>
               </thead>
               <tbody>
@@ -104,21 +104,21 @@ export default function UserOrdersPage() {
                   
                   return (
                     <tr key={order.id} className="hover">
-                      <td>
+                      <td className="whitespace-nowrap">
                         <div className="font-mono font-bold opacity-70">
                           #{order.id.slice(0, 8)}...
                         </div>
                         <div className="text-xs opacity-60 mt-0.5">{formatDate(order.createdAt)}</div>
                       </td>
-                      <td>
-                        <div className="font-bold">{order.items && order.items.length > 0 ? order.items[0].menuName : 'N/A'}</div>
+                      <td className="whitespace-nowrap min-w-[120px]">
+                        <div className="font-bold whitespace-normal">{order.items && order.items.length > 0 ? order.items[0].menuName : 'N/A'}</div>
                         <div className="text-xs opacity-60 mt-0.5">{order.items && order.items.length > 0 ? order.items[0].servings : 0} ท่าน {order.items && order.items.length > 1 ? `(+${order.items.length - 1} รายการ)` : ''}</div>
                       </td>
-                      <td className="font-bold text-primary">
+                      <td className="font-bold text-primary whitespace-nowrap">
                         ฿{order.totalPrice.toLocaleString()}
                       </td>
-                      <td>
-                        <div className={`badge ${status.badge} gap-1 font-bold p-3`}>
+                      <td className="whitespace-nowrap">
+                        <div className={`badge ${status.badge} gap-1 font-bold p-3 whitespace-nowrap`}>
                           <StatusIcon size={14} /> {status.label}
                         </div>
                       </td>
