@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Thai, Inter } from "next/font/google";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { CartProvider } from "@/context/CartContext";
 import "./globals.css";
@@ -35,18 +36,53 @@ export default function RootLayout({
         <CartProvider>
           <Navbar />
           <main className="flex-1">{children}</main>
-          <footer className="bg-gray-900 text-gray-400">
-            <div className="mx-auto max-w-6xl px-6 py-10">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🍳</span>
-                  <span className="text-lg font-bold text-white">
-                    MK340 Meal Kits
-                  </span>
+          <footer className="bg-[#1c1c1c] text-white/80 pt-16 pb-8 border-t-[4px] border-[#E0A800]">
+            <div className="mx-auto max-w-7xl px-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <div className="col-span-1 md:col-span-2">
+                  <div className="bg-white/10 p-4 rounded-xl inline-block mb-6">
+                    <Image 
+                      src="/logo/logo_MealKits.png" 
+                      alt="MK340 Meal Kits Logo" 
+                      width={180} 
+                      height={70} 
+                      className="object-contain drop-shadow-md brightness-0 invert" 
+                    />
+                  </div>
+                  <p className="max-w-md text-sm leading-relaxed text-white/70">
+                    MK340 Meal Kits มอบประสบการณ์ทำอาหารระดับเชฟให้คุณถึงบ้าน
+                    ด้วยวัตถุดิบสดใหม่ คัดสรรอย่างดี และสูตรอาหารที่ทำตามได้ง่าย
+                    อร่อยเป๊ะทุกมื้อเหมือนมีเชฟส่วนตัว
+                  </p>
                 </div>
-                <p className="text-sm text-gray-500">
-                  © 2026 MK340 Meal Kits — ชุดอาหารพร้อมทำ ส่งถึงบ้านทุกเดือน
+                <div>
+                  <h6 className="text-[#E0A800] font-bold text-lg mb-4 tracking-wide">บริการของเรา</h6>
+                  <ul className="space-y-3 text-sm">
+                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">เมนูยอดฮิต</a></li>
+                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">วิธีการสั่งซื้อ</a></li>
+                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">พื้นที่ให้บริการ</a></li>
+                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">คำถามที่พบบ่อย (FAQ)</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h6 className="text-[#E0A800] font-bold text-lg mb-4 tracking-wide">เกี่ยวกับเรา</h6>
+                  <ul className="space-y-3 text-sm">
+                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">เรื่องราวของเรา</a></li>
+                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">ติดต่อเรา</a></li>
+                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">ร่วมงานกับเรา</a></li>
+                    <li><a href="#" className="hover:text-[#E0A800] transition-colors">ข้อกำหนดและเงื่อนไข</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div className="pt-8 border-t border-white/10 text-center md:flex md:justify-between md:text-left">
+                <p className="text-sm text-white/50 mb-4 md:mb-0">
+                  © {new Date().getFullYear()} MK340 Meal Kits — สงวนลิขสิทธิ์
                 </p>
+                <div className="flex justify-center md:justify-end gap-4 text-white/50">
+                  <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                  <span>|</span>
+                  <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+                </div>
               </div>
             </div>
           </footer>

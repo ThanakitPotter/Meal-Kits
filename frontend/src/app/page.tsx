@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { Menu } from "@/types";
-import { Clock, Users, Leaf, Package, Truck, UtensilsCrossed, ChefHat, ShoppingBag } from "lucide-react";
+import { Clock, Users, Leaf, Package, Truck, UtensilsCrossed, ChefHat, ShoppingBag, ArrowDownCircle } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
@@ -49,8 +49,37 @@ export default function Home() {
               ชุดอาหารพร้อมทำ ส่งถึงบ้านคุณทุกสัปดาห์<br className="hidden sm:block" />
               ปรุงง่าย อร่อยเป๊ะ เหมือนเชฟมาเอง
             </p>
-            <a href="#menus" className="btn btn-primary btn-lg rounded-full shadow-xl">
-              สั่งซื้อชุดนี้ <UtensilsCrossed className="ml-2" />
+            <a 
+              href="#menus" 
+              onClick={(e) => {
+                e.preventDefault();
+                const target = document.getElementById("menus");
+                if (!target) return;
+                
+                const targetPosition = target.getBoundingClientRect().top + window.scrollY;
+                const startPosition = window.scrollY;
+                const distance = targetPosition - startPosition;
+                const duration = 1200; // 1.2 seconds
+                let start: number | null = null;
+
+                const step = (timestamp: number) => {
+                  if (!start) start = timestamp;
+                  const progress = timestamp - start;
+                  const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+                  
+                  const percent = Math.min(progress / duration, 1);
+                  window.scrollTo(0, startPosition + distance * easeInOutCubic(percent));
+                  
+                  if (progress < duration) {
+                    window.requestAnimationFrame(step);
+                  }
+                };
+
+                window.requestAnimationFrame(step);
+              }}
+              className="btn bg-[#E0A800] hover:bg-[#c98e10] text-white border-none btn-lg rounded-full shadow-xl"
+            >
+              เลือกดูเมนู <ArrowDownCircle className="ml-2 animate-bounce" />
             </a>
           </div>
         </div>

@@ -5,12 +5,12 @@
   --background: #fafafa;
   --foreground: #333333; /* Charcoal Gray */
   
-  /* DaisyUI Overrides */
-  --p: 45 100% 44%; /* Primary #E0A800 */
-  --pc: 0 0% 100%; /* Primary Content (White) */
-  --s: 0 0% 20%; /* Secondary #333333 */
-  --sc: 0 0% 100%; /* Secondary Content (White) */
-  --a: 344 32% 68%; /* Accent #c594a1 */
+  /* DaisyUI Overrides (v5 format) */
+  --color-primary: #E0A800;
+  --color-primary-content: #ffffff;
+  --color-secondary: #333333;
+  --color-secondary-content: #ffffff;
+  --color-accent: #c594a1;
 }
 
 @theme inline {
