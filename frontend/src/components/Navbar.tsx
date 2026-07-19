@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { User, LogOut, LayoutDashboard, ShoppingBag, Menu as MenuIcon } from "lucide-react";
+import { User, LogOut, LayoutDashboard, ShoppingBag, Menu as MenuIcon, ShoppingCart } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [user, setUser] = useState<any>(null);
+  const { cartCount } = useCart();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -72,6 +74,14 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-end gap-2">
+        <Link href="/cart" className="btn btn-ghost btn-circle relative mr-2">
+          <ShoppingCart size={22} />
+          {cartCount > 0 && (
+            <span className="badge badge-sm badge-primary absolute top-1 right-0 font-bold border-none">
+              {cartCount}
+            </span>
+          )}
+        </Link>
         {user ? (
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar placeholder hover:bg-base-200 focus:outline-none focus:ring-0 outline-none">

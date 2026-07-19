@@ -31,24 +31,14 @@ export class OrdersService {
   }
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
-    const menu = await this.menusService.findOne(createOrderDto.menuId);
-
-    const basePrice = menu?.price ?? 0;
-    const totalPrice =
-      createOrderDto.servings === 2
-        ? Math.round(basePrice * 1.8)
-        : basePrice;
-
     const newOrder = this.ordersRepository.create({
-      menuId: createOrderDto.menuId,
       userId: createOrderDto.userId,
-      menuName: menu?.name ?? 'Unknown Menu',
       customerName: createOrderDto.customerName,
       customerPhone: createOrderDto.customerPhone,
       shippingAddress: createOrderDto.shippingAddress,
-      servings: createOrderDto.servings,
+      items: createOrderDto.items,
       status: 'รอดำเนินการ',
-      totalPrice,
+      totalPrice: createOrderDto.totalPrice,
     });
 
     return this.ordersRepository.save(newOrder);

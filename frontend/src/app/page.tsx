@@ -23,13 +23,7 @@ export default function Home() {
   }, []);
 
   const handleAddToCart = (menuId: string) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("กรุณาเข้าสู่ระบบก่อนสั่งซื้อสินค้าครับ");
-      router.push("/login");
-      return;
-    }
-    router.push(`/order/${menuId}`);
+    router.push(`/menu/${menuId}`);
   };
 
   return (
@@ -47,10 +41,10 @@ export default function Home() {
             </h1>
             <p className="mb-8 text-lg md:text-xl text-white/90 leading-relaxed max-w-xl mx-auto">
               ชุดอาหารพร้อมทำ ส่งถึงบ้านคุณทุกสัปดาห์<br className="hidden sm:block" />
-              อร่อยเหมือนมีเชฟส่วนตัวมาทำให้ที่บ้าน
+              ปรุงง่าย อร่อยเป๊ะ เหมือนเชฟมาเอง
             </p>
             <a href="#menus" className="btn btn-primary btn-lg rounded-full shadow-xl">
-              สั่งซื้อชุดอาหารเลย <UtensilsCrossed className="ml-2" />
+              สั่งซื้อชุดนี้ <UtensilsCrossed className="ml-2" />
             </a>
           </div>
         </div>
@@ -138,7 +132,7 @@ export default function Home() {
                         onClick={() => handleAddToCart(menu.id)}
                         className="btn btn-primary w-full"
                       >
-                        <ShoppingBag size={18} /> Add to Cart
+                        <ShoppingBag size={18} /> สั่งซื้อชุดนี้
                       </button>
                     </div>
                   </div>

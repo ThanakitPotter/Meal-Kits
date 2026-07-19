@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Thai, Inter } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import { CartProvider } from "@/context/CartContext";
 import "./globals.css";
 
 const notoSansThai = Noto_Sans_Thai({
@@ -31,23 +32,25 @@ export default function RootLayout({
       className={`${notoSansThai.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#fafafa] font-sans">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <footer className="bg-gray-900 text-gray-400">
-          <div className="mx-auto max-w-6xl px-6 py-10">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">🍳</span>
-                <span className="text-lg font-bold text-white">
-                  MK340 Meal Kits
-                </span>
+        <CartProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <footer className="bg-gray-900 text-gray-400">
+            <div className="mx-auto max-w-6xl px-6 py-10">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">🍳</span>
+                  <span className="text-lg font-bold text-white">
+                    MK340 Meal Kits
+                  </span>
+                </div>
+                <p className="text-sm text-gray-500">
+                  © 2026 MK340 Meal Kits — ชุดอาหารพร้อมทำ ส่งถึงบ้านทุกเดือน
+                </p>
               </div>
-              <p className="text-sm text-gray-500">
-                © 2026 MK340 Meal Kits — ชุดอาหารพร้อมทำ ส่งถึงบ้านทุกเดือน
-              </p>
             </div>
-          </div>
-        </footer>
+          </footer>
+        </CartProvider>
       </body>
     </html>
   );

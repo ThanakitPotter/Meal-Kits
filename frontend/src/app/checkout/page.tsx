@@ -1,0 +1,249 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
+
+export default function CheckoutPage() {
+  const router = useRouter();
+  const { cartItems, cartTotal, clearCart } = useCart();
+  const [submitting, setSubmitting] = useState(false);
+  const [successId, setSuccessId] = useState<string | null>(null);
+
+  const [form, setForm] = useState({
+    customerName: "",
+    customerPhone: "",
+    shippingAddress: "",
+  });
+
+  // Pre-fill user data if logged in
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setForm((prev) => ({
+        ...prev,
+        customerName: user.name || "",
+        customerPhone: user.phone || "",
+      }));
+    }
+  }, []);
+
+  const updateField = (field: string, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const isFormValid =
+    form.customerName.trim() &&
+    form.customerPhone.trim() &&
+    form.shippingAddress.trim() &&
+    cartItems.length > 0;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isFormValid) return;
+    setSubmitting(true);
+    try {
+      const storedUser = localStorage.getItem("user");
+      const userId = storedUser ? JSON.parse(storedUser).id : null;
+
+      // Clean up items for the API
+      const items = cartItems.map(item => ({
+        menuId: item.menuId,
+        menuName: item.menuName,
+        servings: item.servings,
+        price: item.price,
+        quantity: item.quantity
+      }));
+
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          userId, 
+          customerName: form.customerName,
+          customerPhone: form.customerPhone,
+          shippingAddress: form.shippingAddress,
+          items,
+          totalPrice: cartTotal
+        }),
+      });
+      const order = await res.json();
+      setSuccessId(order.id);
+      clearCart();
+    } catch {
+      alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (successId) {
+    return (
+      <div className="container mx-auto max-w-2xl px-4 py-20">
+        <div className="card bg-base-100 shadow-xl border border-base-200 animate-fade-in-up">
+          <div className="bg-gradient-to-r from-success to-emerald-500 p-8 text-center text-primary-content">
+            <CheckCircle2 size={64} className="mx-auto mb-4" />
+            <h1 className="text-3xl font-extrabold">สั่งซื้อสำเร็จ!</h1>
+          </div>
+          <div className="card-body p-6 md:p-8">
+            <div className="alert alert-success bg-success/10 border-success/20 text-success-content mb-6">
+              <div>
+                <h3 className="font-bold">หมายเลขคำสั่งซื้อ: #{successId}</h3>
+                <div className="text-sm">ระบบได้รับคำสั่งซื้อของคุณแล้ว เราจะเริ่มเตรียมวัตถุดิบและจัดส่งให้คุณโดยเร็วที่สุด</div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link href="/" className="btn btn-outline flex-1">
+                กลับหน้าแรก
+              </Link>
+              <Link href="/admin" className="btn btn-primary flex-1">
+                ดูสถานะออเดอร์
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (cartItems.length === 0 && !successId) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <h1 className="text-2xl font-bold mb-4">ตะกร้าของคุณว่างเปล่า</h1>
+        <Link href="/" className="btn btn-primary">
+          กลับไปเลือกสินค้า
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto max-w-6xl px-4 py-8 md:py-12">
+      <div className="breadcrumbs text-sm mb-6">
+        <ul>
+          <li><Link href="/">หน้าแรก</Link></li>
+          <li><Link href="/cart">ตะกร้าสินค้า</Link></li>
+          <li>ชำระเงิน</li>
+        </ul>
+      </div>
+
+      <h1 className="text-3xl font-extrabold mb-8">ข้อมูลการจัดส่งและชำระเงิน</h1>
+
+      <div className="grid lg:grid-cols-2 gap-10">
+        <div>
+          <div className="card bg-base-100 shadow-md border border-base-200">
+            <div className="card-body p-6 md:p-8">
+              <form id="checkout-form" onSubmit={handleSubmit} className="space-y-4">
+                <div className="form-control">
+                  <label className="label"><span className="label-text font-bold">ชื่อผู้รับ <span className="text-error">*</span></span></label>
+                  <input
+                    type="text"
+                    required
+                    value={form.customerName}
+                    onChange={(e) => updateField("customerName", e.target.value)}
+                    placeholder="ชื่อ-นามสกุล"
+                    className="input input-bordered w-full"
+                  />
+                </div>
+
+                <div className="form-control">
+                  <label className="label"><span className="label-text font-bold">เบอร์โทรศัพท์ <span className="text-error">*</span></span></label>
+                  <input
+                    type="tel"
+                    required
+                    value={form.customerPhone}
+                    onChange={(e) => updateField("customerPhone", e.target.value)}
+                    placeholder="0xx-xxx-xxxx"
+                    className="input input-bordered w-full"
+                  />
+                </div>
+
+                <div className="form-control">
+                  <label className="label"><span className="label-text font-bold">ที่อยู่จัดส่ง <span className="text-error">*</span></span></label>
+                  <textarea
+                    required
+                    rows={3}
+                    value={form.shippingAddress}
+                    onChange={(e) => updateField("shippingAddress", e.target.value)}
+                    placeholder="บ้านเลขที่ ซอย ถนน แขวง/ตำบล เขต/อำเภอ จังหวัด รหัสไปรษณีย์"
+                    className="textarea textarea-bordered w-full resize-none"
+                  />
+                </div>
+                
+                <div className="divider mt-8">ช่องทางการชำระเงิน</div>
+
+                <div className="space-y-3">
+                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-base-300 rounded-box hover:border-primary transition-colors">
+                    <input type="radio" name="payment" className="radio radio-primary" defaultChecked />
+                    <span className="label-text font-medium">โอนเงินผ่านธนาคาร (PromptPay)</span>
+                  </label>
+                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-base-300 rounded-box hover:border-primary transition-colors">
+                    <input type="radio" name="payment" className="radio radio-primary" />
+                    <span className="label-text font-medium">บัตรเครดิต / เดบิต</span>
+                  </label>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="card bg-base-100 shadow-md border border-base-200 sticky top-24">
+            <div className="card-body p-6 md:p-8">
+              <h2 className="card-title text-xl font-bold mb-4">สรุปคำสั่งซื้อ</h2>
+              
+              <div className="overflow-x-auto rounded-lg mb-6">
+                <table className="table w-full border border-base-200 rounded-box overflow-hidden">
+                  <thead className="bg-base-200/50 text-base-content">
+                    <tr>
+                      <th className="font-semibold text-base-content">รายการ</th>
+                      <th className="font-semibold w-16 text-center text-base-content">จำนวน</th>
+                      <th className="font-semibold w-24 text-right text-base-content">ราคา</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-base-200">
+                    {cartItems.map(item => (
+                      <tr key={item.id}>
+                        <td>
+                          <span className="font-bold text-base-content block line-clamp-1">{item.menuName}</span>
+                          <span className="block text-xs opacity-70 mt-1">{item.servings} คน</span>
+                        </td>
+                        <td className="text-center font-medium">{item.quantity}</td>
+                        <td className="text-right font-medium">฿{(item.price * item.quantity).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                    <tr className="bg-base-200/30">
+                      <td colSpan={2} className="font-bold text-right text-base-content/80">
+                        ยอดรวมทั้งสิ้น
+                      </td>
+                      <td className="font-extrabold text-primary text-lg text-right">
+                        ฿{cartTotal.toLocaleString()}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <button
+                type="submit"
+                form="checkout-form"
+                disabled={submitting || !isFormValid}
+                className="btn btn-primary btn-block btn-lg text-lg"
+              >
+                {submitting ? (
+                  <span className="loading loading-spinner loading-md"></span>
+                ) : (
+                  "ยืนยันการสั่งซื้อ"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

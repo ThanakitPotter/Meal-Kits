@@ -5,14 +5,11 @@ export class Order {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
-  menuId!: string;
+  @Column({ type: 'jsonb', nullable: true, default: '[]' })
+  items!: { menuId: string, menuName: string, servings: number, price: number, quantity: number }[];
 
   @Column({ nullable: true })
   userId?: string;
-
-  @Column()
-  menuName!: string;
 
   @Column()
   customerName!: string;
@@ -22,9 +19,6 @@ export class Order {
 
   @Column('text')
   shippingAddress!: string;
-
-  @Column('int')
-  servings!: 1 | 2;
 
   @Column()
   status!: 'รอดำเนินการ' | 'กำลังจัดเตรียม' | 'จัดส่งแล้ว';

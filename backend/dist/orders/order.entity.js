@@ -13,13 +13,11 @@ exports.Order = void 0;
 const typeorm_1 = require("typeorm");
 let Order = class Order {
     id;
-    menuId;
+    items;
     userId;
-    menuName;
     customerName;
     customerPhone;
     shippingAddress;
-    servings;
     status;
     totalPrice;
     createdAt;
@@ -30,17 +28,13 @@ __decorate([
     __metadata("design:type", String)
 ], Order.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Order.prototype, "menuId", void 0);
+    (0, typeorm_1.Column)({ type: 'jsonb', nullable: true, default: '[]' }),
+    __metadata("design:type", Array)
+], Order.prototype, "items", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Order.prototype, "userId", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Order.prototype, "menuName", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
@@ -53,10 +47,6 @@ __decorate([
     (0, typeorm_1.Column)('text'),
     __metadata("design:type", String)
 ], Order.prototype, "shippingAddress", void 0);
-__decorate([
-    (0, typeorm_1.Column)('int'),
-    __metadata("design:type", Number)
-], Order.prototype, "servings", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)

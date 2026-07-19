@@ -17,7 +17,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
     customerName: "",
     customerPhone: "",
     shippingAddress: "",
-    servings: 1 as 1 | 2,
+    servings: 1 as 1 | 2 | 4,
   });
 
   // Pre-fill user data if logged in
@@ -53,7 +53,11 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
     form.shippingAddress.trim();
 
   const totalPrice = menu
-    ? (form.servings === 2 ? Math.round(menu.price * 1.8) : menu.price)
+    ? form.servings === 4
+      ? Math.round(menu.price * 3.2)
+      : form.servings === 2
+        ? Math.round(menu.price * 1.8)
+        : menu.price
     : 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -121,11 +125,11 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
             <div className="space-y-3 text-sm mb-8">
               <div className="flex justify-between py-2 border-b border-base-200">
                 <span className="text-base-content/60">เมนูอาหาร</span>
-                <span className="font-semibold">{success.menuName}</span>
+                <span className="font-semibold">{success.items[0]?.menuName}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-base-200">
                 <span className="text-base-content/60">จำนวนที่ทาน</span>
-                <span className="font-semibold">{success.servings} คน</span>
+                <span className="font-semibold">{success.items[0]?.servings} คน</span>
               </div>
               <div className="flex justify-between py-2 border-b border-base-200">
                 <span className="text-base-content/60">ชื่อลูกค้า</span>
@@ -197,7 +201,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
                 สิ่งที่จะได้รับในชุด
               </h3>
               <ul className="space-y-2">
-                {menu.ingredients.map((item, i) => (
+                {menu.ingredients.map((item: string, i: number) => (
                   <li key={i} className="flex items-start gap-2.5 text-sm text-base-content/70">
                     <Check size={16} className="text-primary mt-0.5 flex-shrink-0" />
                     <span>{item}</span>
@@ -223,31 +227,44 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
                   <label className="label">
                     <span className="label-text font-bold">สำหรับกี่ท่าน? <span className="text-error">*</span></span>
                   </label>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <button
                       type="button"
                       onClick={() => updateField("servings", 1)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all ${form.servings === 1
-                          ? 'btn-primary'
-                          : 'btn-outline border-base-300 text-base-content'
+                        ? 'btn-primary'
+                        : 'btn-outline border-base-300 text-base-content'
                         }`}
                     >
-                      <span className="text-xl font-bold">1 ท่าน</span>
+                      <span className="text-xl font-bold">1 คน</span>
                       <span className="text-sm font-normal opacity-80">฿{menu.price}</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => updateField("servings", 2)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${form.servings === 2
-                          ? 'btn-primary'
-                          : 'btn-outline border-base-300 text-base-content'
+                        ? 'btn-primary'
+                        : 'btn-outline border-base-300 text-base-content'
                         }`}
                     >
                       <div className="flex items-center gap-2">
-                        <span className="text-xl font-bold">2 ท่าน</span>
-                        {form.servings !== 2 && <span className="badge badge-primary badge-sm">คุ้มกว่า</span>}
+                        <span className="text-xl font-bold">2 คน</span>
                       </div>
                       <span className="text-sm font-normal opacity-80">฿{Math.round(menu.price * 1.8)}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => updateField("servings", 4)}
+                      className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${form.servings === 4
+                        ? 'btn-primary'
+                        : 'btn-outline border-base-300 text-base-content'
+                        }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl font-bold">ครอบครัว</span>
+                        {form.servings !== 4 && <span className="badge badge-primary badge-sm">คุ้มสุด</span>}
+                      </div>
+                      <span className="text-sm font-normal opacity-80">฿{Math.round(menu.price * 3.2)}</span>
                     </button>
                   </div>
                 </div>

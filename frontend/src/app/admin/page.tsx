@@ -219,8 +219,16 @@ export default function AdminPage() {
                         <div className="text-xs opacity-60 mt-0.5">{order.customerPhone}</div>
                       </td>
                       <td>
-                        <div className="font-bold">{order.menuName}</div>
-                        <div className="text-xs opacity-60 mt-0.5">{order.servings} ท่าน</div>
+                        <div className="space-y-1">
+                          {order.items?.map((item, i) => (
+                            <div key={i} className="text-sm">
+                              <span className="font-bold">{item.menuName}</span> 
+                              <span className="text-xs opacity-60 ml-1">
+                                (x{item.quantity} สำหรับ {item.servings} คน)
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       </td>
                       <td className="font-bold text-primary">
                         ฿{order.totalPrice.toLocaleString()}
