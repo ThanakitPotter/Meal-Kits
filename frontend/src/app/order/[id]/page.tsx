@@ -18,6 +18,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
     customerPhone: "",
     shippingAddress: "",
     servings: 1 as 1 | 2 | 4,
+    orderType: "one-time",
   });
 
   // Pre-fill user data if logged in
@@ -69,10 +70,26 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
       const storedUser = localStorage.getItem("user");
       const userId = storedUser ? JSON.parse(storedUser).id : null;
 
+      const items = [{
+        menuId: unwrappedParams.id,
+        menuName: menu?.name || "",
+        servings: form.servings,
+        price: totalPrice,
+        quantity: 1
+      }];
+
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ menuId: unwrappedParams.id, userId, ...form }),
+        body: JSON.stringify({ 
+          userId, 
+          customerName: form.customerName,
+          customerPhone: form.customerPhone,
+          shippingAddress: form.shippingAddress,
+          orderType: form.orderType,
+          items,
+          totalPrice
+        }),
       });
       const order = await res.json();
       setSuccess(order);
@@ -147,7 +164,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
               <Link href="/" className="btn btn-outline flex-1">
                 กลับหน้าแรก
               </Link>
-              <Link href="/admin" className="btn btn-primary flex-1">
+              <Link href="/orders" className="btn btn-primary flex-1">
                 ดูสถานะออเดอร์
               </Link>
             </div>
@@ -222,6 +239,31 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="form-control mb-4">
+                  <label className="label"><span className="label-text font-bold">ประเภทการสั่งซื้อ <span className="text-error">*</span></span></label>
+                  <div className="flex gap-4 mt-2">
+                    <label className="cursor-pointer flex items-center gap-2">
+                      <input 
+                        type="radio" 
+                        name="orderType" 
+                        className="radio radio-primary" 
+                        checked={form.orderType === 'one-time'}
+                        onChange={() => updateField("orderType", "one-time")}
+                      />
+                      <span className="label-text">สั่งครั้งเดียว (One-time)</span>
+                    </label>
+                    <label className="cursor-pointer flex items-center gap-2">
+                      <input 
+                        type="radio" 
+                        name="orderType" 
+                        className="radio radio-primary" 
+                        checked={form.orderType === 'subscription'}
+                        onChange={() => updateField("orderType", "subscription")}
+                      />
+                      <span className="label-text">สั่งเป็นประจำ (Subscription)</span>
+                    </label>
+                  </div>
+                </div>
                 {/* Servings */}
                 <div>
                   <label className="label">
@@ -262,8 +304,8 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
                     >
                       <div className="flex items-center gap-2">
                         <span className="text-xl font-bold">ครอบครัว</span>
-                        {form.servings !== 4 && <span className="badge badge-primary badge-sm">คุ้มสุด</span>}
                       </div>
+                      {form.servings !== 4 && <span className="badge badge-primary badge-sm absolute -top-2 -right-2 whitespace-nowrap shadow-md z-10 border-base-100">คุ้มสุด</span>}
                       <span className="text-sm font-normal opacity-80">฿{Math.round(menu.price * 3.2)}</span>
                     </button>
                   </div>

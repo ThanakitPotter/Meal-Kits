@@ -6,6 +6,7 @@ export declare class OrdersService {
     private ordersRepository;
     private readonly menusService;
     constructor(ordersRepository: Repository<Order>, menusService: MenusService);
+    private generateOrderId;
     findAll(): Promise<Order[]>;
     findByUserId(userId: string): Promise<Order[]>;
     findOne(id: string): Promise<Order | null>;

@@ -3,7 +3,14 @@
 
 :root {
   --background: #fafafa;
-  --foreground: #2d2d2d; /* Charcoal */
+  --foreground: #333333; /* Charcoal Gray */
+  
+  /* DaisyUI Overrides */
+  --p: 45 100% 44%; /* Primary #E0A800 */
+  --pc: 0 0% 100%; /* Primary Content (White) */
+  --s: 0 0% 20%; /* Secondary #333333 */
+  --sc: 0 0% 100%; /* Secondary Content (White) */
+  --a: 344 32% 68%; /* Accent #c594a1 */
 }
 
 @theme inline {
@@ -11,6 +18,11 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-noto-sans-thai), var(--font-inter), sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Brand Colors */
+  --color-primary: #E0A800;
+  --color-secondary: #333333;
+  --color-accent: #c594a1;
 
   /* Mustard Colors */
   --color-mustard-50: #fbf8f1;

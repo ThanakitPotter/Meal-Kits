@@ -13,6 +13,7 @@ exports.Order = void 0;
 const typeorm_1 = require("typeorm");
 let Order = class Order {
     id;
+    orderType;
     items;
     userId;
     customerName;
@@ -24,9 +25,13 @@ let Order = class Order {
 };
 exports.Order = Order;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    (0, typeorm_1.PrimaryColumn)('varchar'),
     __metadata("design:type", String)
 ], Order.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 'one-time' }),
+    __metadata("design:type", String)
+], Order.prototype, "orderType", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'jsonb', nullable: true, default: '[]' }),
     __metadata("design:type", Array)

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { User, LogOut, LayoutDashboard, ShoppingBag, Menu as MenuIcon, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
@@ -50,9 +51,15 @@ export default function Navbar() {
             )}
           </ul>
         </div>
-        <Link href="/" className="btn btn-ghost text-xl font-extrabold gap-2">
-          <span className="text-primary"><ShoppingBag fill="currentColor" /></span>
-          MK340
+        <Link href="/" className="btn btn-ghost h-auto hover:bg-transparent py-1 gap-2">
+          <Image 
+            src="/logo/logo_MealKits.png" 
+            alt="MK340 Meal Kits Logo" 
+            width={200} 
+            height={80} 
+            className="object-contain w-auto h-12 md:h-16 lg:h-20" 
+            priority
+          />
         </Link>
       </div>
 

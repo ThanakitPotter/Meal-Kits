@@ -25,6 +25,26 @@ let OrdersService = class OrdersService {
         this.ordersRepository = ordersRepository;
         this.menusService = menusService;
     }
+    async generateOrderId(orderType) {
+        const prefix = orderType === 'subscription' ? 'SUB' : 'ONE';
+        const date = new Date();
+        const yy = String(date.getFullYear()).slice(-2);
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const yymm = `${yy}${mm}`;
+        const lastOrder = await this.ordersRepository.findOne({
+            where: { id: (0, typeorm_2.Like)(`${prefix}-${yymm}-%`) },
+            order: { id: 'DESC' },
+        });
+        let sequence = 1;
+        if (lastOrder) {
+            const parts = lastOrder.id.split('-');
+            if (parts.length === 3) {
+                sequence = parseInt(parts[2], 10) + 1;
+            }
+        }
+        const sequenceStr = String(sequence).padStart(3, '0');
+        return `${prefix}-${yymm}-${sequenceStr}`;
+    }
     findAll() {
         return this.ordersRepository.find({
             order: { createdAt: 'DESC' },
@@ -40,7 +60,10 @@ let OrdersService = class OrdersService {
         return this.ordersRepository.findOne({ where: { id } });
     }
     async create(createOrderDto) {
+        const id = await this.generateOrderId(createOrderDto.orderType);
         const newOrder = this.ordersRepository.create({
+            id,
+            orderType: createOrderDto.orderType,
             userId: createOrderDto.userId,
             customerName: createOrderDto.customerName,
             customerPhone: createOrderDto.customerPhone,

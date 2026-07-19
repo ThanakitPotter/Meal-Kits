@@ -1,9 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class Order {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('varchar')
   id!: string;
+
+  @Column({ default: 'one-time' })
+  orderType!: 'subscription' | 'one-time';
 
   @Column({ type: 'jsonb', nullable: true, default: '[]' })
   items!: { menuId: string, menuName: string, servings: number, price: number, quantity: number }[];

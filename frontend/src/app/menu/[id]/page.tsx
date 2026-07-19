@@ -172,8 +172,8 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                     >
                       <div className="flex items-center gap-2">
                         <span className="text-xl font-bold">ครอบครัว</span>
-                        {servings !== 4 && <span className="badge badge-primary badge-sm">คุ้มสุด</span>}
                       </div>
+                      {servings !== 4 && <span className="badge badge-primary badge-sm absolute -top-2 -right-2 whitespace-nowrap shadow-md z-10 border-base-100">คุ้มสุด</span>}
                       <span className="text-sm font-normal opacity-80">฿{Math.round(menu.price * 3.2)}</span>
                     </button>
                   </div>

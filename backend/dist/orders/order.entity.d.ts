@@ -1,5 +1,6 @@
 export declare class Order {
     id: string;
+    orderType: 'subscription' | 'one-time';
     items: {
         menuId: string;
         menuName: string;

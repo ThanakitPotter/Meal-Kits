@@ -1,5 +1,6 @@
 export declare class CreateOrderDto {
     userId?: string;
+    orderType: 'subscription' | 'one-time';
     customerName: string;
     customerPhone: string;
     shippingAddress: string;

@@ -13,6 +13,7 @@ export interface Menu {
 
 export interface Order {
   id: string;
+  orderType: 'subscription' | 'one-time';
   items: {
     menuId: string;
     menuName: string;

@@ -11,6 +11,8 @@ export default function Home() {
   const router = useRouter();
   const [menus, setMenus] = useState<Menu[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>("ทั้งหมด");
+  const categories = ["ทั้งหมด", "ผัด", "ต้ม-แกง", "ทอด-ย่าง"];
 
   useEffect(() => {
     fetch("/api/menus")
@@ -29,15 +31,19 @@ export default function Home() {
   return (
     <div>
       {/* ─── Hero Section ─── */}
-      <section className="hero min-h-[60vh] bg-base-200" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2070&auto=format&fit=crop')" }}>
-        <div className="hero-overlay bg-charcoal-900 bg-opacity-80"></div>
-        <div className="hero-content text-center text-white py-20">
+      <section className="hero min-h-[60vh] relative overflow-hidden bg-base-200">
+        <Image 
+          src="/images/hero-bg.jpg" 
+          alt="Fresh ingredients on a wooden table" 
+          fill
+          priority
+          className="object-cover z-0"
+        />
+        <div className="absolute inset-0 bg-black/60 z-10"></div>
+        <div className="hero-content text-center text-white py-20 relative z-20">
           <div className="max-w-2xl animate-fade-in-up">
-            <div className="flex justify-center mb-6">
-              <ChefHat size={80} className="text-primary drop-shadow-lg" />
-            </div>
             <h1 className="mb-5 text-5xl md:text-6xl font-extrabold tracking-tight">
-              MK340 <span className="text-primary">Meal Kits</span>
+              <span className="text-primary">Meal Kits</span>
             </h1>
             <p className="mb-8 text-lg md:text-xl text-white/90 leading-relaxed max-w-xl mx-auto">
               ชุดอาหารพร้อมทำ ส่งถึงบ้านคุณทุกสัปดาห์<br className="hidden sm:block" />
@@ -61,6 +67,23 @@ export default function Home() {
           </p>
         </div>
 
+        {/* ─── Category Filter ─── */}
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`btn rounded-full px-6 transition-all shadow-sm border-none ${
+                selectedCategory === cat
+                  ? "btn-primary shadow-md scale-105"
+                  : "btn-ghost bg-base-200 hover:bg-base-300 text-base-content"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
         {loading ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3].map((i) => (
@@ -69,8 +92,8 @@ export default function Home() {
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {menus.length > 0 ? (
-              menus.map((menu, idx) => (
+            {(selectedCategory === "ทั้งหมด" ? menus : menus.filter((m) => m.category === selectedCategory)).length > 0 ? (
+              (selectedCategory === "ทั้งหมด" ? menus : menus.filter((m) => m.category === selectedCategory)).map((menu, idx) => (
                 <div
                   key={menu.id}
                   className="card bg-base-100 shadow-xl border border-base-200 hover:-translate-y-2 transition-transform duration-300 animate-fade-in-up"

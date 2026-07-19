@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateOrderDto = void 0;
 class CreateOrderDto {
     userId;
+    orderType;
     customerName;
     customerPhone;
     shippingAddress;

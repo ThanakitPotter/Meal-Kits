@@ -16,6 +16,7 @@ export default function CheckoutPage() {
     customerName: "",
     customerPhone: "",
     shippingAddress: "",
+    orderType: "one-time",
   });
 
   // Pre-fill user data if logged in
@@ -66,6 +67,7 @@ export default function CheckoutPage() {
           customerName: form.customerName,
           customerPhone: form.customerPhone,
           shippingAddress: form.shippingAddress,
+          orderType: form.orderType,
           items,
           totalPrice: cartTotal
         }),
@@ -100,7 +102,7 @@ export default function CheckoutPage() {
               <Link href="/" className="btn btn-outline flex-1">
                 กลับหน้าแรก
               </Link>
-              <Link href="/admin" className="btn btn-primary flex-1">
+              <Link href="/orders" className="btn btn-primary flex-1">
                 ดูสถานะออเดอร์
               </Link>
             </div>
@@ -138,6 +140,32 @@ export default function CheckoutPage() {
           <div className="card bg-base-100 shadow-md border border-base-200">
             <div className="card-body p-6 md:p-8">
               <form id="checkout-form" onSubmit={handleSubmit} className="space-y-4">
+                <div className="form-control mb-4">
+                  <label className="label"><span className="label-text font-bold">ประเภทการสั่งซื้อ <span className="text-error">*</span></span></label>
+                  <div className="flex gap-4 mt-2">
+                    <label className="cursor-pointer flex items-center gap-2">
+                      <input 
+                        type="radio" 
+                        name="orderType" 
+                        className="radio radio-primary" 
+                        checked={form.orderType === 'one-time'}
+                        onChange={() => updateField("orderType", "one-time")}
+                      />
+                      <span className="label-text">สั่งครั้งเดียว (One-time)</span>
+                    </label>
+                    <label className="cursor-pointer flex items-center gap-2">
+                      <input 
+                        type="radio" 
+                        name="orderType" 
+                        className="radio radio-primary" 
+                        checked={form.orderType === 'subscription'}
+                        onChange={() => updateField("orderType", "subscription")}
+                      />
+                      <span className="label-text">สั่งเป็นประจำ (Subscription)</span>
+                    </label>
+                  </div>
+                </div>
+
                 <div className="form-control">
                   <label className="label"><span className="label-text font-bold">ชื่อผู้รับ <span className="text-error">*</span></span></label>
                   <input
