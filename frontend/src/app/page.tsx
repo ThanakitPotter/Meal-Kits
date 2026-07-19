@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { Menu } from "@/types";
 import { Clock, Users, Leaf, Package, Truck, UtensilsCrossed, ChefHat, ShoppingBag, ArrowDownCircle, Star, Quote } from "lucide-react";
+import AuthModal from "@/components/AuthModal";
 
 export default function Home() {
   const router = useRouter();
@@ -49,6 +50,12 @@ export default function Home() {
   }, []);
 
   const handleAddToCart = (menuId: string) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      const modal = document.getElementById('auth_modal') as HTMLDialogElement;
+      if (modal) modal.showModal();
+      return;
+    }
     router.push(`/menu/${menuId}`);
   };
 
@@ -315,6 +322,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* Auth Modal */}
+      <AuthModal />
     </div>
   );
 }

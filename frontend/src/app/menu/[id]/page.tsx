@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import type { Menu } from "@/types";
 import { ArrowLeft, Clock, Check, ChevronRight, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import AuthModal from "@/components/AuthModal";
 
 export default function MenuDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const unwrappedParams = use(params);
@@ -58,6 +59,13 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
       : menu.price;
 
   const handleAddToCart = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      const modal = document.getElementById('auth_modal') as HTMLDialogElement;
+      if (modal) modal.showModal();
+      return;
+    }
+
     addToCart({
       menuId: menu.id,
       menuName: menu.name,
@@ -198,6 +206,8 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
           </div>
         </div>
       </div>
+      {/* Auth Modal */}
+      <AuthModal />
     </div>
   );
 }
