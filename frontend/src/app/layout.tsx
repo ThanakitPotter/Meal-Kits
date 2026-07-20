@@ -30,6 +30,7 @@ export default function RootLayout({
   return (
     <html
       lang="th"
+      data-theme="light"
       className={`${notoSansThai.variable} ${inter.variable} h-full antialiased`}
     >
       <head>

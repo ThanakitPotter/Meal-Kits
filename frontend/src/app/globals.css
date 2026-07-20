@@ -2,7 +2,6 @@
 @plugin "daisyui";
 
 :root {
-  color-scheme: light;
   --background: #fafafa;
   --foreground: #333333; /* Charcoal Gray */
   
@@ -55,8 +54,6 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
 }
 
 ::selection {
