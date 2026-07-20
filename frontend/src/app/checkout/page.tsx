@@ -145,86 +145,96 @@ export default function CheckoutPage() {
         </ul>
       </div>
 
-      <h1 className="text-3xl font-extrabold mb-8 text-[#333333]">ข้อมูลการจัดส่งและชำระเงิน</h1>
+      <h1 className="text-3xl font-extrabold mb-8 text-base-content">ข้อมูลการจัดส่งและชำระเงิน</h1>
 
       <div className="grid lg:grid-cols-2 gap-10">
         <div>
-          <div className="card bg-white text-[#333333] shadow-md border border-gray-100">
+          <div className="card bg-base-100 shadow-xl border border-base-200 rounded-3xl overflow-hidden">
+            <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-6 border-b border-base-200">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <span className="bg-primary text-primary-content w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span>
+                ที่อยู่จัดส่ง
+              </h2>
+            </div>
             <div className="card-body p-6 md:p-8">
-              <form id="checkout-form" onSubmit={handleSubmit} className="space-y-4">
-                <div className="form-control mb-4">
-                  <label className="label"><span className="label-text font-bold">ประเภทการสั่งซื้อ <span className="text-error">*</span></span></label>
-                  <div className="flex gap-4 mt-2">
-                    <label className="cursor-pointer flex items-center gap-2">
+              <form id="checkout-form" onSubmit={handleSubmit} className="space-y-5">
+                <div className="form-control">
+                  <label className="label"><span className="label-text font-bold text-base-content/80">ประเภทการสั่งซื้อ <span className="text-error">*</span></span></label>
+                  <div className="grid grid-cols-2 gap-4 mt-1">
+                    <label className={`cursor-pointer flex items-center gap-3 p-4 border rounded-xl transition-all ${form.orderType === 'one-time' ? 'border-primary bg-primary/5' : 'border-base-300 hover:border-primary/50'}`}>
                       <input 
                         type="radio" 
                         name="orderType" 
-                        className="radio radio-primary" 
+                        className="radio radio-primary radio-sm" 
                         checked={form.orderType === 'one-time'}
                         onChange={() => updateField("orderType", "one-time")}
                       />
-                      <span className="label-text">สั่งครั้งเดียว (One-time)</span>
+                      <span className="label-text font-medium text-base-content">สั่งครั้งเดียว</span>
                     </label>
-                    <label className="cursor-pointer flex items-center gap-2">
+                    <label className={`cursor-pointer flex items-center gap-3 p-4 border rounded-xl transition-all ${form.orderType === 'subscription' ? 'border-primary bg-primary/5' : 'border-base-300 hover:border-primary/50'}`}>
                       <input 
                         type="radio" 
                         name="orderType" 
-                        className="radio radio-primary" 
+                        className="radio radio-primary radio-sm" 
                         checked={form.orderType === 'subscription'}
                         onChange={() => updateField("orderType", "subscription")}
                       />
-                      <span className="label-text">สั่งเป็นประจำ (Subscription)</span>
+                      <span className="label-text font-medium text-base-content">สั่งประจำ</span>
                     </label>
                   </div>
                 </div>
 
                 <div className="form-control">
-                  <label className="label"><span className="label-text font-bold">ชื่อผู้รับ <span className="text-error">*</span></span></label>
+                  <label className="label"><span className="label-text font-bold text-base-content/80">ชื่อผู้รับ <span className="text-error">*</span></span></label>
                   <input
                     type="text"
                     required
                     value={form.customerName}
                     onChange={(e) => updateField("customerName", e.target.value)}
                     placeholder="ชื่อ-นามสกุล"
-                    className="input input-bordered w-full bg-white text-[#333333] placeholder:text-gray-400"
+                    className="input input-bordered w-full bg-base-100 text-base-content focus:border-primary focus:ring-1 focus:ring-primary transition-all rounded-xl"
                   />
                 </div>
 
                 <div className="form-control">
-                  <label className="label"><span className="label-text font-bold">เบอร์โทรศัพท์ <span className="text-error">*</span></span></label>
+                  <label className="label"><span className="label-text font-bold text-base-content/80">เบอร์โทรศัพท์ <span className="text-error">*</span></span></label>
                   <input
                     type="tel"
                     required
                     value={form.customerPhone}
                     onChange={(e) => updateField("customerPhone", e.target.value)}
                     placeholder="0xx-xxx-xxxx"
-                    className="input input-bordered w-full bg-white text-[#333333] placeholder:text-gray-400"
+                    className="input input-bordered w-full bg-base-100 text-base-content focus:border-primary focus:ring-1 focus:ring-primary transition-all rounded-xl"
                   />
                 </div>
 
                 <div className="form-control">
-                  <label className="label"><span className="label-text font-bold">ที่อยู่จัดส่ง <span className="text-error">*</span></span></label>
+                  <label className="label"><span className="label-text font-bold text-base-content/80">ที่อยู่จัดส่ง <span className="text-error">*</span></span></label>
                   <textarea
                     required
                     rows={3}
                     value={form.shippingAddress}
                     onChange={(e) => updateField("shippingAddress", e.target.value)}
                     placeholder="บ้านเลขที่ ซอย ถนน แขวง/ตำบล เขต/อำเภอ จังหวัด รหัสไปรษณีย์"
-                    className="textarea textarea-bordered w-full resize-none bg-white text-[#333333] placeholder:text-gray-400"
+                    className="textarea textarea-bordered w-full resize-none bg-base-100 text-base-content focus:border-primary focus:ring-1 focus:ring-primary transition-all rounded-xl"
                   />
                 </div>
                 
-                <div className="divider mt-8">ช่องทางการชำระเงิน</div>
-
-                <div className="space-y-3">
-                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-gray-200 rounded-box hover:border-primary transition-colors">
-                    <input type="radio" name="payment" className="radio radio-primary" defaultChecked />
-                    <span className="label-text font-medium">โอนเงินผ่านธนาคาร (PromptPay)</span>
-                  </label>
-                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-gray-200 rounded-box hover:border-primary transition-colors">
-                    <input type="radio" name="payment" className="radio radio-primary" />
-                    <span className="label-text font-medium">บัตรเครดิต / เดบิต</span>
-                  </label>
+                <div className="mt-8 pt-6 border-t border-base-200">
+                  <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <span className="bg-primary text-primary-content w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span>
+                    ช่องทางการชำระเงิน
+                  </h2>
+                  <div className="space-y-3">
+                    <label className="label cursor-pointer justify-start gap-4 p-4 border border-base-300 rounded-xl hover:border-primary/50 transition-all bg-base-100">
+                      <input type="radio" name="payment" className="radio radio-primary radio-sm" defaultChecked />
+                      <span className="label-text font-medium text-base-content">โอนเงินผ่านธนาคาร (PromptPay)</span>
+                    </label>
+                    <label className="label cursor-pointer justify-start gap-4 p-4 border border-base-300 rounded-xl hover:border-primary/50 transition-all bg-base-100">
+                      <input type="radio" name="payment" className="radio radio-primary radio-sm" />
+                      <span className="label-text font-medium text-base-content">บัตรเครดิต / เดบิต</span>
+                    </label>
+                  </div>
                 </div>
               </form>
             </div>
@@ -232,35 +242,40 @@ export default function CheckoutPage() {
         </div>
 
         <div>
-          <div className="card bg-white text-[#333333] shadow-md border border-gray-100 sticky top-24">
+          <div className="card bg-base-100 shadow-xl border border-base-200 rounded-3xl sticky top-24 overflow-hidden">
+            <div className="bg-gradient-to-r from-base-200 to-base-100 p-6 border-b border-base-200">
+              <h2 className="text-xl font-bold flex items-center gap-2 text-base-content">
+                <span className="bg-base-300 text-base-content w-8 h-8 rounded-full flex items-center justify-center text-sm">3</span>
+                สรุปคำสั่งซื้อ
+              </h2>
+            </div>
             <div className="card-body p-6 md:p-8">
-              <h2 className="card-title text-xl font-bold mb-4 text-[#333333]">สรุปคำสั่งซื้อ</h2>
               
-              <div className="overflow-x-auto rounded-lg mb-6">
-                <table className="table w-full border border-[#c594a1] rounded-box overflow-hidden">
-                  <thead className="bg-gray-100 text-gray-700">
+              <div className="overflow-x-auto mb-6">
+                <table className="table w-full">
+                  <thead className="text-base-content/60">
                     <tr>
-                      <th className="font-semibold text-gray-700">รายการ</th>
-                      <th className="font-semibold w-16 text-center text-gray-700">จำนวน</th>
-                      <th className="font-semibold w-24 text-right text-gray-700">ราคา</th>
+                      <th className="font-semibold px-0">รายการ</th>
+                      <th className="font-semibold w-16 text-center px-0">จำนวน</th>
+                      <th className="font-semibold w-24 text-right px-0">ราคา</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-base-200">
                     {cartItems.map(item => (
-                      <tr key={item.id}>
-                        <td>
-                          <span className="font-bold text-gray-800 block line-clamp-1">{item.menuName}</span>
-                          <span className="block text-xs text-gray-500 mt-1">{item.servings} คน</span>
+                      <tr key={item.id} className="border-none">
+                        <td className="px-0 py-4">
+                          <span className="font-bold text-base-content block line-clamp-1">{item.menuName}</span>
+                          <span className="block text-xs text-base-content/60 mt-1">{item.servings} คน</span>
                         </td>
-                        <td className="text-center font-medium text-gray-800">{item.quantity}</td>
-                        <td className="text-right font-medium text-gray-800">฿{(item.price * item.quantity).toLocaleString()}</td>
+                        <td className="text-center font-medium text-base-content px-0 py-4">{item.quantity}</td>
+                        <td className="text-right font-medium text-base-content px-0 py-4">฿{(item.price * item.quantity).toLocaleString()}</td>
                       </tr>
                     ))}
-                    <tr className="bg-gray-50">
-                      <td colSpan={2} className="font-bold text-right text-gray-700">
+                    <tr className="border-t border-base-300">
+                      <td colSpan={2} className="font-bold text-right text-base-content/80 pt-6 px-0">
                         ยอดรวมทั้งสิ้น
                       </td>
-                      <td className="font-extrabold text-primary text-lg text-right">
+                      <td className="font-extrabold text-primary text-xl text-right pt-6 px-0">
                         ฿{cartTotal.toLocaleString()}
                       </td>
                     </tr>
@@ -272,7 +287,7 @@ export default function CheckoutPage() {
                 type="submit"
                 form="checkout-form"
                 disabled={submitting || !isFormValid}
-                className="btn btn-primary btn-block btn-lg text-lg disabled:bg-gray-200 disabled:text-gray-400"
+                className="btn btn-primary btn-block btn-lg rounded-2xl text-lg mt-4 disabled:opacity-50"
               >
                 {submitting ? (
                   <span className="loading loading-spinner loading-md"></span>

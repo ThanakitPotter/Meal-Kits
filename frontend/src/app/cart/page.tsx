@@ -39,8 +39,8 @@ export default function CartPage() {
       <div className="grid lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-4">
           {cartItems.map((item) => (
-            <div key={item.id} className="card bg-white text-[#333333] shadow-sm border border-gray-100 p-4 sm:p-6 flex flex-col sm:flex-row gap-6">
-              <div className="relative h-24 w-full sm:w-32 rounded-lg overflow-hidden shrink-0">
+            <div key={item.id} className="card bg-base-100 shadow-xl border border-base-200 rounded-3xl p-4 sm:p-6 flex flex-col sm:flex-row gap-6">
+              <div className="relative h-24 w-full sm:w-32 rounded-2xl overflow-hidden shrink-0">
                 <Image
                   src={item.image}
                   alt={item.menuName}
@@ -91,9 +91,9 @@ export default function CartPage() {
         </div>
 
         <div className="lg:col-span-1">
-          <div className="card bg-white text-[#333333] shadow-md border border-gray-100 sticky top-24">
+          <div className="card bg-base-100 shadow-xl border border-base-200 rounded-3xl sticky top-24">
             <div className="card-body p-6">
-              <h2 className="card-title text-xl font-bold mb-4">สรุปคำสั่งซื้อ</h2>
+              <h2 className="card-title text-xl font-bold mb-4 text-base-content">สรุปคำสั่งซื้อ</h2>
               
               <div className="space-y-3 mb-6 text-sm">
                 <div className="flex justify-between">
@@ -115,11 +115,11 @@ export default function CartPage() {
                 </span>
               </div>
 
-              <Link href="/checkout" className="btn btn-primary btn-block btn-lg text-lg">
+              <Link href="/checkout" className="btn btn-primary btn-block btn-lg text-lg rounded-2xl shadow-md">
                 ดำเนินการสั่งซื้อ
               </Link>
               
-              <Link href="/" className="btn btn-ghost btn-block mt-2">
+              <Link href="/" className="btn btn-ghost btn-block mt-2 rounded-2xl hover:bg-base-200">
                 เลือกสินค้าเพิ่ม
               </Link>
             </div>

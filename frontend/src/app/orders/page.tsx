@@ -85,7 +85,7 @@ export default function UserOrdersPage() {
         </Link>
       </div>
 
-      <div className="card bg-white text-[#333333] shadow-sm border border-gray-100 overflow-hidden">
+      <div className="card bg-base-100 shadow-xl border border-base-200 overflow-hidden rounded-3xl">
         {loading ? (
           <div className="p-12 flex flex-col items-center justify-center">
             <span className="loading loading-spinner loading-lg text-primary mb-4"></span>
@@ -160,7 +160,7 @@ export default function UserOrdersPage() {
                 const StatusIcon = status.icon;
                 
                 return (
-                  <div key={order.id} className="card bg-white text-[#333333] shadow-sm border border-gray-100">
+                  <div key={order.id} className="card bg-base-100 shadow-md border border-base-200 mb-4 rounded-2xl overflow-hidden">
                     <div className="card-body p-4">
                       <div className="flex justify-between items-start mb-2">
                         <div>
@@ -171,14 +171,6 @@ export default function UserOrdersPage() {
                           <div className={`badge ${status.badge} gap-1 font-bold p-3 text-xs`}>
                             <StatusIcon size={12} /> {status.label}
                           </div>
-                          {order.status === 'จัดส่งแล้ว' && !order.isReviewed && (
-                            <button 
-                              onClick={() => setSelectedReviewOrder(order.id)}
-                              className="btn btn-xs bg-[#E0A800] hover:bg-[#c98e10] text-white border-none gap-1"
-                            >
-                              <Star size={12} className="fill-white" /> รีวิว
-                            </button>
-                          )}
                         </div>
                       </div>
                       
@@ -186,13 +178,24 @@ export default function UserOrdersPage() {
                       
                       <div className="flex justify-between items-center mt-2">
                         <div>
-                          <div className="font-bold text-sm line-clamp-1">{order.items && order.items.length > 0 ? order.items[0].menuName : 'N/A'}</div>
-                          <div className="text-xs opacity-60 mt-0.5">{order.items && order.items.length > 0 ? order.items[0].servings : 0} ท่าน {order.items && order.items.length > 1 ? `(+${order.items.length - 1} รายการ)` : ''}</div>
+                          <div className="font-bold text-sm line-clamp-1 text-base-content">{order.items && order.items.length > 0 ? order.items[0].menuName : 'N/A'}</div>
+                          <div className="text-xs text-base-content/60 mt-0.5">{order.items && order.items.length > 0 ? order.items[0].servings : 0} ท่าน {order.items && order.items.length > 1 ? `(+${order.items.length - 1} รายการ)` : ''}</div>
                         </div>
                         <div className="font-bold text-primary text-lg whitespace-nowrap ml-2">
                           ฿{order.totalPrice.toLocaleString()}
                         </div>
                       </div>
+
+                      {order.status === 'จัดส่งแล้ว' && !order.isReviewed && (
+                        <div className="mt-4 pt-4 border-t border-base-200">
+                          <button 
+                            onClick={() => setSelectedReviewOrder(order.id)}
+                            className="btn btn-block bg-[#E0A800] hover:bg-[#c98e10] text-white border-none rounded-xl font-bold shadow-sm"
+                          >
+                            <Star size={18} className="fill-white" /> รีวิวเมนูนี้เลย
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
