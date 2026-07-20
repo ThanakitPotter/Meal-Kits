@@ -1,6 +1,7 @@
 export class CreateOrderDto {
   userId?: string;
   orderType!: 'subscription' | 'one-time';
+  deliveryFrequency?: string;
   customerName!: string;
   customerPhone!: string;
   shippingAddress!: string;

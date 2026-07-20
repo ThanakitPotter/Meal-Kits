@@ -60,6 +60,7 @@ export class OrdersService {
     const newOrder = this.ordersRepository.create({
       id,
       orderType: createOrderDto.orderType,
+      deliveryFrequency: createOrderDto.deliveryFrequency,
       userId: createOrderDto.userId,
       customerName: createOrderDto.customerName,
       customerPhone: createOrderDto.customerPhone,

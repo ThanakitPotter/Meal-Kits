@@ -8,6 +8,9 @@ export class Order {
   @Column({ default: 'one-time' })
   orderType!: 'subscription' | 'one-time';
 
+  @Column({ nullable: true })
+  deliveryFrequency?: string;
+
   @Column({ type: 'jsonb', nullable: true, default: '[]' })
   items!: { menuId: string, menuName: string, servings: number, price: number, quantity: number }[];
 

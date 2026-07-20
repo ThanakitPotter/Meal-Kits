@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Info } from "lucide-react";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -23,6 +23,7 @@ export default function CheckoutPage() {
     customerPhone: "",
     shippingAddress: "",
     orderType: "one-time",
+    deliveryFrequency: "weekly",
   });
 
   // Pre-fill user data if logged in
@@ -74,6 +75,7 @@ export default function CheckoutPage() {
           customerPhone: form.customerPhone,
           shippingAddress: form.shippingAddress,
           orderType: form.orderType,
+          deliveryFrequency: form.orderType === 'subscription' ? form.deliveryFrequency : undefined,
           items,
           totalPrice: cartTotal
         }),
@@ -188,6 +190,24 @@ export default function CheckoutPage() {
                       <span className="label-text font-medium text-base-content">สั่งประจำ</span>
                     </label>
                   </div>
+                  
+                  {form.orderType === 'subscription' && (
+                    <div className="mt-4 p-4 bg-primary/5 rounded-xl border border-primary/20 animate-fade-in-up">
+                      <label className="label pt-0"><span className="label-text font-bold text-base-content/80">เลือกรอบการจัดส่ง <span className="text-error">*</span></span></label>
+                      <select 
+                        className="select select-bordered w-full bg-white text-base-content focus:border-primary focus:outline-none rounded-xl"
+                        value={form.deliveryFrequency}
+                        onChange={(e) => updateField("deliveryFrequency", e.target.value)}
+                      >
+                        <option value="weekly">ทุกสัปดาห์ (Weekly)</option>
+                        <option value="biweekly">ทุก 2 สัปดาห์ (Bi-weekly)</option>
+                        <option value="monthly">ทุกเดือน (Monthly)</option>
+                      </select>
+                      <p className="text-xs text-base-content/60 mt-3 flex items-start gap-1.5 leading-relaxed">
+                        <Info size={14} className="shrink-0 mt-0.5 text-primary" /> ระบบจะทำการจัดส่งวัตถุดิบและเรียกเก็บเงินตามรอบระยะเวลาที่คุณได้เลือกไว้
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-control">
