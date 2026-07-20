@@ -146,7 +146,7 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name */}
             <div>
-              <label className={`input input-bordered flex items-center gap-3 bg-white text-[#333333] ${errors.name ? 'input-error' : ''}`}>
+              <label className={`input input-bordered w-full flex items-center gap-3 bg-white text-[#333333] ${errors.name ? 'input-error' : ''}`}>
                 <User size={18} className={errors.name ? 'text-error' : 'text-[#333333]/50'} />
                 <input
                   type="text"
@@ -163,7 +163,7 @@ export default function RegisterPage() {
 
             {/* Email */}
             <div>
-              <label className={`input input-bordered flex items-center gap-3 bg-white text-[#333333] ${errors.email ? 'input-error' : ''}`}>
+              <label className={`input input-bordered w-full flex items-center gap-3 bg-white text-[#333333] ${errors.email ? 'input-error' : ''}`}>
                 <Mail size={18} className={errors.email ? 'text-error' : 'text-[#333333]/50'} />
                 <input
                   type="email"
@@ -180,7 +180,7 @@ export default function RegisterPage() {
 
             {/* Phone */}
             <div>
-              <label className={`input input-bordered flex items-center gap-3 bg-white text-[#333333] ${errors.phone ? 'input-error' : ''}`}>
+              <label className={`input input-bordered w-full flex items-center gap-3 bg-white text-[#333333] ${errors.phone ? 'input-error' : ''}`}>
                 <Phone size={18} className={errors.phone ? 'text-error' : 'text-[#333333]/50'} />
                 <input
                   type="tel"
@@ -198,7 +198,7 @@ export default function RegisterPage() {
 
             {/* Password */}
             <div>
-              <label className={`input input-bordered flex items-center gap-3 bg-white text-[#333333] ${errors.password ? 'input-error' : ''}`}>
+              <label className={`input input-bordered w-full flex items-center gap-3 bg-white text-[#333333] ${errors.password ? 'input-error' : ''}`}>
                 <Lock size={18} className={errors.password ? 'text-error' : 'text-[#333333]/50'} />
                 <input
                   type="password"
@@ -231,7 +231,7 @@ export default function RegisterPage() {
 
             {/* Confirm Password */}
             <div>
-              <label className={`input input-bordered flex items-center gap-3 bg-white text-[#333333] ${errors.confirmPassword ? 'input-error' : ''}`}>
+              <label className={`input input-bordered w-full flex items-center gap-3 bg-white text-[#333333] ${errors.confirmPassword ? 'input-error' : ''}`}>
                 <Lock size={18} className={errors.confirmPassword ? 'text-error' : 'text-[#333333]/50'} />
                 <input
                   type="password"

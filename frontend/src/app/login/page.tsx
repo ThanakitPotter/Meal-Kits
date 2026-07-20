@@ -57,7 +57,7 @@ export default function LoginPage() {
           {error && <div className="alert alert-error text-sm py-2 mb-4">{error}</div>}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <label className="input input-bordered flex items-center gap-3 bg-white text-[#333333]">
+            <label className="input input-bordered w-full flex items-center gap-3 bg-white text-[#333333]">
               <Mail size={18} className="text-[#333333]/50" />
               <input
                 type="email"
@@ -69,7 +69,7 @@ export default function LoginPage() {
               />
             </label>
 
-            <label className="input input-bordered flex items-center gap-3 bg-white text-[#333333]">
+            <label className="input input-bordered w-full flex items-center gap-3 bg-white text-[#333333]">
               <Lock size={18} className="text-[#333333]/50" />
               <input
                 type="password"
