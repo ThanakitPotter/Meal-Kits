@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { User, LogOut, LayoutDashboard, ShoppingBag, Menu as MenuIcon, ShoppingCart } from "lucide-react";
+import { User, LogOut, LayoutDashboard, ShoppingBag, Menu as MenuIcon, ShoppingCart, ClipboardList, Info } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 export default function Navbar() {
@@ -99,8 +99,8 @@ export default function Navbar() {
                 <ShoppingBag size={18} /> สั่งอาหาร
               </Link>
             </li>
-            <li><Link href="/how-to-order">วิธีการสั่งซื้อ</Link></li>
-            <li><Link href="/about">เกี่ยวกับเรา</Link></li>
+            <li><Link href="/how-to-order"><ClipboardList size={18} /> วิธีการสั่งซื้อ</Link></li>
+            <li><Link href="/about"><Info size={18} /> เกี่ยวกับเรา</Link></li>
             {user?.role === 'admin' && (
               <li>
                 <Link href="/admin" className={pathname === "/admin" ? "active text-primary" : ""}>
@@ -123,24 +123,24 @@ export default function Navbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-2 font-medium">
           <li>
-            <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "active !bg-primary !text-primary-content font-bold" : "hover:text-primary transition-colors"}>
-              สั่งอาหาร
+            <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "active !bg-primary !text-primary-content font-bold flex items-center gap-2" : "hover:text-primary transition-colors flex items-center gap-2"}>
+              <ShoppingBag size={18} /> สั่งอาหาร
             </Link>
           </li>
           <li>
-            <Link href="/how-to-order" className={pathname === "/how-to-order" ? "active !bg-primary !text-primary-content font-bold" : "hover:text-primary transition-colors"}>
-              วิธีการสั่งซื้อ
+            <Link href="/how-to-order" className={pathname === "/how-to-order" ? "active !bg-primary !text-primary-content font-bold flex items-center gap-2" : "hover:text-primary transition-colors flex items-center gap-2"}>
+              <ClipboardList size={18} /> วิธีการสั่งซื้อ
             </Link>
           </li>
           <li>
-            <Link href="/about" className={pathname === "/about" ? "active !bg-primary !text-primary-content font-bold" : "hover:text-primary transition-colors"}>
-              เกี่ยวกับเรา
+            <Link href="/about" className={pathname === "/about" ? "active !bg-primary !text-primary-content font-bold flex items-center gap-2" : "hover:text-primary transition-colors flex items-center gap-2"}>
+              <Info size={18} /> เกี่ยวกับเรา
             </Link>
           </li>
           {user?.role === 'admin' && (
             <li>
-              <Link href="/admin" className={pathname === "/admin" ? "active !bg-primary !text-primary-content font-bold" : "hover:text-primary transition-colors"}>
-                แอดมิน
+              <Link href="/admin" className={pathname === "/admin" ? "active !bg-primary !text-primary-content font-bold flex items-center gap-2" : "hover:text-primary transition-colors flex items-center gap-2"}>
+                <LayoutDashboard size={18} /> แอดมิน
               </Link>
             </li>
           )}
