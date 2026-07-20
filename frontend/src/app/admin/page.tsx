@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Order } from "@/types";
-import { RefreshCw, BarChart, ShoppingBag, Clock, Package, Truck, Inbox, Star, MessageSquare, Phone } from "lucide-react";
+import { RefreshCw, BarChart, ShoppingBag, Clock, Package, Truck, Inbox, Star, MessageSquare, Phone, Calendar } from "lucide-react";
 
 const statusConfig: Record<
   string,
@@ -24,6 +24,15 @@ const statusConfig: Record<
     badge: "badge-success",
     icon: Truck,
   },
+};
+
+const getNextDeliveryDate = (createdAt: string, frequency?: string) => {
+  if (!frequency) return null;
+  const date = new Date(createdAt);
+  if (frequency === 'weekly') date.setDate(date.getDate() + 7);
+  else if (frequency === 'biweekly') date.setDate(date.getDate() + 14);
+  else if (frequency === 'monthly') date.setMonth(date.getMonth() + 1);
+  return date;
 };
 
 const statusOptions: Array<Order["status"]> = [
@@ -244,6 +253,13 @@ export default function AdminPage() {
                         <span className="font-mono text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
                           #{order.id}
                         </span>
+                        {order.orderType === 'subscription' && (
+                          <div className="mt-2">
+                            <span className="badge badge-sm bg-primary/10 text-primary border-primary/20 text-[10px] font-bold px-2 py-2">
+                              {order.deliveryFrequency === 'weekly' ? 'ทุกสัปดาห์' : order.deliveryFrequency === 'biweekly' ? 'ทุก 2 สัปดาห์' : order.deliveryFrequency === 'monthly' ? 'ทุกเดือน' : 'สั่งประจำ'}
+                            </span>
+                          </div>
+                        )}
                       </td>
                       <td className="px-4 py-4">
                         <div className="font-bold text-gray-800">{order.customerName}</div>
@@ -292,7 +308,12 @@ export default function AdminPage() {
                         </div>
                       </td>
                       <td className="px-4 py-4 text-xs text-gray-500 whitespace-nowrap">
-                        {formatDate(order.createdAt)}
+                        <div className="flex items-center gap-1.5"><Calendar size={12} className="opacity-70" /> {formatDate(order.createdAt)}</div>
+                        {order.orderType === 'subscription' && order.deliveryFrequency && (
+                          <div className="mt-2 text-primary font-bold flex items-center gap-1.5 bg-primary/5 px-2 py-1.5 rounded-md border border-primary/10 w-fit">
+                            <Truck size={12} /> รอบถัดไป: {formatDate(getNextDeliveryDate(order.createdAt, order.deliveryFrequency)?.toISOString() || '')}
+                          </div>
+                        )}
                       </td>
                     </tr>
                   );
