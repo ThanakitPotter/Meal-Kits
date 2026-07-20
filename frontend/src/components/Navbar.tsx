@@ -12,16 +12,17 @@ export default function Navbar() {
   const pathname = usePathname();
   const [user, setUser] = useState<any>(null);
   const { cartCount } = useCart();
-  const [unreviewedOrders, setUnreviewedOrders] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [selectedReviewOrder, setSelectedReviewOrder] = useState<string | null>(null);
 
-  const fetchUnreviewedOrders = async (userId: string) => {
+  const fetchNotifications = async (userId: string) => {
     try {
       const res = await fetch(`/api/orders/user/${userId}`);
       if (res.ok) {
         const data = await res.json();
-        const unreviewed = data.filter((o: any) => o.status === "จัดส่งแล้ว" && !o.isReviewed);
-        setUnreviewedOrders(unreviewed);
+        const unreviewed = data.filter((o: any) => o.status === "จัดส่งแล้ว" && !o.isReviewed).map((o: any) => ({ ...o, notifType: 'shipped' }));
+        const preparing = data.filter((o: any) => o.status === "กำลังจัดเตรียม").map((o: any) => ({ ...o, notifType: 'preparing' }));
+        setNotifications([...unreviewed, ...preparing]);
       }
     } catch (error) {
       console.error(error);
@@ -33,18 +34,18 @@ export default function Navbar() {
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUser(parsedUser);
-      fetchUnreviewedOrders(parsedUser.id);
+      fetchNotifications(parsedUser.id);
     }
   }, []);
 
   // Re-fetch notifications when navigating pages and periodically
   useEffect(() => {
     if (user) {
-      fetchUnreviewedOrders(user.id);
+      fetchNotifications(user.id);
       
       // Check for new notifications every 5 seconds (Real-time feel)
       const interval = setInterval(() => {
-        fetchUnreviewedOrders(user.id);
+        fetchNotifications(user.id);
       }, 5000);
       
       return () => clearInterval(interval);
@@ -184,26 +185,39 @@ export default function Navbar() {
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle relative mr-1 text-[#333333]">
               <Bell size={22} />
-              {unreviewedOrders.length > 0 && (
+              {notifications.length > 0 && (
                 <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse border border-white"></span>
               )}
             </div>
             <ul tabIndex={0} className="dropdown-content menu bg-white text-[#333333] rounded-box z-[100] w-72 p-2 shadow-xl border border-gray-100 mt-4">
               <li className="menu-title px-4 py-2 font-bold text-[#333333]">การแจ้งเตือน</li>
               <div className="divider my-0"></div>
-              {unreviewedOrders.length > 0 ? (
-                unreviewedOrders.map((order) => (
-                  <li key={order.id}>
+              {notifications.length > 0 ? (
+                notifications.map((notif) => (
+                  <li key={`${notif.id}-${notif.notifType}`}>
                     <button 
                       onClick={() => {
-                        setSelectedReviewOrder(order.id);
+                        if (notif.notifType === 'shipped') {
+                          setSelectedReviewOrder(notif.id);
+                        } else {
+                          window.location.href = "/orders";
+                        }
                         const elem = document.activeElement as HTMLElement;
                         if (elem) elem.blur();
                       }}
                       className="text-left whitespace-normal py-3 px-4 hover:bg-gray-50 flex flex-col gap-1 border-b border-gray-50 last:border-0"
                     >
-                      <span className="font-bold text-[#E0A800]">🎉 ออเดอร์จัดส่งสำเร็จแล้ว!</span>
-                      <span className="text-sm text-[#333333]/70 leading-tight">คำสั่งซื้อ #{order.id} ส่งถึงมือคุณแล้ว แวะมาให้คะแนนและรีวิวมื้อนี้กันหน่อยนะครับ</span>
+                      {notif.notifType === 'shipped' ? (
+                        <>
+                          <span className="font-bold text-[#E0A800]">🎉 ออเดอร์จัดส่งสำเร็จแล้ว!</span>
+                          <span className="text-sm text-[#333333]/70 leading-tight">คำสั่งซื้อ #{notif.id} ส่งถึงมือคุณแล้ว แวะมาให้คะแนนและรีวิวมื้อนี้กันหน่อยนะครับ</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="font-bold text-warning">⏳ ออเดอร์กำลังจัดเตรียม!</span>
+                          <span className="text-sm text-[#333333]/70 leading-tight">คำสั่งซื้อ #{notif.id} กำลังถูกจัดเตรียมอย่างพิถีพิถัน รอรับความอร่อยได้เลยครับ!</span>
+                        </>
+                      )}
                     </button>
                   </li>
                 ))
@@ -282,7 +296,7 @@ export default function Navbar() {
         isOpen={!!selectedReviewOrder} 
         onClose={() => setSelectedReviewOrder(null)} 
         onSuccess={() => {
-          if (user) fetchUnreviewedOrders(user.id);
+          if (user) fetchNotifications(user.id);
         }}
       />
     </div>
