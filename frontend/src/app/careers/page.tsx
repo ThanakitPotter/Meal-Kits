@@ -26,7 +26,7 @@ export default function CareersPage() {
               พนักงานจัดส่งที่รักบริการ พร้อมรถจักรยานยนต์หรือรถยนต์ส่วนตัว (มีกล่องเก็บความเย็นจะพิจารณาเป็นพิเศษ)
             </p>
             <div className="card-actions justify-end mt-4">
-              <button className="btn btn-outline btn-sm">ดูรายละเอียด</button>
+              <button className="btn bg-white border border-gray-300 text-[#333333] hover:bg-gray-50 btn-sm">ดูรายละเอียด</button>
             </div>
           </div>
         </div>
