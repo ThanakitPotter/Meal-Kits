@@ -55,6 +55,34 @@ export default function Navbar() {
     }
   };
 
+  const handleScrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      
+      const startPosition = window.scrollY;
+      if (startPosition === 0) return;
+
+      const distance = -startPosition;
+      const duration = 1200; // 1.2 seconds
+      let start: number | null = null;
+
+      const step = (timestamp: number) => {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+        const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+        const percent = Math.min(progress / duration, 1);
+        window.scrollTo(0, startPosition + distance * easeInOutCubic(percent));
+
+        if (progress < duration) {
+          window.requestAnimationFrame(step);
+        }
+      };
+
+      window.requestAnimationFrame(step);
+    }
+  };
+
   return (
     <div className="navbar bg-base-100 shadow-sm border-b border-base-200 sticky top-0 z-50 px-4 md:px-8">
       <div className="navbar-start">
@@ -82,7 +110,7 @@ export default function Navbar() {
             )}
           </ul>
         </div>
-        <Link href="/" className="btn btn-ghost h-auto hover:bg-transparent py-1 gap-2">
+        <Link href="/" onClick={handleScrollToTop} className="btn btn-ghost h-auto hover:bg-transparent py-1 gap-2">
           <div className="flex items-center gap-2">
             <span className="text-2xl md:text-3xl">🍳</span>
             <span className="text-xl md:text-2xl font-extrabold tracking-tight">
