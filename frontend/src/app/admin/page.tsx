@@ -39,6 +39,8 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"orders" | "reviews">("orders");
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 15;
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -232,7 +234,7 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => {
+                {orders.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map((order) => {
                   const status = statusConfig[order.status] || { label: order.status, badge: 'badge-neutral', icon: Clock };
                   const StatusIcon = status.icon;
                   
@@ -292,6 +294,33 @@ export default function AdminPage() {
                 })}
               </tbody>
             </table>
+          </div>
+        )}
+        
+        {orders.length > 0 && !loading && (
+          <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-t border-gray-100 bg-gray-50/50 gap-4">
+            <span className="text-sm text-gray-500 font-medium">
+              แสดง {(currentPage - 1) * ITEMS_PER_PAGE + 1} ถึง {Math.min(currentPage * ITEMS_PER_PAGE, orders.length)} จาก {orders.length} รายการ
+            </span>
+            <div className="join shadow-sm">
+              <button 
+                className="join-item btn btn-sm bg-white border-gray-200 hover:bg-gray-100" 
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              >
+                « ก่อนหน้า
+              </button>
+              <button className="join-item btn btn-sm bg-white border-gray-200 cursor-default hover:bg-white text-primary font-bold px-4">
+                หน้า {currentPage} / {Math.ceil(orders.length / ITEMS_PER_PAGE) || 1}
+              </button>
+              <button 
+                className="join-item btn btn-sm bg-white border-gray-200 hover:bg-gray-100" 
+                disabled={currentPage === Math.ceil(orders.length / ITEMS_PER_PAGE) || Math.ceil(orders.length / ITEMS_PER_PAGE) === 0}
+                onClick={() => setCurrentPage(prev => Math.min(Math.ceil(orders.length / ITEMS_PER_PAGE), prev + 1))}
+              >
+                ถัดไป »
+              </button>
+            </div>
           </div>
         )}
       </div>
