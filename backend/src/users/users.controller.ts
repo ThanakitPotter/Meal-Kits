@@ -32,4 +32,10 @@ export class UsersController {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     res.redirect(`${frontendUrl}/auth/callback?token=${data.access_token}&user=${encodeURIComponent(JSON.stringify(data.user))}`);
   }
+
+  @Post(':id/profile')
+  updateProfile(@Req() req: any, @Body() body: any) {
+    const id = req.params.id;
+    return this.usersService.updateProfile(id, body);
+  }
 }

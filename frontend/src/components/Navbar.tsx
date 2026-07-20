@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { User, LogOut, LayoutDashboard, ShoppingBag, Menu as MenuIcon, ShoppingCart, ClipboardList, Info, Bell } from "lucide-react";
+import { User, LogOut, LayoutDashboard, ShoppingBag, Menu as MenuIcon, ShoppingCart, ClipboardList, Info, Bell, Settings } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import ReviewModal from "@/components/ReviewModal";
 
@@ -224,8 +224,12 @@ export default function Navbar() {
         {user ? (
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar placeholder hover:bg-base-200 focus:outline-none focus:ring-0 outline-none text-[#333333]">
-              <div className="bg-primary text-primary-content flex items-center justify-center rounded-full w-10 ring ring-primary ring-offset-base-100 ring-offset-2">
-                <User size={20} />
+              <div className="bg-primary text-primary-content flex items-center justify-center rounded-full w-10 ring ring-primary ring-offset-base-100 ring-offset-2 overflow-hidden">
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt="Avatar" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                ) : (
+                  <User size={20} />
+                )}
               </div>
             </div>
             <ul
@@ -247,6 +251,11 @@ export default function Navbar() {
               <li>
                 <Link href="/orders" className="text-[#333333] mt-1 font-medium py-3 hover:bg-gray-100">
                   <ShoppingBag size={18} /> ประวัติการสั่งซื้อ
+                </Link>
+              </li>
+              <li>
+                <Link href="/settings" className="text-[#333333] mt-1 font-medium py-3 hover:bg-gray-100">
+                  <Settings size={18} /> ตั้งค่าโปรไฟล์
                 </Link>
               </li>
               <li>

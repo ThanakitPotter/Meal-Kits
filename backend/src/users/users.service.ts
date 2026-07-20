@@ -58,7 +58,7 @@ export class UsersService implements OnModuleInit {
     const payload = { sub: user.id, email: user.email, name: user.name, role: user.role };
     return {
       access_token: await this.jwtService.signAsync(payload),
-      user: { id: user.id, name: user.name, email: user.email, role: user.role, phone: user.phone },
+      user: { id: user.id, name: user.name, email: user.email, role: user.role, phone: user.phone, avatarUrl: user.avatarUrl },
     };
   }
 
@@ -76,7 +76,7 @@ export class UsersService implements OnModuleInit {
     const payload = { sub: user.id, email: user.email, name: user.name, role: user.role };
     return {
       access_token: await this.jwtService.signAsync(payload),
-      user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role },
+      user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role, avatarUrl: user.avatarUrl },
     };
   }
 
@@ -98,7 +98,25 @@ export class UsersService implements OnModuleInit {
     const payload = { sub: user.id, email: user.email, name: user.name, role: user.role };
     return {
       access_token: await this.jwtService.signAsync(payload),
-      user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role },
+      user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role, avatarUrl: user.avatarUrl },
+    };
+  }
+
+  async updateProfile(id: string, data: { name?: string; avatarUrl?: string }) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new UnauthorizedException('ไม่พบผู้ใช้งาน');
+    }
+
+    if (data.name) user.name = data.name;
+    if (data.avatarUrl) user.avatarUrl = data.avatarUrl;
+
+    await this.usersRepository.save(user);
+
+    const payload = { sub: user.id, email: user.email, name: user.name, role: user.role };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+      user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role, avatarUrl: user.avatarUrl },
     };
   }
 }

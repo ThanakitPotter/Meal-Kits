@@ -17,6 +17,7 @@ export default function Home() {
   const categories = ["ทั้งหมด", "ผัด", "ต้ม-แกง", "ทอด-ย่าง"];
 
   useEffect(() => {
+    // Initial fetch
     Promise.all([
       fetch("/api/menus").then((res) => res.json()),
       fetch("/api/reviews").then((res) => res.json())
@@ -47,6 +48,34 @@ export default function Home() {
         console.error(err);
         setLoading(false);
       });
+
+    // Auto-refresh reviews every 5 seconds for a real-time feel
+    const interval = setInterval(() => {
+      fetch("/api/reviews")
+        .then((res) => res.json())
+        .then((reviewsData) => {
+          if (Array.isArray(reviewsData)) {
+            const formattedReviews = reviewsData.map((r: any) => {
+              const date = new Date(r.createdAt);
+              const now = new Date();
+              const diffTime = Math.abs(now.getTime() - date.getTime());
+              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+              let dateStr = "เมื่อวาน";
+              if (diffDays <= 1) dateStr = "วันนี้";
+              else if (diffDays < 7) dateStr = `${diffDays} วันที่แล้ว`;
+              else if (diffDays < 30) dateStr = `${Math.floor(diffDays / 7)} สัปดาห์ที่แล้ว`;
+              else dateStr = `${Math.floor(diffDays / 30)} เดือนที่แล้ว`;
+
+              return { ...r, dateStr };
+            });
+            setReviews(formattedReviews);
+          }
+        })
+        .catch((err) => console.error("Error polling reviews:", err));
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleAddToCart = (menuId: string) => {

@@ -34,7 +34,7 @@ export class ReviewsService {
       userId,
       userName: user.name,
       role: user.role === 'admin' ? 'ผู้ดูแลระบบ' : 'ลูกค้า',
-      image: `https://i.pravatar.cc/150?u=${userId}`,
+      image: user.avatarUrl || `https://i.pravatar.cc/150?u=${userId}`,
       rating,
       review,
     });
@@ -43,10 +43,21 @@ export class ReviewsService {
   }
 
   async findLatest() {
-    return this.reviewRepository.find({
+    const reviews = await this.reviewRepository.find({
       order: { createdAt: 'DESC' },
       take: 3,
     });
+
+    for (const r of reviews) {
+      if (r.userId) {
+        const user = await this.userRepository.findOne({ where: { id: r.userId } });
+        if (user && user.avatarUrl) {
+          r.image = user.avatarUrl;
+        }
+      }
+    }
+
+    return reviews;
   }
 
   async seed() {
