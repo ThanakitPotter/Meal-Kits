@@ -52,6 +52,13 @@ export default function UserOrdersPage() {
     }
     const user = JSON.parse(storedUser);
     fetchOrders(user.id);
+
+    // Auto-refresh orders every 5 seconds for a real-time feel
+    const interval = setInterval(() => {
+      fetchOrders(user.id);
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [router]);
 
   const formatDate = (dateStr: string) => {
