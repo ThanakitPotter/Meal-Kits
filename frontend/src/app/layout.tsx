@@ -3,6 +3,7 @@ import { Noto_Sans_Thai, Inter } from "next/font/google";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { CartProvider } from "@/context/CartContext";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 
 const notoSansThai = Noto_Sans_Thai({
@@ -36,6 +37,7 @@ export default function RootLayout({
       <head>
       </head>
       <body className="min-h-full flex flex-col bg-base-200 text-base-content font-sans">
+        <NextTopLoader color="#E0A800" showSpinner={false} />
         <CartProvider>
           <Navbar />
           <main className="flex-1">{children}</main>
