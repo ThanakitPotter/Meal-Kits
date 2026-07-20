@@ -60,7 +60,7 @@ export default function UserOrdersPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12 max-w-5xl">
+    <div className="container mx-auto px-4 py-8 md:py-12 max-w-5xl min-h-[60vh] mb-10 md:mb-0">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-extrabold flex items-center gap-3">
@@ -87,47 +87,86 @@ export default function UserOrdersPage() {
             <Link href="/" className="btn btn-primary">เริ่มสั่งอาหารเลย</Link>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="table w-full">
-              <thead className="bg-base-200/50 text-base-content">
-                <tr>
-                  <th className="whitespace-nowrap">ออเดอร์</th>
-                  <th className="whitespace-nowrap">เมนู</th>
-                  <th className="whitespace-nowrap">ราคา</th>
-                  <th className="whitespace-nowrap">สถานะ</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((order) => {
-                  const status = statusConfig[order.status] || { label: order.status, badge: 'badge-neutral', icon: Clock };
-                  const StatusIcon = status.icon;
-                  
-                  return (
-                    <tr key={order.id} className="hover">
-                      <td className="whitespace-nowrap">
-                        <div className="font-mono font-bold opacity-70">
-                          #{order.id.slice(0, 8)}...
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="table w-full">
+                <thead className="bg-base-200/50 text-base-content">
+                  <tr>
+                    <th className="whitespace-nowrap">ออเดอร์</th>
+                    <th className="whitespace-nowrap">เมนู</th>
+                    <th className="whitespace-nowrap">ราคา</th>
+                    <th className="whitespace-nowrap">สถานะ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order) => {
+                    const status = statusConfig[order.status] || { label: order.status, badge: 'badge-neutral', icon: Clock };
+                    const StatusIcon = status.icon;
+                    
+                    return (
+                      <tr key={order.id} className="hover">
+                        <td className="whitespace-nowrap">
+                          <div className="font-mono font-bold opacity-70">
+                            #{order.id.slice(0, 8)}...
+                          </div>
+                          <div className="text-xs opacity-60 mt-0.5">{formatDate(order.createdAt)}</div>
+                        </td>
+                        <td className="whitespace-nowrap min-w-[120px]">
+                          <div className="font-bold whitespace-normal">{order.items && order.items.length > 0 ? order.items[0].menuName : 'N/A'}</div>
+                          <div className="text-xs opacity-60 mt-0.5">{order.items && order.items.length > 0 ? order.items[0].servings : 0} ท่าน {order.items && order.items.length > 1 ? `(+${order.items.length - 1} รายการ)` : ''}</div>
+                        </td>
+                        <td className="font-bold text-primary whitespace-nowrap">
+                          ฿{order.totalPrice.toLocaleString()}
+                        </td>
+                        <td className="whitespace-nowrap">
+                          <div className={`badge ${status.badge} gap-1 font-bold p-3 whitespace-nowrap`}>
+                            <StatusIcon size={14} /> {status.label}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden flex flex-col gap-3 p-4 bg-base-200/20">
+              {orders.map((order) => {
+                const status = statusConfig[order.status] || { label: order.status, badge: 'badge-neutral', icon: Clock };
+                const StatusIcon = status.icon;
+                
+                return (
+                  <div key={order.id} className="card bg-base-100 shadow-sm border border-base-200">
+                    <div className="card-body p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <div className="font-mono font-bold opacity-70 text-sm">#{order.id.slice(0, 8)}...</div>
+                          <div className="text-xs opacity-60 mt-0.5">{formatDate(order.createdAt)}</div>
                         </div>
-                        <div className="text-xs opacity-60 mt-0.5">{formatDate(order.createdAt)}</div>
-                      </td>
-                      <td className="whitespace-nowrap min-w-[120px]">
-                        <div className="font-bold whitespace-normal">{order.items && order.items.length > 0 ? order.items[0].menuName : 'N/A'}</div>
-                        <div className="text-xs opacity-60 mt-0.5">{order.items && order.items.length > 0 ? order.items[0].servings : 0} ท่าน {order.items && order.items.length > 1 ? `(+${order.items.length - 1} รายการ)` : ''}</div>
-                      </td>
-                      <td className="font-bold text-primary whitespace-nowrap">
-                        ฿{order.totalPrice.toLocaleString()}
-                      </td>
-                      <td className="whitespace-nowrap">
-                        <div className={`badge ${status.badge} gap-1 font-bold p-3 whitespace-nowrap`}>
-                          <StatusIcon size={14} /> {status.label}
+                        <div className={`badge ${status.badge} gap-1 font-bold p-3 text-xs`}>
+                          <StatusIcon size={12} /> {status.label}
                         </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                      </div>
+                      
+                      <div className="divider my-1"></div>
+                      
+                      <div className="flex justify-between items-center mt-2">
+                        <div>
+                          <div className="font-bold text-sm line-clamp-1">{order.items && order.items.length > 0 ? order.items[0].menuName : 'N/A'}</div>
+                          <div className="text-xs opacity-60 mt-0.5">{order.items && order.items.length > 0 ? order.items[0].servings : 0} ท่าน {order.items && order.items.length > 1 ? `(+${order.items.length - 1} รายการ)` : ''}</div>
+                        </div>
+                        <div className="font-bold text-primary text-lg whitespace-nowrap ml-2">
+                          ฿{order.totalPrice.toLocaleString()}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
     </div>
