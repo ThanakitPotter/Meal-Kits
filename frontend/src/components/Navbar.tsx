@@ -28,8 +28,8 @@ export default function Navbar() {
         
         // Check if there are new unread notifications
         const viewedNotifs = JSON.parse(localStorage.getItem('viewedNotifs') || '[]');
-        const hasNew = allNotifs.some(n => !viewedNotifs.includes(`${n.id}-${n.status}`));
-        if (hasNew) setHasUnread(true);
+        const hasNew = allNotifs.length > 0 && allNotifs.some(n => !viewedNotifs.includes(`${n.id}-${n.status}`));
+        setHasUnread(hasNew);
       }
     } catch (error) {
       console.error(error);
