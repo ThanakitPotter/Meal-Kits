@@ -390,20 +390,31 @@ export default function Home() {
               <div className="mt-4 bg-white border border-gray-100 rounded-2xl p-6 shadow-sm animate-fade-in-up">
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {(selectedRating ? reviews.filter(r => r.rating === selectedRating) : reviews).slice(0, 15).map((review, i) => (
-                    <div key={i} className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl transition-colors">
-                      <div className="avatar">
-                        <div className="w-10 h-10 rounded-full bg-gray-100 overflow-hidden">
-                          <img src={review.image} alt={review.userName} className="object-cover w-full h-full" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                    <div key={i} className="flex flex-col gap-3 p-4 hover:bg-gray-50 border border-transparent hover:border-gray-100 rounded-2xl transition-all">
+                      <div className="flex items-center gap-3">
+                        <div className="avatar shrink-0">
+                          <div className="w-10 h-10 rounded-full bg-gray-100 overflow-hidden">
+                            <img src={review.image} alt={review.userName} className="object-cover w-full h-full" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                          </div>
+                        </div>
+                        <div className="overflow-hidden">
+                          <div className="font-bold text-sm text-[#333333] truncate">{review.userName}</div>
+                          <div className="flex gap-0.5 text-warning mt-0.5">
+                            {[...Array(review.rating)].map((_, j) => (
+                              <Star key={j} size={12} fill="currentColor" />
+                            ))}
+                          </div>
                         </div>
                       </div>
-                      <div>
-                        <div className="font-bold text-sm text-[#333333] truncate max-w-[180px]">{review.userName}</div>
-                        <div className="flex gap-0.5 text-warning mt-0.5">
-                          {[...Array(review.rating)].map((_, j) => (
-                            <Star key={j} size={10} fill="currentColor" />
-                          ))}
+                      
+                      {review.menuNames && (
+                        <div className="text-[10px] text-[#E0A800] bg-[#E0A800]/10 px-2 py-1 rounded-md font-medium border border-[#E0A800]/20 inline-flex items-center gap-1.5 w-fit line-clamp-1">
+                          <UtensilsCrossed size={10} /> {review.menuNames}
                         </div>
-                      </div>
+                      )}
+                      <p className="text-xs text-[#333333]/70 line-clamp-2 italic leading-relaxed">
+                        "{review.review}"
+                      </p>
                     </div>
                   ))}
                 </div>
