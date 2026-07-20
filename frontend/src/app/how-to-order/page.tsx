@@ -1,5 +1,5 @@
-import { Package, ChefHat, Truck } from "lucide-react";
-
+import Link from "next/link";
+import { Package, ChefHat, Truck, ArrowLeft } from "lucide-react";
 export default function HowToOrderPage() {
   return (
     <div className="container mx-auto px-4 py-20 max-w-4xl">
@@ -42,10 +42,10 @@ export default function HowToOrderPage() {
         </div>
       </div>
       
-      <div className="text-center mt-16">
-        <a href="/" className="btn bg-[#E0A800] hover:bg-[#c98e10] text-white border-none rounded-full px-8">
-          กลับไปเลือกเมนู
-        </a>
+      <div className="mt-16 flex justify-center">
+        <Link href="/#menus" className="btn bg-[#E0A800] hover:bg-[#c98e10] text-white border-none btn-lg rounded-full shadow-lg">
+          <ArrowLeft className="mr-2" size={20} /> กลับไปเลือกเมนู
+        </Link>
       </div>
     </div>
   );

@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+
 export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-20 max-w-4xl">
@@ -21,6 +24,12 @@ export default function AboutPage() {
           <li>สัดส่วนพอดีเป๊ะ หมดปัญหาซื้อของมาแล้วใช้ไม่หมด</li>
           <li>รสชาติอร่อยระดับร้านอาหาร ทำตามได้ง่ายๆ ใน 15-30 นาที</li>
         </ul>
+
+        <div className="mt-12 flex justify-center">
+          <Link href="/#menus" className="btn bg-[#E0A800] hover:bg-[#c98e10] text-white border-none btn-lg rounded-full shadow-lg">
+            <ArrowLeft className="mr-2" size={20} /> กลับไปเลือกเมนู
+          </Link>
+        </div>
       </div>
     </div>
   );
