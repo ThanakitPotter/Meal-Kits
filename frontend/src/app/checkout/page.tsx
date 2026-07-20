@@ -226,26 +226,26 @@ export default function CheckoutPage() {
               
               <div className="overflow-x-auto rounded-lg mb-6">
                 <table className="table w-full border border-[#c594a1] rounded-box overflow-hidden">
-                  <thead className="bg-base-200/50 text-base-content">
+                  <thead className="bg-gray-100 text-gray-700">
                     <tr>
-                      <th className="font-semibold text-base-content">รายการ</th>
-                      <th className="font-semibold w-16 text-center text-base-content">จำนวน</th>
-                      <th className="font-semibold w-24 text-right text-base-content">ราคา</th>
+                      <th className="font-semibold text-gray-700">รายการ</th>
+                      <th className="font-semibold w-16 text-center text-gray-700">จำนวน</th>
+                      <th className="font-semibold w-24 text-right text-gray-700">ราคา</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-base-200">
+                  <tbody className="divide-y divide-gray-100">
                     {cartItems.map(item => (
                       <tr key={item.id}>
                         <td>
-                          <span className="font-bold text-base-content block line-clamp-1">{item.menuName}</span>
-                          <span className="block text-xs opacity-70 mt-1">{item.servings} คน</span>
+                          <span className="font-bold text-gray-800 block line-clamp-1">{item.menuName}</span>
+                          <span className="block text-xs text-gray-500 mt-1">{item.servings} คน</span>
                         </td>
-                        <td className="text-center font-medium">{item.quantity}</td>
-                        <td className="text-right font-medium">฿{(item.price * item.quantity).toLocaleString()}</td>
+                        <td className="text-center font-medium text-gray-800">{item.quantity}</td>
+                        <td className="text-right font-medium text-gray-800">฿{(item.price * item.quantity).toLocaleString()}</td>
                       </tr>
                     ))}
-                    <tr className="bg-base-200/30">
-                      <td colSpan={2} className="font-bold text-right text-base-content/80">
+                    <tr className="bg-gray-50">
+                      <td colSpan={2} className="font-bold text-right text-gray-700">
                         ยอดรวมทั้งสิ้น
                       </td>
                       <td className="font-extrabold text-primary text-lg text-right">
@@ -260,7 +260,7 @@ export default function CheckoutPage() {
                 type="submit"
                 form="checkout-form"
                 disabled={submitting || !isFormValid}
-                className="btn btn-primary btn-block btn-lg text-lg"
+                className="btn btn-primary btn-block btn-lg text-lg disabled:bg-gray-200 disabled:text-gray-400"
               >
                 {submitting ? (
                   <span className="loading loading-spinner loading-md"></span>

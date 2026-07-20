@@ -43,7 +43,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
     return (
       <div className="container mx-auto px-4 py-20 text-center min-h-[60vh] flex flex-col items-center justify-center">
         <h1 className="text-3xl font-bold mb-2">ไม่พบเมนู</h1>
-        <p className="text-base-content/60 mb-6">เมนูที่คุณกำลังค้นหาไม่มีอยู่ในระบบ</p>
+        <p className="text-gray-500 mb-6">เมนูที่คุณกำลังค้นหาไม่มีอยู่ในระบบ</p>
         <Link href="/" className="btn btn-primary">
           <ArrowLeft size={18} /> กลับหน้าแรก
         </Link>
@@ -108,11 +108,11 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
             
             <div className="card-body p-6 md:p-8">
               <h1 className="text-3xl md:text-4xl font-extrabold mb-2 text-[#333333]">{menu.name}</h1>
-              <div className="flex items-center gap-2 mb-6 text-sm font-medium text-base-content/70">
+              <div className="flex items-center gap-2 mb-6 text-sm font-medium text-gray-500">
                 <Clock size={16} /> ใช้เวลาปรุงประมาณ {menu.prepTime}
               </div>
               
-              <div className="prose prose-sm md:prose-base max-w-none text-base-content/80 mb-8">
+              <div className="prose prose-sm md:prose-base max-w-none text-gray-700 mb-8">
                 <p>{menu.description}</p>
               </div>
               
@@ -120,7 +120,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
               
               <ul className="grid sm:grid-cols-2 gap-4">
                 {menu.ingredients.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-sm text-base-content/70">
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-gray-600">
                     <Check size={16} className="text-primary mt-0.5 flex-shrink-0" />
                     <span>{item}</span>
                   </li>
@@ -135,7 +135,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
           <div className="card bg-white text-[#333333] shadow-md border border-gray-100 sticky top-24">
             <div className="card-body p-6 md:p-8">
               <h2 className="card-title text-2xl font-extrabold mb-1">สั่งซื้อเมนูนี้</h2>
-              <p className="text-base-content/50 text-sm mb-8">
+              <p className="text-gray-500 text-sm mb-8">
                 เลือกจำนวนที่ต้องการทาน
               </p>
 
@@ -151,7 +151,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                       onClick={() => setServings(1)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all ${servings === 1
                           ? 'btn-primary'
-                          : 'btn-outline border-gray-200 text-base-content'
+                          : 'btn-outline border-gray-200 text-[#333333] hover:bg-gray-50'
                         }`}
                     >
                       <span className="text-xl font-bold">1 คน</span>
@@ -162,7 +162,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                       onClick={() => setServings(2)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${servings === 2
                           ? 'btn-primary'
-                          : 'btn-outline border-gray-200 text-base-content'
+                          : 'btn-outline border-gray-200 text-[#333333] hover:bg-gray-50'
                         }`}
                     >
                       <div className="flex items-center gap-2">
@@ -175,7 +175,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                       onClick={() => setServings(4)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${servings === 4
                           ? 'btn-primary'
-                          : 'btn-outline border-gray-200 text-base-content'
+                          : 'btn-outline border-gray-200 text-[#333333] hover:bg-gray-50'
                         }`}
                     >
                       <div className="flex items-center gap-2">
@@ -190,7 +190,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                 <div className="divider"></div>
 
                 <div className="flex justify-between items-center mb-6">
-                  <span className="text-lg font-bold text-base-content/80">ราคารวม</span>
+                  <span className="text-lg font-bold text-gray-700">ราคารวม</span>
                   <span className="text-3xl font-extrabold text-primary">฿{totalPrice.toLocaleString()}</span>
                 </div>
 

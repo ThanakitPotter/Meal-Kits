@@ -60,7 +60,7 @@ export default function CartPage() {
                       <Trash2 size={18} />
                     </button>
                   </div>
-                  <p className="text-sm text-base-content/70 mt-1">
+                  <p className="text-sm text-gray-500 mt-1">
                     สำหรับ {item.servings} คน
                   </p>
                 </div>
@@ -97,11 +97,11 @@ export default function CartPage() {
               
               <div className="space-y-3 mb-6 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-base-content/70">ยอดรวมสินค้า ({cartItems.length} รายการ)</span>
+                  <span className="text-gray-500">ยอดรวมสินค้า ({cartItems.length} รายการ)</span>
                   <span className="font-semibold">฿{cartTotal.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-base-content/70">ค่าจัดส่ง</span>
+                  <span className="text-gray-500">ค่าจัดส่ง</span>
                   <span className="text-success font-semibold">ส่งฟรี</span>
                 </div>
               </div>
