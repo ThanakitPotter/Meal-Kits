@@ -24,7 +24,10 @@ export class MenusService {
   }
 
   async seedMenus(): Promise<string> {
-    await this.menusRepository.delete({});
+    const existing = await this.menusRepository.find();
+    if (existing.length > 0) {
+      await this.menusRepository.remove(existing);
+    }
     for (const menuData of MOCK_MENUS) {
       // Exclude the mock string ID to let postgres generate a UUID
       const { id, ...data } = menuData;
