@@ -26,5 +26,6 @@ export interface Order {
   shippingAddress: string;
   status: 'รอดำเนินการ' | 'กำลังจัดเตรียม' | 'จัดส่งแล้ว';
   totalPrice: number;
+  isReviewed?: boolean;
   createdAt: string;
 }

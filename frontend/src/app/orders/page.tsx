@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Order } from "@/types";
-import { ShoppingBag, Clock, Package, Truck, Inbox, ArrowLeft } from "lucide-react";
+import { ShoppingBag, Clock, Package, Truck, Inbox, ArrowLeft, Star } from "lucide-react";
+import ReviewModal from "@/components/ReviewModal";
 
 const statusConfig: Record<
   string,
@@ -31,6 +32,17 @@ export default function UserOrdersPage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedReviewOrder, setSelectedReviewOrder] = useState<string | null>(null);
+
+  const fetchOrders = (userId: string) => {
+    fetch(`/api/orders/user/${userId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setOrders(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  };
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -39,14 +51,7 @@ export default function UserOrdersPage() {
       return;
     }
     const user = JSON.parse(storedUser);
-
-    fetch(`/api/orders/user/${user.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setOrders(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    fetchOrders(user.id);
   }, [router]);
 
   const formatDate = (dateStr: string) => {
@@ -120,8 +125,18 @@ export default function UserOrdersPage() {
                           ฿{order.totalPrice.toLocaleString()}
                         </td>
                         <td className="whitespace-nowrap">
-                          <div className={`badge ${status.badge} gap-1 font-bold p-3 whitespace-nowrap`}>
-                            <StatusIcon size={14} /> {status.label}
+                          <div className="flex items-center gap-2">
+                            <div className={`badge ${status.badge} gap-1 font-bold p-3 whitespace-nowrap`}>
+                              <StatusIcon size={14} /> {status.label}
+                            </div>
+                            {order.status === 'จัดส่งแล้ว' && !order.isReviewed && (
+                              <button 
+                                onClick={() => setSelectedReviewOrder(order.id)}
+                                className="btn btn-sm bg-[#E0A800] hover:bg-[#c98e10] text-white border-none gap-1 ml-2"
+                              >
+                                <Star size={14} className="fill-white" /> รีวิว
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -145,8 +160,18 @@ export default function UserOrdersPage() {
                           <div className="font-mono font-bold opacity-70 text-sm">#{order.id.slice(0, 8)}...</div>
                           <div className="text-xs opacity-60 mt-0.5">{formatDate(order.createdAt)}</div>
                         </div>
-                        <div className={`badge ${status.badge} gap-1 font-bold p-3 text-xs`}>
-                          <StatusIcon size={12} /> {status.label}
+                        <div className="flex flex-col items-end gap-2">
+                          <div className={`badge ${status.badge} gap-1 font-bold p-3 text-xs`}>
+                            <StatusIcon size={12} /> {status.label}
+                          </div>
+                          {order.status === 'จัดส่งแล้ว' && !order.isReviewed && (
+                            <button 
+                              onClick={() => setSelectedReviewOrder(order.id)}
+                              className="btn btn-xs bg-[#E0A800] hover:bg-[#c98e10] text-white border-none gap-1"
+                            >
+                              <Star size={12} className="fill-white" /> รีวิว
+                            </button>
+                          )}
                         </div>
                       </div>
                       
@@ -169,6 +194,18 @@ export default function UserOrdersPage() {
           </>
         )}
       </div>
+
+      <ReviewModal 
+        orderId={selectedReviewOrder || ""} 
+        isOpen={!!selectedReviewOrder} 
+        onClose={() => setSelectedReviewOrder(null)} 
+        onSuccess={() => {
+          const storedUser = localStorage.getItem("user");
+          if (storedUser) {
+            fetchOrders(JSON.parse(storedUser).id);
+          }
+        }}
+      />
     </div>
   );
 }
