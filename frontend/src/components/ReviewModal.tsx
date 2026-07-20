@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Star, X } from "lucide-react";
+import confetti from "canvas-confetti";
 
 interface ReviewModalProps {
   orderId: string;
@@ -15,6 +16,16 @@ export default function ReviewModal({ orderId, isOpen, onClose, onSuccess }: Rev
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  // Reset state when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setRating(0);
+      setReviewText("");
+      setIsSuccess(false);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -51,9 +62,19 @@ export default function ReviewModal({ orderId, isOpen, onClose, onSuccess }: Rev
 
       if (!orderRes.ok) throw new Error("อัปเดตสถานะออเดอร์ไม่สำเร็จ");
 
-      alert("ขอบคุณสำหรับรีวิวของคุณครับ!");
-      onSuccess();
-      onClose();
+      setIsSuccess(true);
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#E0A800', '#ffc107', '#ffeb3b', '#4caf50', '#ffffff'],
+      });
+      
+      setTimeout(() => {
+        onSuccess();
+        onClose();
+        setIsSuccess(false);
+      }, 3000);
     } catch (error) {
       console.error(error);
       alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
@@ -80,7 +101,18 @@ export default function ReviewModal({ orderId, isOpen, onClose, onSuccess }: Rev
 
         {/* Body */}
         <div className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {isSuccess ? (
+            <div className="flex flex-col items-center justify-center py-8 text-center animate-fade-in-up">
+              <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-6 animate-bounce">
+                <svg className="w-12 h-12 text-green-500 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-extrabold text-[#333333] mb-2">ขอบคุณสำหรับการรีวิวครับ! 🎉</h3>
+              <p className="text-gray-500 font-medium">ความคิดเห็นของคุณมีความหมายกับเรามาก</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
             
             {/* Stars */}
             <div className="flex flex-col items-center">
@@ -130,6 +162,7 @@ export default function ReviewModal({ orderId, isOpen, onClose, onSuccess }: Rev
               {isSubmitting ? <span className="loading loading-spinner"></span> : "ส่งรีวิวเลย"}
             </button>
           </form>
+          )}
         </div>
       </div>
     </div>
