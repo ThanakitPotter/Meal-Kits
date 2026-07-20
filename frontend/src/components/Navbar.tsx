@@ -26,6 +26,35 @@ export default function Navbar() {
     window.location.href = "/";
   };
 
+  const handleScrollToMenus = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      const target = document.getElementById("menus");
+      if (!target) return;
+
+      const targetPosition = target.getBoundingClientRect().top + window.scrollY;
+      const startPosition = window.scrollY;
+      const distance = targetPosition - startPosition;
+      const duration = 1200; // 1.2 seconds
+      let start: number | null = null;
+
+      const step = (timestamp: number) => {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+        const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+        const percent = Math.min(progress / duration, 1);
+        window.scrollTo(0, startPosition + distance * easeInOutCubic(percent));
+
+        if (progress < duration) {
+          window.requestAnimationFrame(step);
+        }
+      };
+
+      window.requestAnimationFrame(step);
+    }
+  };
+
   return (
     <div className="navbar bg-base-100 shadow-sm border-b border-base-200 sticky top-0 z-50 px-4 md:px-8">
       <div className="navbar-start">
@@ -42,7 +71,7 @@ export default function Navbar() {
                 <ShoppingBag size={18} /> สั่งอาหาร
               </Link>
             </li>
-            <li><Link href="/#menus">เมนูแนะนำ</Link></li>
+            <li><Link href="/#menus" onClick={handleScrollToMenus}>เมนูแนะนำ</Link></li>
             <li><Link href="/how-to-order">วิธีการสั่งซื้อ</Link></li>
             <li><Link href="/about">เกี่ยวกับเรา</Link></li>
             {user?.role === 'admin' && (
@@ -72,7 +101,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="/#menus" className="hover:text-primary transition-colors">
+            <Link href="/#menus" onClick={handleScrollToMenus} className="hover:text-primary transition-colors">
               เมนูแนะนำ
             </Link>
           </li>
