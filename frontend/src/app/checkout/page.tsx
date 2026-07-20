@@ -84,28 +84,40 @@ export default function CheckoutPage() {
 
   if (successId) {
     return (
-      <div className="container mx-auto max-w-md md:max-w-2xl px-4 py-12 md:py-20 min-h-[60vh] flex items-center justify-center">
-        <div className="card w-full bg-base-100 shadow-2xl border border-gray-100 animate-fade-in-up overflow-hidden mb-10 md:mb-0">
-          <div className="bg-gradient-to-r from-success to-emerald-500 p-8 md:p-10 text-center text-primary-content">
-            <CheckCircle2 size={64} className="mx-auto mb-4 drop-shadow-md" />
-            <h1 className="text-2xl md:text-3xl font-extrabold drop-shadow-sm">สั่งซื้อสำเร็จ!</h1>
-          </div>
-          <div className="card-body p-6 md:p-8">
-            <div className="alert alert-success bg-success/10 border-success/20 text-success-content mb-8 shadow-sm">
-              <div className="flex flex-col gap-1">
-                <h3 className="font-bold text-base">หมายเลขคำสั่งซื้อ: #{successId}</h3>
-                <p className="text-sm opacity-90">ระบบได้รับคำสั่งซื้อของคุณแล้ว เราจะเริ่มเตรียมวัตถุดิบและจัดส่งให้คุณโดยเร็วที่สุด</p>
+      <div className="container mx-auto max-w-md md:max-w-xl px-4 py-12 md:py-20 min-h-[60vh] flex items-center justify-center">
+        <div className="card w-full bg-white shadow-2xl border border-gray-100 animate-fade-in-up overflow-hidden mb-10 md:mb-0 rounded-3xl">
+          
+          <div className="bg-gradient-to-br from-green-400 to-emerald-600 p-8 md:p-12 text-center text-white relative">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+            <div className="relative z-10 flex flex-col items-center">
+              <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-5 animate-bounce shadow-lg ring-4 ring-white/30">
+                <CheckCircle2 size={48} className="text-white drop-shadow-md" />
               </div>
+              <h1 className="text-3xl md:text-4xl font-extrabold drop-shadow-sm mb-2">สั่งซื้อสำเร็จ!</h1>
+              <p className="text-emerald-50 font-medium text-lg">ขอบคุณที่ไว้วางใจ Meal Kits</p>
+            </div>
+          </div>
+
+          <div className="card-body p-6 md:p-10 flex flex-col items-center text-center">
+            
+            <div className="w-full bg-gray-50 border border-gray-200 rounded-2xl p-6 mb-8 shadow-inner relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-green-500"></div>
+              <p className="text-gray-500 font-medium mb-1 text-sm uppercase tracking-wider">หมายเลขคำสั่งซื้อ</p>
+              <h3 className="font-mono text-2xl font-bold text-gray-800 mb-4">#{successId.slice(0,8).toUpperCase()}</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                ระบบได้รับคำสั่งซื้อของคุณแล้ว เราจะเริ่มเตรียมวัตถุดิบที่สดใหม่และจัดส่งให้คุณโดยเร็วที่สุด
+              </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 mt-2">
-              <Link href="/" className="btn btn-outline flex-1 rounded-full">
+            <div className="flex flex-col sm:flex-row w-full gap-4 mt-2">
+              <Link href="/" className="btn btn-lg bg-gray-100 hover:bg-gray-200 text-gray-700 border-none flex-1 rounded-2xl font-bold text-base shadow-sm">
                 กลับหน้าแรก
               </Link>
-              <Link href="/orders" className="btn btn-primary flex-1 rounded-full shadow-md hover:shadow-lg">
+              <Link href="/orders" className="btn btn-lg bg-[#E0A800] hover:bg-[#c98e10] text-white border-none flex-1 rounded-2xl shadow-md hover:shadow-lg font-bold text-base">
                 ดูสถานะออเดอร์
               </Link>
             </div>
+            
           </div>
         </div>
       </div>
