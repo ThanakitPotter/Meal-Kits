@@ -67,11 +67,10 @@ export default function Navbar() {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[100] mt-3 w-52 p-2 shadow"
           >
             <li>
-              <Link href="/" className={pathname === "/" ? "active text-primary" : ""}>
+              <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "active text-primary" : ""}>
                 <ShoppingBag size={18} /> สั่งอาหาร
               </Link>
             </li>
-            <li><Link href="/#menus" onClick={handleScrollToMenus}>เมนูแนะนำ</Link></li>
             <li><Link href="/how-to-order">วิธีการสั่งซื้อ</Link></li>
             <li><Link href="/about">เกี่ยวกับเรา</Link></li>
             {user?.role === 'admin' && (
@@ -96,13 +95,8 @@ export default function Navbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-2 font-medium">
           <li>
-            <Link href="/" className={pathname === "/" ? "active !bg-primary !text-primary-content font-bold" : "hover:text-primary transition-colors"}>
+            <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "active !bg-primary !text-primary-content font-bold" : "hover:text-primary transition-colors"}>
               สั่งอาหาร
-            </Link>
-          </li>
-          <li>
-            <Link href="/#menus" onClick={handleScrollToMenus} className="hover:text-primary transition-colors">
-              เมนูแนะนำ
             </Link>
           </li>
           <li>
