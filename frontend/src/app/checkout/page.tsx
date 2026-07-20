@@ -84,25 +84,25 @@ export default function CheckoutPage() {
 
   if (successId) {
     return (
-      <div className="container mx-auto max-w-2xl px-4 py-20">
-        <div className="card bg-base-100 shadow-xl border border-base-200 animate-fade-in-up">
-          <div className="bg-gradient-to-r from-success to-emerald-500 p-8 text-center text-primary-content">
-            <CheckCircle2 size={64} className="mx-auto mb-4" />
-            <h1 className="text-3xl font-extrabold">สั่งซื้อสำเร็จ!</h1>
+      <div className="container mx-auto max-w-md md:max-w-2xl px-4 py-12 md:py-20 min-h-[60vh] flex items-center justify-center">
+        <div className="card w-full bg-base-100 shadow-2xl border border-base-200 animate-fade-in-up overflow-hidden mb-10 md:mb-0">
+          <div className="bg-gradient-to-r from-success to-emerald-500 p-8 md:p-10 text-center text-primary-content">
+            <CheckCircle2 size={64} className="mx-auto mb-4 drop-shadow-md" />
+            <h1 className="text-2xl md:text-3xl font-extrabold drop-shadow-sm">สั่งซื้อสำเร็จ!</h1>
           </div>
           <div className="card-body p-6 md:p-8">
-            <div className="alert alert-success bg-success/10 border-success/20 text-success-content mb-6">
-              <div>
-                <h3 className="font-bold">หมายเลขคำสั่งซื้อ: #{successId}</h3>
-                <div className="text-sm">ระบบได้รับคำสั่งซื้อของคุณแล้ว เราจะเริ่มเตรียมวัตถุดิบและจัดส่งให้คุณโดยเร็วที่สุด</div>
+            <div className="alert alert-success bg-success/10 border-success/20 text-success-content mb-8 shadow-sm">
+              <div className="flex flex-col gap-1">
+                <h3 className="font-bold text-base">หมายเลขคำสั่งซื้อ: #{successId}</h3>
+                <p className="text-sm opacity-90">ระบบได้รับคำสั่งซื้อของคุณแล้ว เราจะเริ่มเตรียมวัตถุดิบและจัดส่งให้คุณโดยเร็วที่สุด</p>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link href="/" className="btn btn-outline flex-1">
+            <div className="flex flex-col sm:flex-row gap-3 mt-2">
+              <Link href="/" className="btn btn-outline flex-1 rounded-full">
                 กลับหน้าแรก
               </Link>
-              <Link href="/orders" className="btn btn-primary flex-1">
+              <Link href="/orders" className="btn btn-primary flex-1 rounded-full shadow-md hover:shadow-lg">
                 ดูสถานะออเดอร์
               </Link>
             </div>
