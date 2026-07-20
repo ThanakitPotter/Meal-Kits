@@ -162,7 +162,7 @@ export default function Home() {
               (selectedCategory === "ทั้งหมด" ? menus : menus.filter((m) => m.category === selectedCategory)).map((menu, idx) => (
                 <div
                   key={menu.id}
-                  className="card bg-white text-[#333333] shadow-xl border border-base-200 hover:-translate-y-2 transition-transform duration-300 animate-fade-in-up"
+                  className="card bg-white text-[#333333] shadow-xl border border-gray-100 hover:-translate-y-2 transition-transform duration-300 animate-fade-in-up"
                   style={{ animationDelay: `${idx * 0.1}s` }}
                 >
                   <figure className="relative h-60 w-full">
@@ -257,7 +257,7 @@ export default function Home() {
                 desc: "จัดส่งแบบควบคุมอุณหภูมิ ถึงหน้าบ้านคุณ",
               },
             ].map((feat, i) => (
-              <div key={i} className="card bg-white text-[#333333] shadow-sm border border-base-200">
+              <div key={i} className="card bg-white text-[#333333] shadow-sm border border-gray-100">
                 <div className="card-body items-center text-center">
                   {feat.icon}
                   <h3 className="card-title text-lg text-[#333333]">{feat.title}</h3>
@@ -285,7 +285,7 @@ export default function Home() {
             {reviews.map((review, i) => (
               <div
                 key={i}
-                className={`card bg-white text-[#333333] shadow-lg border border-base-200 hover:-translate-y-3 transition-all duration-300 hover:shadow-2xl relative overflow-hidden group ${i === 1 ? 'md:translate-y-8' : ''
+                className={`card bg-white text-[#333333] shadow-lg border border-gray-100 hover:-translate-y-3 transition-all duration-300 hover:shadow-2xl relative overflow-hidden group ${i === 1 ? 'md:translate-y-8' : ''
                   }`}
               >
                 <div className="absolute -top-6 -right-6 text-primary/5 rotate-12 group-hover:scale-110 group-hover:text-primary/10 transition-transform duration-500">

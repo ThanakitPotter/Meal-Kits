@@ -131,7 +131,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-10">
-      <div className="card w-full max-w-md bg-white text-[#333333] shadow-xl border border-base-200">
+      <div className="card w-full max-w-md bg-white text-[#333333] shadow-xl border border-gray-100">
         <div className="card-body">
           <div className="text-center mb-6">
             <div className="bg-primary text-primary-content w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">

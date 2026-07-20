@@ -7,7 +7,7 @@ export default function CareersPage() {
       </p>
 
       <div className="grid md:grid-cols-2 gap-8">
-        <div className="card bg-white text-[#333333] shadow-sm border border-base-200">
+        <div className="card bg-white text-[#333333] shadow-sm border border-gray-100">
           <div className="card-body">
             <h2 className="card-title text-[#E0A800]">Chef & Recipe Developer</h2>
             <p className="text-[#333333]/70">
@@ -19,7 +19,7 @@ export default function CareersPage() {
           </div>
         </div>
 
-        <div className="card bg-white text-[#333333] shadow-sm border border-base-200">
+        <div className="card bg-white text-[#333333] shadow-sm border border-gray-100">
           <div className="card-body">
             <h2 className="card-title text-[#E0A800]">Food Delivery Driver</h2>
             <p className="text-[#333333]/70">

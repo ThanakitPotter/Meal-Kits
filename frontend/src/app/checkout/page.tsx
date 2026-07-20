@@ -85,7 +85,7 @@ export default function CheckoutPage() {
   if (successId) {
     return (
       <div className="container mx-auto max-w-md md:max-w-2xl px-4 py-12 md:py-20 min-h-[60vh] flex items-center justify-center">
-        <div className="card w-full bg-base-100 shadow-2xl border border-base-200 animate-fade-in-up overflow-hidden mb-10 md:mb-0">
+        <div className="card w-full bg-base-100 shadow-2xl border border-gray-100 animate-fade-in-up overflow-hidden mb-10 md:mb-0">
           <div className="bg-gradient-to-r from-success to-emerald-500 p-8 md:p-10 text-center text-primary-content">
             <CheckCircle2 size={64} className="mx-auto mb-4 drop-shadow-md" />
             <h1 className="text-2xl md:text-3xl font-extrabold drop-shadow-sm">สั่งซื้อสำเร็จ!</h1>
@@ -137,7 +137,7 @@ export default function CheckoutPage() {
 
       <div className="grid lg:grid-cols-2 gap-10">
         <div>
-          <div className="card bg-white text-[#333333] shadow-md border border-base-200">
+          <div className="card bg-white text-[#333333] shadow-md border border-gray-100">
             <div className="card-body p-6 md:p-8">
               <form id="checkout-form" onSubmit={handleSubmit} className="space-y-4">
                 <div className="form-control mb-4">
@@ -205,11 +205,11 @@ export default function CheckoutPage() {
                 <div className="divider mt-8">ช่องทางการชำระเงิน</div>
 
                 <div className="space-y-3">
-                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-base-300 rounded-box hover:border-primary transition-colors">
+                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-gray-200 rounded-box hover:border-primary transition-colors">
                     <input type="radio" name="payment" className="radio radio-primary" defaultChecked />
                     <span className="label-text font-medium">โอนเงินผ่านธนาคาร (PromptPay)</span>
                   </label>
-                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-base-300 rounded-box hover:border-primary transition-colors">
+                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-gray-200 rounded-box hover:border-primary transition-colors">
                     <input type="radio" name="payment" className="radio radio-primary" />
                     <span className="label-text font-medium">บัตรเครดิต / เดบิต</span>
                   </label>
@@ -220,7 +220,7 @@ export default function CheckoutPage() {
         </div>
 
         <div>
-          <div className="card bg-white text-[#333333] shadow-md border border-base-200 sticky top-24">
+          <div className="card bg-white text-[#333333] shadow-md border border-gray-100 sticky top-24">
             <div className="card-body p-6 md:p-8">
               <h2 className="card-title text-xl font-bold mb-4 text-[#333333]">สรุปคำสั่งซื้อ</h2>
               

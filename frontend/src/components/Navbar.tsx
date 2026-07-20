@@ -84,7 +84,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="navbar bg-white text-[#333333] shadow-sm border-b border-base-200 sticky top-0 z-50 px-4 md:px-8">
+    <div className="navbar bg-white text-[#333333] shadow-sm border-b border-gray-100 sticky top-0 z-50 px-4 md:px-8">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden text-[#333333]">
@@ -92,7 +92,7 @@ export default function Navbar() {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-white text-[#333333] rounded-box z-[100] mt-3 w-52 p-2 shadow-lg border border-base-200"
+            className="menu menu-sm dropdown-content bg-white text-[#333333] rounded-box z-[100] mt-3 w-52 p-2 shadow-lg border border-gray-100"
           >
             <li>
               <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "text-[#E0A800] font-bold" : "text-[#333333]"}>
@@ -165,7 +165,7 @@ export default function Navbar() {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-md dropdown-content bg-white text-[#333333] rounded-box z-[100] mt-4 w-60 p-2 shadow-xl border border-base-200"
+              className="menu menu-md dropdown-content bg-white text-[#333333] rounded-box z-[100] mt-4 w-60 p-2 shadow-xl border border-gray-100"
             >
               <li className="menu-title px-4 py-3 opacity-100 mb-1">
                 <span className="text-[#333333] font-extrabold block text-base">{user.name}</span>

@@ -126,7 +126,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
   if (success) {
     return (
       <div className="container mx-auto max-w-md md:max-w-2xl px-4 py-12 md:py-20 min-h-[60vh] flex items-center justify-center">
-        <div className="card w-full bg-base-100 shadow-2xl border border-base-200 animate-fade-in-up overflow-hidden mb-10 md:mb-0">
+        <div className="card w-full bg-base-100 shadow-2xl border border-gray-100 animate-fade-in-up overflow-hidden mb-10 md:mb-0">
           <div className="bg-gradient-to-r from-success to-emerald-500 p-8 md:p-10 text-center text-primary-content">
             <CheckCircle2 size={64} className="mx-auto mb-4 drop-shadow-md" />
             <h1 className="text-2xl md:text-3xl font-extrabold drop-shadow-sm">สั่งซื้อสำเร็จ!</h1>
@@ -140,15 +140,15 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
             </div>
 
             <div className="space-y-3 text-sm mb-8">
-              <div className="flex justify-between py-2 border-b border-base-200">
+              <div className="flex justify-between py-2 border-b border-gray-100">
                 <span className="text-base-content/60">เมนูอาหาร</span>
                 <span className="font-semibold text-right">{success.items[0]?.menuName}</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-base-200">
+              <div className="flex justify-between py-2 border-b border-gray-100">
                 <span className="text-base-content/60">จำนวนที่ทาน</span>
                 <span className="font-semibold text-right">{success.items[0]?.servings} คน</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-base-200">
+              <div className="flex justify-between py-2 border-b border-gray-100">
                 <span className="text-base-content/60">ชื่อลูกค้า</span>
                 <span className="font-semibold text-right">{success.customerName}</span>
               </div>
@@ -195,7 +195,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
       <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
         {/* Left: Menu Info */}
         <div className="lg:col-span-2">
-          <div className="card bg-base-100 shadow-md border border-base-200 sticky top-24">
+          <div className="card bg-base-100 shadow-md border border-gray-100 sticky top-24">
             <figure className="relative h-64 w-full">
               <Image
                 src={menu.image}
@@ -210,7 +210,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
               <div className="flex items-center gap-2 mb-2 text-sm font-medium text-base-content/70">
                 <Clock size={16} /> ใช้เวลา {menu.prepTime}
               </div>
-              <p className="text-base-content/70 text-sm mb-4 pb-4 border-b border-base-200">
+              <p className="text-base-content/70 text-sm mb-4 pb-4 border-b border-gray-100">
                 {menu.description}
               </p>
 
@@ -231,7 +231,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
 
         {/* Right: Order Form */}
         <div className="lg:col-span-3">
-          <div className="card bg-base-100 shadow-md border border-base-200">
+          <div className="card bg-base-100 shadow-md border border-gray-100">
             <div className="card-body p-6 md:p-8">
               <h2 className="card-title text-2xl font-extrabold mb-1">รายละเอียดการสั่งซื้อ</h2>
               <p className="text-base-content/50 text-sm mb-8">
@@ -275,7 +275,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
                       onClick={() => updateField("servings", 1)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all ${form.servings === 1
                         ? 'btn-primary'
-                        : 'btn-outline border-base-300 text-base-content'
+                        : 'btn-outline border-gray-200 text-base-content'
                         }`}
                     >
                       <span className="text-xl font-bold">1 คน</span>
@@ -286,7 +286,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
                       onClick={() => updateField("servings", 2)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${form.servings === 2
                         ? 'btn-primary'
-                        : 'btn-outline border-base-300 text-base-content'
+                        : 'btn-outline border-gray-200 text-base-content'
                         }`}
                     >
                       <div className="flex items-center gap-2">
@@ -299,7 +299,7 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
                       onClick={() => updateField("servings", 4)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${form.servings === 4
                         ? 'btn-primary'
-                        : 'btn-outline border-base-300 text-base-content'
+                        : 'btn-outline border-gray-200 text-base-content'
                         }`}
                     >
                       <div className="flex items-center gap-2">
@@ -354,11 +354,11 @@ export default function OrderPage({ params }: { params: Promise<{ id: string }> 
                 <div className="divider">ช่องทางการชำระเงิน</div>
 
                 <div className="space-y-3">
-                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-base-300 rounded-box hover:border-primary transition-colors">
+                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-gray-200 rounded-box hover:border-primary transition-colors">
                     <input type="radio" name="payment" className="radio radio-primary" defaultChecked />
                     <span className="label-text font-medium">โอนเงินผ่านธนาคาร (PromptPay)</span>
                   </label>
-                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-base-300 rounded-box hover:border-primary transition-colors">
+                  <label className="label cursor-pointer justify-start gap-4 p-4 border border-gray-200 rounded-box hover:border-primary transition-colors">
                     <input type="radio" name="payment" className="radio radio-primary" />
                     <span className="label-text font-medium">บัตรเครดิต / เดบิต</span>
                   </label>

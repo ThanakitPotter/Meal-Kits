@@ -89,7 +89,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
       <div className="grid lg:grid-cols-7 gap-10">
         {/* Left: Image & Menu Details */}
         <div className="lg:col-span-4">
-          <div className="card bg-white text-[#333333] shadow-md border border-base-200 overflow-hidden">
+          <div className="card bg-white text-[#333333] shadow-md border border-gray-100 overflow-hidden">
             <figure className="relative h-80 md:h-96 w-full">
               <Image
                 src={menu.image}
@@ -132,7 +132,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
 
         {/* Right: Add to cart */}
         <div className="lg:col-span-3">
-          <div className="card bg-white text-[#333333] shadow-md border border-base-200 sticky top-24">
+          <div className="card bg-white text-[#333333] shadow-md border border-gray-100 sticky top-24">
             <div className="card-body p-6 md:p-8">
               <h2 className="card-title text-2xl font-extrabold mb-1">สั่งซื้อเมนูนี้</h2>
               <p className="text-base-content/50 text-sm mb-8">
@@ -151,7 +151,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                       onClick={() => setServings(1)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all ${servings === 1
                           ? 'btn-primary'
-                          : 'btn-outline border-base-300 text-base-content'
+                          : 'btn-outline border-gray-200 text-base-content'
                         }`}
                     >
                       <span className="text-xl font-bold">1 คน</span>
@@ -162,7 +162,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                       onClick={() => setServings(2)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${servings === 2
                           ? 'btn-primary'
-                          : 'btn-outline border-base-300 text-base-content'
+                          : 'btn-outline border-gray-200 text-base-content'
                         }`}
                     >
                       <div className="flex items-center gap-2">
@@ -175,7 +175,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                       onClick={() => setServings(4)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${servings === 4
                           ? 'btn-primary'
-                          : 'btn-outline border-base-300 text-base-content'
+                          : 'btn-outline border-gray-200 text-base-content'
                         }`}
                     >
                       <div className="flex items-center gap-2">

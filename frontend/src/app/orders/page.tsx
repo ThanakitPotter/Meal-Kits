@@ -73,7 +73,7 @@ export default function UserOrdersPage() {
         </Link>
       </div>
 
-      <div className="card bg-white text-[#333333] shadow-sm border border-base-200 overflow-hidden">
+      <div className="card bg-white text-[#333333] shadow-sm border border-gray-100 overflow-hidden">
         {loading ? (
           <div className="p-12 flex flex-col items-center justify-center">
             <span className="loading loading-spinner loading-lg text-primary mb-4"></span>
@@ -138,7 +138,7 @@ export default function UserOrdersPage() {
                 const StatusIcon = status.icon;
                 
                 return (
-                  <div key={order.id} className="card bg-white text-[#333333] shadow-sm border border-base-200">
+                  <div key={order.id} className="card bg-white text-[#333333] shadow-sm border border-gray-100">
                     <div className="card-body p-4">
                       <div className="flex justify-between items-start mb-2">
                         <div>

@@ -8,7 +8,7 @@ export default function ServiceAreasPage() {
         เราจัดส่งชุดอาหารพร้อมทำ (Meal Kits) แบบควบคุมอุณหภูมิ เพื่อให้วัตถุดิบสดใหม่เสมอ
       </p>
 
-      <div className="bg-white text-[#333333] shadow-xl rounded-2xl p-8 border border-base-200">
+      <div className="bg-white text-[#333333] shadow-xl rounded-2xl p-8 border border-gray-100">
         <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
           <MapPin className="text-[#E0A800]" /> พื้นที่จัดส่งปัจจุบัน
         </h2>

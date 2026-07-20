@@ -3,7 +3,7 @@ export default function ContactPage() {
     <div className="container mx-auto px-4 py-20 max-w-2xl">
       <h1 className="text-4xl font-extrabold text-center mb-12 text-[#333333]">ติดต่อเรา (Contact Us)</h1>
       
-      <div className="bg-white text-[#333333] shadow-xl rounded-2xl p-8 border border-base-200">
+      <div className="bg-white text-[#333333] shadow-xl rounded-2xl p-8 border border-gray-100">
         <form className="space-y-6">
           <div className="form-control">
             <label className="label">

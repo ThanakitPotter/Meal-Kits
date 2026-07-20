@@ -129,7 +129,7 @@ export default function AdminPage() {
 
       {/* ─── Stats ─── */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="card bg-white text-[#333333] shadow-sm border border-base-200">
+        <div className="card bg-white text-[#333333] shadow-sm border border-gray-100">
           <div className="card-body p-6">
             <div className="flex items-center gap-2 mb-2">
               <ShoppingBag size={18} className="text-base-content/60" />
@@ -138,7 +138,7 @@ export default function AdminPage() {
             <p className="text-3xl font-extrabold">{orders.length}</p>
           </div>
         </div>
-        <div className="card bg-white text-[#333333] shadow-sm border border-base-200">
+        <div className="card bg-white text-[#333333] shadow-sm border border-gray-100">
           <div className="card-body p-6">
             <div className="flex items-center gap-2 mb-2">
               <BarChart size={18} className="text-primary" />
@@ -149,7 +149,7 @@ export default function AdminPage() {
             </p>
           </div>
         </div>
-        <div className="card bg-white text-[#333333] shadow-sm border border-base-200">
+        <div className="card bg-white text-[#333333] shadow-sm border border-gray-100">
           <div className="card-body p-6">
             <div className="flex items-center gap-2 mb-2">
               <Clock size={18} className="text-error" />
@@ -160,7 +160,7 @@ export default function AdminPage() {
             </p>
           </div>
         </div>
-        <div className="card bg-white text-[#333333] shadow-sm border border-base-200">
+        <div className="card bg-white text-[#333333] shadow-sm border border-gray-100">
           <div className="card-body p-6">
             <div className="flex items-center gap-2 mb-2">
               <Package size={18} className="text-warning" />
@@ -174,8 +174,8 @@ export default function AdminPage() {
       </div>
 
       {/* ─── Orders Table ─── */}
-      <div className="card bg-white text-[#333333] shadow-sm border border-base-200 overflow-hidden">
-        <div className="p-6 border-b border-base-200">
+      <div className="card bg-white text-[#333333] shadow-sm border border-gray-100 overflow-hidden">
+        <div className="p-6 border-b border-gray-100">
           <h2 className="card-title text-lg font-bold">รายการล่าสุด</h2>
         </div>
 

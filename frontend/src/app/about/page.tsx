@@ -6,7 +6,7 @@ export default function AboutPage() {
     <div className="container mx-auto px-4 py-20 max-w-4xl">
       <h1 className="text-4xl font-extrabold text-center mb-8 text-[#333333]">เรื่องราวของเรา (Our Story)</h1>
       
-      <div className="bg-white text-[#333333] p-8 md:p-12 rounded-3xl shadow-sm border border-base-200">
+      <div className="bg-white text-[#333333] p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100">
         <h2 className="text-2xl font-bold text-[#E0A800] mb-4">จุดเริ่มต้นของ MK340 Meal Kits</h2>
         <p className="text-lg text-[#333333] leading-relaxed mb-6">
           เราเริ่มต้นจากความเชื่อที่ว่า "ทุกคนสามารถทำอาหารอร่อยๆ ทานเองที่บ้านได้" 
