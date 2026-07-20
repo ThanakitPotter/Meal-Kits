@@ -136,3 +136,13 @@ body {
 .table td {
   border-color: #c594a1;
 }
+
+/* ─── Prose Hardening ─── */
+.prose,
+.prose h1,
+.prose h2,
+.prose h3,
+.prose p,
+.prose li {
+  color: #333333 !important;
+}

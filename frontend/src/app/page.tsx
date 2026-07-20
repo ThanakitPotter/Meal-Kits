@@ -298,7 +298,7 @@ export default function Home() {
                         <Star key={j} size={18} fill="currentColor" />
                       ))}
                     </div>
-                    <span className="text-[10px] text-[#333333]/50 bg-gray-100 px-3 py-1 rounded-full font-medium">
+                    <span className="text-[10px] text-gray-500 bg-gray-100 px-3 py-1 rounded-full font-medium">
                       {review.dateStr}
                     </span>
                   </div>

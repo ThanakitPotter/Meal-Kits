@@ -20,17 +20,17 @@ export default function FaqPage() {
 
   return (
     <div className="container mx-auto px-4 py-20 max-w-3xl">
-      <h1 className="text-4xl font-extrabold text-center mb-12">คำถามที่พบบ่อย (FAQ)</h1>
+      <h1 className="text-4xl font-extrabold text-center mb-12 text-[#333333]">คำถามที่พบบ่อย (FAQ)</h1>
       
       <div className="space-y-4">
         {faqs.map((faq, idx) => (
-          <div key={idx} className="collapse collapse-arrow bg-base-200">
+          <div key={idx} className="collapse collapse-arrow bg-white text-[#333333] border border-gray-200">
             <input type="radio" name="faq-accordion" defaultChecked={idx === 0} /> 
-            <div className="collapse-title text-xl font-medium">
+            <div className="collapse-title text-xl font-medium text-[#333333]">
               {faq.q}
             </div>
             <div className="collapse-content"> 
-              <p className="text-base-content/80">{faq.a}</p>
+              <p className="text-[#333333]/80">{faq.a}</p>
             </div>
           </div>
         ))}
