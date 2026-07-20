@@ -37,10 +37,17 @@ export default function Navbar() {
     }
   }, []);
 
-  // Re-fetch notifications when navigating pages
+  // Re-fetch notifications when navigating pages and periodically
   useEffect(() => {
     if (user) {
       fetchUnreviewedOrders(user.id);
+      
+      // Check for new notifications every 5 seconds (Real-time feel)
+      const interval = setInterval(() => {
+        fetchUnreviewedOrders(user.id);
+      }, 5000);
+      
+      return () => clearInterval(interval);
     }
   }, [pathname, user?.id]);
 
