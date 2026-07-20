@@ -32,7 +32,7 @@ export default function SettingsPage() {
     setSuccessMsg("");
 
     try {
-      const res = await fetch(`http://localhost:3001/api/users/${user.id}/profile`, {
+      const res = await fetch(`/api/users/${user.id}/profile`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

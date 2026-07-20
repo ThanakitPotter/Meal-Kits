@@ -31,7 +31,7 @@ export default function ReviewModal({ orderId, isOpen, onClose, onSuccess }: Rev
       const userName = user?.name || "Guest User";
 
       // 2. ส่งรีวิวไปที่ API
-      const reviewRes = await fetch("http://localhost:3001/api/reviews", {
+      const reviewRes = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -45,7 +45,7 @@ export default function ReviewModal({ orderId, isOpen, onClose, onSuccess }: Rev
       if (!reviewRes.ok) throw new Error("ส่งรีวิวไม่สำเร็จ");
 
       // 3. เปลี่ยนสถานะ isReviewed = true ในคำสั่งซื้อ
-      const orderRes = await fetch(`http://localhost:3001/api/orders/${orderId}/reviewed`, {
+      const orderRes = await fetch(`/api/orders/${orderId}/reviewed`, {
         method: "PATCH",
       });
 

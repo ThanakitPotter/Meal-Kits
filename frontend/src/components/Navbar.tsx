@@ -17,7 +17,7 @@ export default function Navbar() {
 
   const fetchUnreviewedOrders = async (userId: string) => {
     try {
-      const res = await fetch(`http://localhost:3001/api/orders/user/${userId}`);
+      const res = await fetch(`/api/orders/user/${userId}`);
       if (res.ok) {
         const data = await res.json();
         const unreviewed = data.filter((o: any) => o.status === "จัดส่งแล้ว" && !o.isReviewed);
