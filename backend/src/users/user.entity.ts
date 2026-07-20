@@ -20,7 +20,7 @@ export class User {
   @Column({ default: 'user' })
   role: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   avatarUrl: string;
 
   @CreateDateColumn()

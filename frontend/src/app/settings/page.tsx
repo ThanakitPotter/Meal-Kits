@@ -118,20 +118,31 @@ export default function SettingsPage() {
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-bold text-[#333333]">ลิงก์รูปโปรไฟล์ (Image URL)</span>
+                  <span className="label-text font-bold text-[#333333]">อัปโหลดรูปโปรไฟล์</span>
                 </label>
-                <label className="input input-bordered flex items-center gap-3 bg-white text-[#333333] focus-within:border-[#E0A800]">
-                  <ImageIcon size={18} className="text-gray-400" />
-                  <input 
-                    type="url" 
-                    className="grow bg-transparent focus:outline-none" 
-                    placeholder="https://example.com/avatar.png"
-                    value={form.avatarUrl}
-                    onChange={(e) => setForm({...form, avatarUrl: e.target.value})}
-                  />
-                </label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  className="file-input file-input-bordered w-full bg-white text-[#333333] focus-within:border-[#E0A800]"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      // Check file size (limit to 2MB)
+                      if (file.size > 2 * 1024 * 1024) {
+                        alert("ขนาดไฟล์ใหญ่เกินไป กรุณาเลือกไฟล์ที่มีขนาดไม่เกิน 2MB");
+                        e.target.value = '';
+                        return;
+                      }
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setForm({...form, avatarUrl: reader.result as string});
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
                 <label className="label">
-                  <span className="label-text-alt text-gray-500">ใส่ URL รูปภาพที่คุณต้องการ หรือเว้นว่างไว้เพื่อใช้ไอคอนเริ่มต้น</span>
+                  <span className="label-text-alt text-gray-500">เลือกรูปภาพจากในเครื่องของคุณ (ขนาดไม่เกิน 2MB)</span>
                 </label>
               </div>
 
