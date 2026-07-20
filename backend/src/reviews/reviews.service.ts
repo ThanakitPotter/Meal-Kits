@@ -51,7 +51,7 @@ export class ReviewsService {
   async findLatest() {
     const reviews = await this.reviewRepository.find({
       order: { createdAt: 'DESC' },
-      take: 3,
+      take: 15,
     });
 
     for (const r of reviews) {
