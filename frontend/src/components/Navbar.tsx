@@ -95,15 +95,15 @@ export default function Navbar() {
             className="menu menu-sm dropdown-content bg-white text-[#333333] rounded-box z-[100] mt-3 w-52 p-2 shadow-lg border border-base-200"
           >
             <li>
-              <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "active text-primary" : ""}>
+              <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "text-[#E0A800] font-bold" : "text-[#333333]"}>
                 <ShoppingBag size={18} /> สั่งอาหาร
               </Link>
             </li>
-            <li><Link href="/how-to-order"><ClipboardList size={18} /> วิธีการสั่งซื้อ</Link></li>
-            <li><Link href="/about"><Info size={18} /> เกี่ยวกับเรา</Link></li>
+            <li><Link href="/how-to-order" className={pathname === "/how-to-order" ? "text-[#E0A800] font-bold" : "text-[#333333]"}><ClipboardList size={18} /> วิธีการสั่งซื้อ</Link></li>
+            <li><Link href="/about" className={pathname === "/about" ? "text-[#E0A800] font-bold" : "text-[#333333]"}><Info size={18} /> เกี่ยวกับเรา</Link></li>
             {user?.role === 'admin' && (
               <li>
-                <Link href="/admin" className={pathname === "/admin" ? "active text-primary" : ""}>
+                <Link href="/admin" className={pathname === "/admin" ? "text-[#E0A800] font-bold" : "text-[#333333]"}>
                   <LayoutDashboard size={18} /> แอดมิน
                 </Link>
               </li>
@@ -123,23 +123,23 @@ export default function Navbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-2 font-medium">
           <li>
-            <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "active !bg-primary !text-white font-bold flex items-center gap-2" : "text-[#333333] hover:text-primary transition-colors flex items-center gap-2"}>
+            <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "text-[#E0A800] border-b-2 border-[#E0A800] font-bold flex items-center gap-2 rounded-none !bg-transparent" : "text-[#333333] hover:text-[#E0A800] transition-colors flex items-center gap-2 border-b-2 border-transparent rounded-none"}>
               <ShoppingBag size={18} /> สั่งอาหาร
             </Link>
           </li>
           <li>
-            <Link href="/how-to-order" className={pathname === "/how-to-order" ? "active !bg-primary !text-white font-bold flex items-center gap-2" : "text-[#333333] hover:text-primary transition-colors flex items-center gap-2"}>
+            <Link href="/how-to-order" className={pathname === "/how-to-order" ? "text-[#E0A800] border-b-2 border-[#E0A800] font-bold flex items-center gap-2 rounded-none !bg-transparent" : "text-[#333333] hover:text-[#E0A800] transition-colors flex items-center gap-2 border-b-2 border-transparent rounded-none"}>
               <ClipboardList size={18} /> วิธีการสั่งซื้อ
             </Link>
           </li>
           <li>
-            <Link href="/about" className={pathname === "/about" ? "active !bg-primary !text-white font-bold flex items-center gap-2" : "text-[#333333] hover:text-primary transition-colors flex items-center gap-2"}>
+            <Link href="/about" className={pathname === "/about" ? "text-[#E0A800] border-b-2 border-[#E0A800] font-bold flex items-center gap-2 rounded-none !bg-transparent" : "text-[#333333] hover:text-[#E0A800] transition-colors flex items-center gap-2 border-b-2 border-transparent rounded-none"}>
               <Info size={18} /> เกี่ยวกับเรา
             </Link>
           </li>
           {user?.role === 'admin' && (
             <li>
-              <Link href="/admin" className={pathname === "/admin" ? "active !bg-primary !text-white font-bold flex items-center gap-2" : "text-[#333333] hover:text-primary transition-colors flex items-center gap-2"}>
+              <Link href="/admin" className={pathname === "/admin" ? "text-[#E0A800] border-b-2 border-[#E0A800] font-bold flex items-center gap-2 rounded-none !bg-transparent" : "text-[#333333] hover:text-[#E0A800] transition-colors flex items-center gap-2 border-b-2 border-transparent rounded-none"}>
                 <LayoutDashboard size={18} /> แอดมิน
               </Link>
             </li>
