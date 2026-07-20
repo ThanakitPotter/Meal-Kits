@@ -89,7 +89,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
       <div className="grid lg:grid-cols-7 gap-10">
         {/* Left: Image & Menu Details */}
         <div className="lg:col-span-4">
-          <div className="card bg-base-100 shadow-md border border-base-200 overflow-hidden">
+          <div className="card bg-white text-[#333333] shadow-md border border-base-200 overflow-hidden">
             <figure className="relative h-80 md:h-96 w-full">
               <Image
                 src={menu.image}
@@ -107,7 +107,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
             </figure>
             
             <div className="card-body p-6 md:p-8">
-              <h1 className="text-3xl md:text-4xl font-extrabold mb-2">{menu.name}</h1>
+              <h1 className="text-3xl md:text-4xl font-extrabold mb-2 text-[#333333]">{menu.name}</h1>
               <div className="flex items-center gap-2 mb-6 text-sm font-medium text-base-content/70">
                 <Clock size={16} /> ใช้เวลาปรุงประมาณ {menu.prepTime}
               </div>
@@ -132,7 +132,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
 
         {/* Right: Add to cart */}
         <div className="lg:col-span-3">
-          <div className="card bg-base-100 shadow-md border border-base-200 sticky top-24">
+          <div className="card bg-white text-[#333333] shadow-md border border-base-200 sticky top-24">
             <div className="card-body p-6 md:p-8">
               <h2 className="card-title text-2xl font-extrabold mb-1">สั่งซื้อเมนูนี้</h2>
               <p className="text-base-content/50 text-sm mb-8">

@@ -84,7 +84,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="navbar bg-base-100 shadow-sm border-b border-base-200 sticky top-0 z-50 px-4 md:px-8">
+    <div className="navbar bg-white text-[#333333] shadow-sm border-b border-base-200 sticky top-0 z-50 px-4 md:px-8">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -92,7 +92,7 @@ export default function Navbar() {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[100] mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-white text-[#333333] rounded-box z-[100] mt-3 w-52 p-2 shadow-lg border border-base-200"
           >
             <li>
               <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "active text-primary" : ""}>
@@ -123,23 +123,23 @@ export default function Navbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-2 font-medium">
           <li>
-            <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "active !bg-primary !text-primary-content font-bold flex items-center gap-2" : "hover:text-primary transition-colors flex items-center gap-2"}>
+            <Link href="/#menus" onClick={handleScrollToMenus} className={pathname === "/" ? "active !bg-primary !text-white font-bold flex items-center gap-2" : "text-[#333333] hover:text-primary transition-colors flex items-center gap-2"}>
               <ShoppingBag size={18} /> สั่งอาหาร
             </Link>
           </li>
           <li>
-            <Link href="/how-to-order" className={pathname === "/how-to-order" ? "active !bg-primary !text-primary-content font-bold flex items-center gap-2" : "hover:text-primary transition-colors flex items-center gap-2"}>
+            <Link href="/how-to-order" className={pathname === "/how-to-order" ? "active !bg-primary !text-white font-bold flex items-center gap-2" : "text-[#333333] hover:text-primary transition-colors flex items-center gap-2"}>
               <ClipboardList size={18} /> วิธีการสั่งซื้อ
             </Link>
           </li>
           <li>
-            <Link href="/about" className={pathname === "/about" ? "active !bg-primary !text-primary-content font-bold flex items-center gap-2" : "hover:text-primary transition-colors flex items-center gap-2"}>
+            <Link href="/about" className={pathname === "/about" ? "active !bg-primary !text-white font-bold flex items-center gap-2" : "text-[#333333] hover:text-primary transition-colors flex items-center gap-2"}>
               <Info size={18} /> เกี่ยวกับเรา
             </Link>
           </li>
           {user?.role === 'admin' && (
             <li>
-              <Link href="/admin" className={pathname === "/admin" ? "active !bg-primary !text-primary-content font-bold flex items-center gap-2" : "hover:text-primary transition-colors flex items-center gap-2"}>
+              <Link href="/admin" className={pathname === "/admin" ? "active !bg-primary !text-white font-bold flex items-center gap-2" : "text-[#333333] hover:text-primary transition-colors flex items-center gap-2"}>
                 <LayoutDashboard size={18} /> แอดมิน
               </Link>
             </li>
@@ -165,7 +165,7 @@ export default function Navbar() {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-md dropdown-content bg-base-100 rounded-box z-[100] mt-4 w-60 p-2 shadow-xl border border-base-200"
+              className="menu menu-md dropdown-content bg-white text-[#333333] rounded-box z-[100] mt-4 w-60 p-2 shadow-xl border border-base-200"
             >
               <li className="menu-title px-4 py-3 opacity-100 mb-1">
                 <span className="text-base-content font-extrabold block text-base">{user.name}</span>

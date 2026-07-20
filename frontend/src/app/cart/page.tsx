@@ -39,7 +39,7 @@ export default function CartPage() {
       <div className="grid lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-4">
           {cartItems.map((item) => (
-            <div key={item.id} className="card bg-base-100 shadow-sm border border-base-200 p-4 sm:p-6 flex flex-col sm:flex-row gap-6">
+            <div key={item.id} className="card bg-white text-[#333333] shadow-sm border border-base-200 p-4 sm:p-6 flex flex-col sm:flex-row gap-6">
               <div className="relative h-24 w-full sm:w-32 rounded-lg overflow-hidden shrink-0">
                 <Image
                   src={item.image}
@@ -91,7 +91,7 @@ export default function CartPage() {
         </div>
 
         <div className="lg:col-span-1">
-          <div className="card bg-base-100 shadow-md border border-base-200 sticky top-24">
+          <div className="card bg-white text-[#333333] shadow-md border border-base-200 sticky top-24">
             <div className="card-body p-6">
               <h2 className="card-title text-xl font-bold mb-4">สรุปคำสั่งซื้อ</h2>
               

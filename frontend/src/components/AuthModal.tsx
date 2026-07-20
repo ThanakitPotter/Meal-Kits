@@ -5,7 +5,7 @@ import { User, LogIn } from "lucide-react";
 export default function AuthModal({ id = "auth_modal" }: { id?: string }) {
   return (
     <dialog id={id} className="modal">
-      <div className="modal-box text-center p-8">
+      <div className="modal-box text-center p-8 bg-white text-[#333333]">
         <form method="dialog">
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
         </form>

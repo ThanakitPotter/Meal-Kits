@@ -2,6 +2,7 @@
 @plugin "daisyui";
 
 :root {
+  color-scheme: light;
   --background: #fafafa;
   --foreground: #333333; /* Charcoal Gray */
   
@@ -89,4 +90,49 @@ body {
 
 .animate-fade-in-up-delay-3 {
   animation: fade-in-up 0.6s ease-out 0.3s both;
+}
+
+/* ─── iOS Dark Mode Hardening ─── */
+/* Prevent iOS Safari from inverting colors on all key DaisyUI components */
+.card,
+.card-body {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.navbar {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.modal-box {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.dropdown-content {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.input,
+.textarea,
+.select {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: #9ca3af; /* gray-400 */
+}
+
+/* ─── Table Border Spec ─── */
+.table {
+  border-color: #c594a1;
+}
+
+.table th,
+.table td {
+  border-color: #c594a1;
 }

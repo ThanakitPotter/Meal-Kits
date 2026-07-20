@@ -60,7 +60,7 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <div className="bg-[#fafafa] text-[#333333]">
       {/* ─── Hero Section ─── */}
       <section className="hero min-h-screen relative overflow-hidden bg-base-200">
         <Image
@@ -126,10 +126,10 @@ export default function Home() {
       {/* ─── Menus Grid ─── */}
       <section id="menus" className="container mx-auto px-4 py-20">
         <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-3 text-[#333333]">
             เมนูยอดฮิต
           </h2>
-          <p className="text-base-content/60 max-w-lg mx-auto">
+          <p className="text-[#333333]/60 max-w-lg mx-auto">
             เลือกเมนูที่ใช่ พร้อมวัตถุดิบสดใหม่ แพ็คอย่างดี ส่งตรงถึงครัวคุณ
           </p>
         </div>
@@ -162,7 +162,7 @@ export default function Home() {
               (selectedCategory === "ทั้งหมด" ? menus : menus.filter((m) => m.category === selectedCategory)).map((menu, idx) => (
                 <div
                   key={menu.id}
-                  className="card bg-base-100 shadow-xl border border-base-200 hover:-translate-y-2 transition-transform duration-300 animate-fade-in-up"
+                  className="card bg-white text-[#333333] shadow-xl border border-base-200 hover:-translate-y-2 transition-transform duration-300 animate-fade-in-up"
                   style={{ animationDelay: `${idx * 0.1}s` }}
                 >
                   <figure className="relative h-60 w-full">
@@ -181,7 +181,7 @@ export default function Home() {
                   </figure>
 
                   <div className="card-body">
-                    <h2 className="card-title text-2xl font-bold">{menu.name}</h2>
+                    <h2 className="card-title text-2xl font-bold text-[#333333]">{menu.name}</h2>
 
                     <div className="flex flex-wrap items-center gap-2 my-2">
                       <div className="badge badge-ghost font-semibold gap-1">
@@ -193,23 +193,23 @@ export default function Home() {
                     </div>
 
                     <p className="text-2xl font-bold text-primary my-2">฿{menu.price}</p>
-                    <p className="text-base-content/70 text-sm line-clamp-2 leading-relaxed">
+                    <p className="text-[#333333]/70 text-sm line-clamp-2 leading-relaxed">
                       {menu.description}
                     </p>
 
                     <div className="mt-4 mb-2">
-                      <p className="text-xs font-bold text-base-content/50 uppercase tracking-wider mb-2">
+                      <p className="text-xs font-bold text-[#333333]/50 uppercase tracking-wider mb-2">
                         วัตถุดิบที่ให้มา
                       </p>
                       <ul className="space-y-1">
                         {menu.ingredients.slice(0, 3).map((item, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-base-content/80">
+                          <li key={i} className="flex items-start gap-2 text-sm text-[#333333]/80">
                             <Leaf size={14} className="text-primary mt-0.5 flex-shrink-0" />
                             <span className="line-clamp-1">{item}</span>
                           </li>
                         ))}
                         {menu.ingredients.length > 3 && (
-                          <li className="text-xs text-base-content/50 pl-6 mt-1 font-medium">
+                          <li className="text-xs text-[#333333]/50 pl-6 mt-1 font-medium">
                             +{menu.ingredients.length - 3} อย่างเพิ่มเติม
                           </li>
                         )}
@@ -237,7 +237,7 @@ export default function Home() {
       </section>
 
       {/* ─── Features Section ─── */}
-      <section className="bg-base-200">
+      <section className="bg-[#f5f5f5]">
         <div className="container mx-auto px-4 py-16">
           <div className="grid sm:grid-cols-3 gap-8 text-center">
             {[
@@ -257,11 +257,11 @@ export default function Home() {
                 desc: "จัดส่งแบบควบคุมอุณหภูมิ ถึงหน้าบ้านคุณ",
               },
             ].map((feat, i) => (
-              <div key={i} className="card bg-base-100 shadow-sm border border-base-200">
+              <div key={i} className="card bg-white text-[#333333] shadow-sm border border-base-200">
                 <div className="card-body items-center text-center">
                   {feat.icon}
-                  <h3 className="card-title text-lg">{feat.title}</h3>
-                  <p className="text-base-content/60 text-sm">{feat.desc}</p>
+                  <h3 className="card-title text-lg text-[#333333]">{feat.title}</h3>
+                  <p className="text-[#333333]/60 text-sm">{feat.desc}</p>
                 </div>
               </div>
             ))}
@@ -270,13 +270,13 @@ export default function Home() {
       </section>
 
       {/* ─── Customer Reviews Section ─── */}
-      <section className="py-20 bg-base-100">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-3 text-[#333333]">
               รีวิวจากลูกค้าที่สั่งไปแล้ว
             </h2>
-            <p className="text-base-content/60 max-w-lg mx-auto">
+            <p className="text-[#333333]/60 max-w-lg mx-auto">
               เสียงตอบรับจากลูกค้าจริง ที่การันตีความอร่อยและความสะดวกสบาย
             </p>
           </div>
@@ -285,7 +285,7 @@ export default function Home() {
             {reviews.map((review, i) => (
               <div
                 key={i}
-                className={`card bg-base-100 shadow-lg border border-base-200 hover:-translate-y-3 transition-all duration-300 hover:shadow-2xl relative overflow-hidden group ${i === 1 ? 'md:translate-y-8' : ''
+                className={`card bg-white text-[#333333] shadow-lg border border-base-200 hover:-translate-y-3 transition-all duration-300 hover:shadow-2xl relative overflow-hidden group ${i === 1 ? 'md:translate-y-8' : ''
                   }`}
               >
                 <div className="absolute -top-6 -right-6 text-primary/5 rotate-12 group-hover:scale-110 group-hover:text-primary/10 transition-transform duration-500">
@@ -298,22 +298,22 @@ export default function Home() {
                         <Star key={j} size={18} fill="currentColor" />
                       ))}
                     </div>
-                    <span className="text-[10px] text-base-content/50 bg-base-200 px-3 py-1 rounded-full font-medium">
+                    <span className="text-[10px] text-[#333333]/50 bg-gray-100 px-3 py-1 rounded-full font-medium">
                       {review.dateStr}
                     </span>
                   </div>
-                  <p className="text-base-content/80 mb-8 leading-relaxed font-medium">
+                  <p className="text-[#333333]/80 mb-8 leading-relaxed font-medium">
                     "{review.review}"
                   </p>
                   <div className="flex items-center gap-4 mt-auto">
                     <div className="avatar">
-                      <div className="w-12 h-12 rounded-full ring-2 ring-primary/20 ring-offset-base-100 ring-offset-2 group-hover:ring-primary transition-all duration-300">
+                      <div className="w-12 h-12 rounded-full ring-2 ring-[#E0A800]/20 ring-offset-white ring-offset-2 group-hover:ring-[#E0A800] transition-all duration-300">
                         <img src={review.image} alt={review.name} />
                       </div>
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm">{review.userName}</h4>
-                      <p className="text-xs text-base-content/50">{review.role}</p>
+                      <h4 className="font-bold text-sm text-[#333333]">{review.userName}</h4>
+                      <p className="text-xs text-[#333333]/50">{review.role}</p>
                     </div>
                   </div>
                 </div>

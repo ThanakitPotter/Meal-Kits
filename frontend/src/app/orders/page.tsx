@@ -73,7 +73,7 @@ export default function UserOrdersPage() {
         </Link>
       </div>
 
-      <div className="card bg-base-100 shadow-sm border border-base-200 overflow-hidden">
+      <div className="card bg-white text-[#333333] shadow-sm border border-base-200 overflow-hidden">
         {loading ? (
           <div className="p-12 flex flex-col items-center justify-center">
             <span className="loading loading-spinner loading-lg text-primary mb-4"></span>
@@ -90,7 +90,7 @@ export default function UserOrdersPage() {
           <>
             {/* Desktop Table View */}
             <div className="hidden md:block overflow-x-auto">
-              <table className="table w-full">
+              <table className="table w-full border border-[#c594a1]">
                 <thead className="bg-base-200/50 text-base-content">
                   <tr>
                     <th className="whitespace-nowrap">ออเดอร์</th>
@@ -138,7 +138,7 @@ export default function UserOrdersPage() {
                 const StatusIcon = status.icon;
                 
                 return (
-                  <div key={order.id} className="card bg-base-100 shadow-sm border border-base-200">
+                  <div key={order.id} className="card bg-white text-[#333333] shadow-sm border border-base-200">
                     <div className="card-body p-4">
                       <div className="flex justify-between items-start mb-2">
                         <div>

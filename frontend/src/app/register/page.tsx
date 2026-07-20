@@ -131,14 +131,14 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-10">
-      <div className="card w-full max-w-md bg-base-100 shadow-xl border border-base-200">
+      <div className="card w-full max-w-md bg-white text-[#333333] shadow-xl border border-base-200">
         <div className="card-body">
           <div className="text-center mb-6">
             <div className="bg-primary text-primary-content w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
               <UserPlus size={32} />
             </div>
-            <h2 className="text-2xl font-bold">สมัครสมาชิก</h2>
-            <p className="text-base-content/60">สร้างบัญชีเพื่อสั่ง Meal Kits สุดพรีเมียม</p>
+            <h2 className="text-2xl font-bold text-[#333333]">สมัครสมาชิก</h2>
+            <p className="text-[#333333]/60">สร้างบัญชีเพื่อสั่ง Meal Kits สุดพรีเมียม</p>
           </div>
 
           {mainError && <div className="alert alert-error text-sm py-2 mb-4">{mainError}</div>}
@@ -146,8 +146,8 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name */}
             <div>
-              <label className={`input input-bordered flex items-center gap-3 ${errors.name ? 'input-error' : ''}`}>
-                <User size={18} className={errors.name ? 'text-error' : 'text-base-content/50'} />
+              <label className={`input input-bordered flex items-center gap-3 bg-white text-[#333333] ${errors.name ? 'input-error' : ''}`}>
+                <User size={18} className={errors.name ? 'text-error' : 'text-[#333333]/50'} />
                 <input
                   type="text"
                   name="name"
@@ -163,8 +163,8 @@ export default function RegisterPage() {
 
             {/* Email */}
             <div>
-              <label className={`input input-bordered flex items-center gap-3 ${errors.email ? 'input-error' : ''}`}>
-                <Mail size={18} className={errors.email ? 'text-error' : 'text-base-content/50'} />
+              <label className={`input input-bordered flex items-center gap-3 bg-white text-[#333333] ${errors.email ? 'input-error' : ''}`}>
+                <Mail size={18} className={errors.email ? 'text-error' : 'text-[#333333]/50'} />
                 <input
                   type="email"
                   name="email"
@@ -180,8 +180,8 @@ export default function RegisterPage() {
 
             {/* Phone */}
             <div>
-              <label className={`input input-bordered flex items-center gap-3 ${errors.phone ? 'input-error' : ''}`}>
-                <Phone size={18} className={errors.phone ? 'text-error' : 'text-base-content/50'} />
+              <label className={`input input-bordered flex items-center gap-3 bg-white text-[#333333] ${errors.phone ? 'input-error' : ''}`}>
+                <Phone size={18} className={errors.phone ? 'text-error' : 'text-[#333333]/50'} />
                 <input
                   type="tel"
                   name="phone"
@@ -198,8 +198,8 @@ export default function RegisterPage() {
 
             {/* Password */}
             <div>
-              <label className={`input input-bordered flex items-center gap-3 ${errors.password ? 'input-error' : ''}`}>
-                <Lock size={18} className={errors.password ? 'text-error' : 'text-base-content/50'} />
+              <label className={`input input-bordered flex items-center gap-3 bg-white text-[#333333] ${errors.password ? 'input-error' : ''}`}>
+                <Lock size={18} className={errors.password ? 'text-error' : 'text-[#333333]/50'} />
                 <input
                   type="password"
                   name="password"
@@ -216,7 +216,7 @@ export default function RegisterPage() {
               {form.password && (
                 <div className="mt-2">
                   <div className="flex justify-between items-center mb-1 text-xs">
-                    <span className="text-base-content/70">ความปลอดภัยรหัสผ่าน:</span>
+                    <span className="text-[#333333]/70">ความปลอดภัยรหัสผ่าน:</span>
                     <span className={`font-semibold ${strengthColor.replace('bg-', 'text-')}`}>{strengthText}</span>
                   </div>
                   <div className="w-full bg-base-300 rounded-full h-1.5">
@@ -231,8 +231,8 @@ export default function RegisterPage() {
 
             {/* Confirm Password */}
             <div>
-              <label className={`input input-bordered flex items-center gap-3 ${errors.confirmPassword ? 'input-error' : ''}`}>
-                <Lock size={18} className={errors.confirmPassword ? 'text-error' : 'text-base-content/50'} />
+              <label className={`input input-bordered flex items-center gap-3 bg-white text-[#333333] ${errors.confirmPassword ? 'input-error' : ''}`}>
+                <Lock size={18} className={errors.confirmPassword ? 'text-error' : 'text-[#333333]/50'} />
                 <input
                   type="password"
                   name="confirmPassword"

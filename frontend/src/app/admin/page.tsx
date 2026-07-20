@@ -129,7 +129,7 @@ export default function AdminPage() {
 
       {/* ─── Stats ─── */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="card bg-base-100 shadow-sm border border-base-200">
+        <div className="card bg-white text-[#333333] shadow-sm border border-base-200">
           <div className="card-body p-6">
             <div className="flex items-center gap-2 mb-2">
               <ShoppingBag size={18} className="text-base-content/60" />
@@ -138,7 +138,7 @@ export default function AdminPage() {
             <p className="text-3xl font-extrabold">{orders.length}</p>
           </div>
         </div>
-        <div className="card bg-base-100 shadow-sm border border-base-200">
+        <div className="card bg-white text-[#333333] shadow-sm border border-base-200">
           <div className="card-body p-6">
             <div className="flex items-center gap-2 mb-2">
               <BarChart size={18} className="text-primary" />
@@ -149,7 +149,7 @@ export default function AdminPage() {
             </p>
           </div>
         </div>
-        <div className="card bg-base-100 shadow-sm border border-base-200">
+        <div className="card bg-white text-[#333333] shadow-sm border border-base-200">
           <div className="card-body p-6">
             <div className="flex items-center gap-2 mb-2">
               <Clock size={18} className="text-error" />
@@ -160,7 +160,7 @@ export default function AdminPage() {
             </p>
           </div>
         </div>
-        <div className="card bg-base-100 shadow-sm border border-base-200">
+        <div className="card bg-white text-[#333333] shadow-sm border border-base-200">
           <div className="card-body p-6">
             <div className="flex items-center gap-2 mb-2">
               <Package size={18} className="text-warning" />
@@ -174,7 +174,7 @@ export default function AdminPage() {
       </div>
 
       {/* ─── Orders Table ─── */}
-      <div className="card bg-base-100 shadow-sm border border-base-200 overflow-hidden">
+      <div className="card bg-white text-[#333333] shadow-sm border border-base-200 overflow-hidden">
         <div className="p-6 border-b border-base-200">
           <h2 className="card-title text-lg font-bold">รายการล่าสุด</h2>
         </div>
@@ -191,7 +191,7 @@ export default function AdminPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="table w-full">
+            <table className="table w-full border border-[#c594a1]">
               <thead className="bg-base-200/50 text-base-content">
                 <tr>
                   <th>ID</th>
@@ -247,7 +247,7 @@ export default function AdminPage() {
                               )
                             }
                             disabled={updatingId === order.id}
-                            className="select select-bordered select-sm w-full max-w-[150px]"
+                            className="select select-bordered select-sm w-full max-w-[150px] bg-white text-[#333333]"
                           >
                             {statusOptions.map((s) => (
                               <option key={s} value={s}>{s}</option>

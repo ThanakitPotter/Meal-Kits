@@ -44,21 +44,21 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4">
-      <div className="card w-full max-w-md bg-base-100 shadow-xl border border-error/20">
+      <div className="card w-full max-w-md bg-white text-[#333333] shadow-xl border border-error/20">
         <div className="card-body">
           <div className="text-center mb-6">
             <div className="bg-error/10 text-error w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
               <ShieldAlert size={32} />
             </div>
-            <h2 className="text-2xl font-bold">เข้าสู่ระบบ (แอดมิน)</h2>
-            <p className="text-base-content/60">เข้าสู่บัญชีสำหรับผู้ดูแลระบบเท่านั้น</p>
+            <h2 className="text-2xl font-bold text-[#333333]">เข้าสู่ระบบ (แอดมิน)</h2>
+            <p className="text-[#333333]/60">เข้าสู่บัญชีสำหรับผู้ดูแลระบบเท่านั้น</p>
           </div>
 
           {error && <div className="alert alert-error text-sm py-2 mb-4">{error}</div>}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <label className="input input-bordered flex items-center gap-3">
-              <Mail size={18} className="text-base-content/50" />
+            <label className="input input-bordered flex items-center gap-3 bg-white text-[#333333]">
+              <Mail size={18} className="text-[#333333]/50" />
               <input
                 type="email"
                 required
@@ -69,8 +69,8 @@ export default function AdminLoginPage() {
               />
             </label>
 
-            <label className="input input-bordered flex items-center gap-3">
-              <Lock size={18} className="text-base-content/50" />
+            <label className="input input-bordered flex items-center gap-3 bg-white text-[#333333]">
+              <Lock size={18} className="text-[#333333]/50" />
               <input
                 type="password"
                 required

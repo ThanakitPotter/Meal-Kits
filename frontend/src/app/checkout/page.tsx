@@ -133,11 +133,11 @@ export default function CheckoutPage() {
         </ul>
       </div>
 
-      <h1 className="text-3xl font-extrabold mb-8">ข้อมูลการจัดส่งและชำระเงิน</h1>
+      <h1 className="text-3xl font-extrabold mb-8 text-[#333333]">ข้อมูลการจัดส่งและชำระเงิน</h1>
 
       <div className="grid lg:grid-cols-2 gap-10">
         <div>
-          <div className="card bg-base-100 shadow-md border border-base-200">
+          <div className="card bg-white text-[#333333] shadow-md border border-base-200">
             <div className="card-body p-6 md:p-8">
               <form id="checkout-form" onSubmit={handleSubmit} className="space-y-4">
                 <div className="form-control mb-4">
@@ -174,7 +174,7 @@ export default function CheckoutPage() {
                     value={form.customerName}
                     onChange={(e) => updateField("customerName", e.target.value)}
                     placeholder="ชื่อ-นามสกุล"
-                    className="input input-bordered w-full"
+                    className="input input-bordered w-full bg-white text-[#333333] placeholder:text-gray-400"
                   />
                 </div>
 
@@ -186,7 +186,7 @@ export default function CheckoutPage() {
                     value={form.customerPhone}
                     onChange={(e) => updateField("customerPhone", e.target.value)}
                     placeholder="0xx-xxx-xxxx"
-                    className="input input-bordered w-full"
+                    className="input input-bordered w-full bg-white text-[#333333] placeholder:text-gray-400"
                   />
                 </div>
 
@@ -198,7 +198,7 @@ export default function CheckoutPage() {
                     value={form.shippingAddress}
                     onChange={(e) => updateField("shippingAddress", e.target.value)}
                     placeholder="บ้านเลขที่ ซอย ถนน แขวง/ตำบล เขต/อำเภอ จังหวัด รหัสไปรษณีย์"
-                    className="textarea textarea-bordered w-full resize-none"
+                    className="textarea textarea-bordered w-full resize-none bg-white text-[#333333] placeholder:text-gray-400"
                   />
                 </div>
                 
@@ -220,12 +220,12 @@ export default function CheckoutPage() {
         </div>
 
         <div>
-          <div className="card bg-base-100 shadow-md border border-base-200 sticky top-24">
+          <div className="card bg-white text-[#333333] shadow-md border border-base-200 sticky top-24">
             <div className="card-body p-6 md:p-8">
-              <h2 className="card-title text-xl font-bold mb-4">สรุปคำสั่งซื้อ</h2>
+              <h2 className="card-title text-xl font-bold mb-4 text-[#333333]">สรุปคำสั่งซื้อ</h2>
               
               <div className="overflow-x-auto rounded-lg mb-6">
-                <table className="table w-full border border-base-200 rounded-box overflow-hidden">
+                <table className="table w-full border border-[#c594a1] rounded-box overflow-hidden">
                   <thead className="bg-base-200/50 text-base-content">
                     <tr>
                       <th className="font-semibold text-base-content">รายการ</th>

@@ -32,11 +32,14 @@ export default function RootLayout({
       lang="th"
       className={`${notoSansThai.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#fafafa] font-sans">
+      <head>
+        <meta name="color-scheme" content="light" />
+      </head>
+      <body className="min-h-full flex flex-col bg-[#fafafa] text-[#333333] font-sans">
         <CartProvider>
           <Navbar />
           <main className="flex-1">{children}</main>
-          <footer className="bg-[#1c1c1c] text-white/80 pt-16 pb-8 border-t-[4px] border-[#E0A800]">
+          <footer className="bg-[#1c1c1c] text-white pt-16 pb-8 border-t-[4px] border-[#E0A800]">
             <div className="mx-auto max-w-7xl px-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
                 <div className="col-span-1 md:col-span-2">
@@ -49,7 +52,7 @@ export default function RootLayout({
                       className="object-contain drop-shadow-md brightness-0 invert" 
                     />
                   </div>
-                  <p className="max-w-md text-sm leading-relaxed text-white/70">
+                  <p className="max-w-md text-sm leading-relaxed text-white/80">
                     MK340 Meal Kits มอบประสบการณ์ทำอาหารระดับเชฟให้คุณถึงบ้าน
                     ด้วยวัตถุดิบสดใหม่ คัดสรรอย่างดี และสูตรอาหารที่ทำตามได้ง่าย
                     อร่อยเป๊ะทุกมื้อเหมือนมีเชฟส่วนตัว
@@ -57,7 +60,7 @@ export default function RootLayout({
                 </div>
                 <div>
                   <h6 className="text-[#E0A800] font-bold text-lg mb-4 tracking-wide">บริการของเรา</h6>
-                  <ul className="space-y-3 text-sm">
+                  <ul className="space-y-3 text-sm text-white/80">
                     <li><a href="/#menus" className="hover:text-[#E0A800] transition-colors">เมนูยอดฮิต</a></li>
                     <li><a href="/how-to-order" className="hover:text-[#E0A800] transition-colors">วิธีการสั่งซื้อ</a></li>
                     <li><a href="/service-areas" className="hover:text-[#E0A800] transition-colors">พื้นที่ให้บริการ</a></li>
@@ -75,10 +78,10 @@ export default function RootLayout({
                 </div>
               </div>
               <div className="pt-8 border-t border-white/10 text-center md:flex md:justify-between md:text-left">
-                <p className="text-sm text-white/50 mb-4 md:mb-0">
+                <p className="text-sm text-white/60 mb-4 md:mb-0">
                   © {new Date().getFullYear()} MK340 Meal Kits — สงวนลิขสิทธิ์
                 </p>
-                <div className="flex justify-center md:justify-end gap-4 text-white/50">
+                <div className="flex justify-center md:justify-end gap-4 text-white/60">
                   <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
                   <span>|</span>
                   <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
