@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Order } from "@/types";
-import { RefreshCw, BarChart, ShoppingBag, Clock, Package, Truck, Inbox, Star, MessageSquare } from "lucide-react";
+import { RefreshCw, BarChart, ShoppingBag, Clock, Package, Truck, Inbox, Star, MessageSquare, Phone } from "lucide-react";
 
 const statusConfig: Record<
   string,
@@ -222,51 +222,56 @@ export default function AdminPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="table w-full border border-[#c594a1]">
-              <thead className="bg-base-200/50 text-base-content">
+            <table className="table w-full">
+              <thead className="bg-gray-50 text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100">
                 <tr>
-                  <th>ID</th>
-                  <th>ลูกค้า</th>
-                  <th>เมนู</th>
-                  <th>ราคา</th>
-                  <th>สถานะ</th>
-                  <th>วันที่สั่ง</th>
+                  <th className="font-semibold px-4 py-3">ID</th>
+                  <th className="font-semibold px-4 py-3">ลูกค้า</th>
+                  <th className="font-semibold px-4 py-3">เมนู</th>
+                  <th className="font-semibold px-4 py-3">ราคา</th>
+                  <th className="font-semibold px-4 py-3">สถานะ</th>
+                  <th className="font-semibold px-4 py-3">วันที่สั่ง</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-gray-100">
                 {orders.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map((order) => {
                   const status = statusConfig[order.status] || { label: order.status, badge: 'badge-neutral', icon: Clock };
                   const StatusIcon = status.icon;
                   
                   return (
-                    <tr key={order.id} className="hover">
-                      <td>
-                        <span className="font-mono font-bold opacity-70">
+                    <tr key={order.id} className="hover:bg-gray-50/50 transition-colors">
+                      <td className="px-4 py-4">
+                        <span className="font-mono text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
                           #{order.id}
                         </span>
                       </td>
-                      <td>
-                        <div className="font-bold">{order.customerName}</div>
-                        <div className="text-xs opacity-60 mt-0.5">{order.customerPhone}</div>
+                      <td className="px-4 py-4">
+                        <div className="font-bold text-gray-800">{order.customerName}</div>
+                        <div className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                          <Phone size={10} /> {order.customerPhone}
+                        </div>
                       </td>
-                      <td>
-                        <div className="space-y-1">
+                      <td className="px-4 py-4">
+                        <div className="space-y-2">
                           {order.items?.map((item, i) => (
-                            <div key={i} className="text-sm">
-                              <span className="font-bold">{item.menuName}</span> 
-                              <span className="text-xs opacity-60 ml-1">
-                                (x{item.quantity} สำหรับ {item.servings} คน)
-                              </span>
+                            <div key={i} className="text-sm flex items-start gap-2">
+                              <div className="w-1.5 h-1.5 rounded-full bg-[#E0A800] mt-1.5 flex-shrink-0"></div>
+                              <div>
+                                <span className="font-medium text-gray-800">{item.menuName}</span> 
+                                <span className="text-xs text-gray-500 ml-1">
+                                  (x{item.quantity} สำหรับ {item.servings} คน)
+                                </span>
+                              </div>
                             </div>
                           ))}
                         </div>
                       </td>
-                      <td className="font-bold text-primary">
+                      <td className="px-4 py-4 font-bold text-gray-800">
                         ฿{order.totalPrice.toLocaleString()}
                       </td>
-                      <td>
-                        <div className="flex items-center gap-2">
-                          <div className={`badge ${status.badge} gap-1 font-bold`}>
+                      <td className="px-4 py-4">
+                        <div className="flex flex-col 2xl:flex-row items-start 2xl:items-center gap-2">
+                          <div className={`badge ${status.badge} gap-1 font-bold border-none py-3 px-3 w-fit shrink-0`}>
                             <StatusIcon size={12} /> {status.label}
                           </div>
                           <select
@@ -278,7 +283,7 @@ export default function AdminPage() {
                               )
                             }
                             disabled={updatingId === order.id}
-                            className="select select-bordered select-sm w-full max-w-[150px] bg-white text-[#333333]"
+                            className="select select-bordered select-sm w-full max-w-[140px] bg-white text-[#333333] border-gray-200 hover:border-gray-300 focus:border-[#E0A800] focus:outline-none transition-colors text-xs font-medium"
                           >
                             {statusOptions.map((s) => (
                               <option key={s} value={s}>{s}</option>
@@ -286,7 +291,7 @@ export default function AdminPage() {
                           </select>
                         </div>
                       </td>
-                      <td className="text-xs opacity-60 whitespace-nowrap">
+                      <td className="px-4 py-4 text-xs text-gray-500 whitespace-nowrap">
                         {formatDate(order.createdAt)}
                       </td>
                     </tr>
