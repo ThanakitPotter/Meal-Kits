@@ -79,4 +79,26 @@ export class UsersService implements OnModuleInit {
       user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role },
     };
   }
+
+  async validateOAuthLogin(profile: any) {
+    const { email, name } = profile;
+    
+    let user = await this.usersRepository.findOne({ where: { email } });
+    
+    if (!user) {
+      user = this.usersRepository.create({
+        email,
+        name,
+        role: 'user',
+        // passwordHash and phone are nullable
+      });
+      await this.usersRepository.save(user);
+    }
+
+    const payload = { sub: user.id, email: user.email, name: user.name, role: user.role };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+      user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role },
+    };
+  }
 }

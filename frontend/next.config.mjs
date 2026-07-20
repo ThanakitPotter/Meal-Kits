@@ -1,6 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   async rewrites() {
     // ใช้ API_URL จาก Environment Variable 
     // ถ้าไม่มีจะใช้ http://localhost:3001 สำหรับทดสอบในเครื่อง
