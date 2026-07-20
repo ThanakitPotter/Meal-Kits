@@ -12,6 +12,12 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [successId, setSuccessId] = useState<string | null>(null);
 
+  // Scroll to top when order is successful
+  useEffect(() => {
+    if (successId) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [successId]);
   const [form, setForm] = useState({
     customerName: "",
     customerPhone: "",
