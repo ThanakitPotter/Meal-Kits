@@ -52,8 +52,8 @@ export default function AdminPage() {
     }
   }, [router]);
 
-  const fetchOrders = () => {
-    setLoading(true);
+  const fetchOrders = (showLoading = true) => {
+    if (showLoading) setLoading(true);
     Promise.all([
       fetch("/api/orders").then((res) => res.json()),
       fetch("/api/reviews/all").then((res) => res.json())
@@ -67,7 +67,14 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    fetchOrders();
+    fetchOrders(true);
+    
+    // Auto-refresh every 5 seconds for real-time updates (silently without loader)
+    const interval = setInterval(() => {
+      fetchOrders(false);
+    }, 5000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   const handleStatusChange = async (
@@ -123,7 +130,7 @@ export default function AdminPage() {
           <p className="text-base-content/60 mt-1">รายการสั่งซื้อ Meal Kits ทั้งหมด</p>
         </div>
         <button
-          onClick={fetchOrders}
+          onClick={() => fetchOrders(true)}
           disabled={loading}
           className="btn btn-outline"
         >
