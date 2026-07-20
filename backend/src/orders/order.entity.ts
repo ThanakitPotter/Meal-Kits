@@ -29,6 +29,9 @@ export class Order {
   @Column('int')
   totalPrice!: number;
 
+  @Column({ default: false })
+  isReviewed!: boolean;
+
   @CreateDateColumn()
   createdAt!: string;
 }

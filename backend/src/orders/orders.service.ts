@@ -83,4 +83,13 @@ export class OrdersService {
     }
     return null;
   }
+
+  async markAsReviewed(id: string): Promise<Order | null> {
+    const order = await this.ordersRepository.findOne({ where: { id } });
+    if (order) {
+      order.isReviewed = true;
+      return this.ordersRepository.save(order);
+    }
+    return null;
+  }
 }

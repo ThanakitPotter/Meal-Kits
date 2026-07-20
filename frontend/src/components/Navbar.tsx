@@ -4,18 +4,36 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { User, LogOut, LayoutDashboard, ShoppingBag, Menu as MenuIcon, ShoppingCart, ClipboardList, Info } from "lucide-react";
+import { User, LogOut, LayoutDashboard, ShoppingBag, Menu as MenuIcon, ShoppingCart, ClipboardList, Info, Bell } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import ReviewModal from "@/components/ReviewModal";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [user, setUser] = useState<any>(null);
   const { cartCount } = useCart();
+  const [unreviewedOrders, setUnreviewedOrders] = useState<any[]>([]);
+  const [selectedReviewOrder, setSelectedReviewOrder] = useState<string | null>(null);
+
+  const fetchUnreviewedOrders = async (userId: string) => {
+    try {
+      const res = await fetch(`http://localhost:3001/api/orders/user/${userId}`);
+      if (res.ok) {
+        const data = await res.json();
+        const unreviewed = data.filter((o: any) => o.status === "จัดส่งแล้ว" && !o.isReviewed);
+        setUnreviewedOrders(unreviewed);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      fetchUnreviewedOrders(parsedUser.id);
     }
   }, []);
 
@@ -148,6 +166,39 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-end gap-2">
+        {user && (
+          <div className="dropdown dropdown-end">
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle relative mr-1 text-[#333333]">
+              <Bell size={22} />
+              {unreviewedOrders.length > 0 && (
+                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse border border-white"></span>
+              )}
+            </div>
+            <ul tabIndex={0} className="dropdown-content menu bg-white text-[#333333] rounded-box z-[100] w-72 p-2 shadow-xl border border-gray-100 mt-4">
+              <li className="menu-title px-4 py-2 font-bold text-[#333333]">การแจ้งเตือน</li>
+              <div className="divider my-0"></div>
+              {unreviewedOrders.length > 0 ? (
+                unreviewedOrders.map((order) => (
+                  <li key={order.id}>
+                    <button 
+                      onClick={() => {
+                        setSelectedReviewOrder(order.id);
+                        const elem = document.activeElement as HTMLElement;
+                        if (elem) elem.blur();
+                      }}
+                      className="text-left whitespace-normal py-3 px-4 hover:bg-gray-50 flex flex-col gap-1 border-b border-gray-50 last:border-0"
+                    >
+                      <span className="font-bold text-[#E0A800]">🎉 ออเดอร์จัดส่งสำเร็จแล้ว!</span>
+                      <span className="text-sm text-[#333333]/70 leading-tight">คำสั่งซื้อ #{order.id} ส่งถึงมือคุณแล้ว แวะมาให้คะแนนและรีวิวมื้อนี้กันหน่อยนะครับ</span>
+                    </button>
+                  </li>
+                ))
+              ) : (
+                <li className="p-4 text-center text-gray-400 text-sm">ไม่มีการแจ้งเตือนใหม่</li>
+              )}
+            </ul>
+          </div>
+        )}
         <Link href="/cart" className="btn btn-ghost btn-circle relative mr-2 text-[#333333]">
           <ShoppingCart size={22} />
           {cartCount > 0 && (
@@ -202,6 +253,15 @@ export default function Navbar() {
           </>
         )}
       </div>
+
+      <ReviewModal 
+        orderId={selectedReviewOrder || ""} 
+        isOpen={!!selectedReviewOrder} 
+        onClose={() => setSelectedReviewOrder(null)} 
+        onSuccess={() => {
+          if (user) fetchUnreviewedOrders(user.id);
+        }}
+      />
     </div>
   );
 }

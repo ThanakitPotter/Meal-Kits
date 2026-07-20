@@ -35,4 +35,9 @@ export class OrdersController {
   ) {
     return this.ordersService.updateStatus(id, updateOrderStatusDto.status);
   }
+
+  @Patch(':id/reviewed')
+  markAsReviewed(@Param('id') id: string) {
+    return this.ordersService.markAsReviewed(id);
+  }
 }
