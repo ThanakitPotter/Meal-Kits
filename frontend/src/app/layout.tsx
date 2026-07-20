@@ -33,7 +33,7 @@ export default function RootLayout({
       className={`${notoSansThai.variable} ${inter.variable} h-full antialiased`}
     >
       <head>
-        <meta name="color-scheme" content="light" />
+        <meta name="color-scheme" content="light only" />
       </head>
       <body className="min-h-full flex flex-col bg-[#fafafa] text-[#333333] font-sans">
         <CartProvider>

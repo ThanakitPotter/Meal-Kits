@@ -135,14 +135,14 @@ export default function Home() {
         </div>
 
         {/* ─── Category Filter ─── */}
-        <div className="flex flex-wrap justify-center gap-3 mb-10">
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`btn rounded-full px-6 transition-all shadow-sm border-none ${selectedCategory === cat
-                ? "btn-primary shadow-md scale-105"
-                : "btn-ghost bg-base-200 hover:bg-base-300 text-base-content"
+              className={`btn rounded-full px-6 transition-all ${selectedCategory === cat
+                ? "bg-[#E0A800] text-white shadow-md scale-105 border-[#E0A800] hover:bg-[#c98e10]"
+                : "bg-white text-[#333333] shadow-sm border border-gray-100 hover:bg-gray-50 hover:border-gray-200"
                 }`}
             >
               {cat}
