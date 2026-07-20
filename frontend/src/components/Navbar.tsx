@@ -13,6 +13,7 @@ export default function Navbar() {
   const [user, setUser] = useState<any>(null);
   const { cartCount } = useCart();
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [hasUnread, setHasUnread] = useState(false);
   const [selectedReviewOrder, setSelectedReviewOrder] = useState<string | null>(null);
 
   const fetchNotifications = async (userId: string) => {
@@ -22,7 +23,13 @@ export default function Navbar() {
         const data = await res.json();
         const unreviewed = data.filter((o: any) => o.status === "จัดส่งแล้ว" && !o.isReviewed).map((o: any) => ({ ...o, notifType: 'shipped' }));
         const preparing = data.filter((o: any) => o.status === "กำลังจัดเตรียม").map((o: any) => ({ ...o, notifType: 'preparing' }));
-        setNotifications([...unreviewed, ...preparing]);
+        const allNotifs = [...unreviewed, ...preparing];
+        setNotifications(allNotifs);
+        
+        // Check if there are new unread notifications
+        const viewedNotifs = JSON.parse(localStorage.getItem('viewedNotifs') || '[]');
+        const hasNew = allNotifs.some(n => !viewedNotifs.includes(`${n.id}-${n.status}`));
+        if (hasNew) setHasUnread(true);
       }
     } catch (error) {
       console.error(error);
@@ -116,6 +123,12 @@ export default function Navbar() {
     }
   };
 
+  const markAsRead = () => {
+    setHasUnread(false);
+    const notifIds = notifications.map(n => `${n.id}-${n.status}`);
+    localStorage.setItem('viewedNotifs', JSON.stringify(notifIds));
+  };
+
   return (
     <div className="navbar bg-white text-[#333333] shadow-sm border-b border-gray-100 sticky top-0 z-50 px-4 md:px-8">
       <div className="navbar-start">
@@ -183,9 +196,14 @@ export default function Navbar() {
       <div className="navbar-end gap-2">
         {user && (
           <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle relative mr-1 text-[#333333]">
+            <div 
+              tabIndex={0} 
+              role="button" 
+              className="btn btn-ghost btn-circle relative mr-1 text-[#333333]"
+              onClick={markAsRead}
+            >
               <Bell size={22} />
-              {notifications.length > 0 && (
+              {hasUnread && (
                 <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse border border-white"></span>
               )}
             </div>
