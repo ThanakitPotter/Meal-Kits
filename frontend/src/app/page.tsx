@@ -184,7 +184,7 @@ export default function Home() {
                     <h2 className="card-title text-2xl font-bold text-[#333333]">{menu.name}</h2>
 
                     <div className="flex flex-wrap items-center gap-2 my-2">
-                      <div className="badge badge-ghost font-semibold gap-1">
+                      <div className="badge bg-white text-[#333333] border border-gray-200 font-semibold gap-1">
                         <Clock size={12} /> ใช้เวลา {menu.prepTime}
                       </div>
                       <div className="badge badge-primary badge-outline font-semibold gap-1">
