@@ -49,6 +49,7 @@ export default function AdminPage() {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"orders" | "reviews">("orders");
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentReviewPage, setCurrentReviewPage] = useState(1);
   const ITEMS_PER_PAGE = 15;
 
   useEffect(() => {
@@ -381,7 +382,7 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {reviews.map((r) => (
+                {reviews.slice((currentReviewPage - 1) * ITEMS_PER_PAGE, currentReviewPage * ITEMS_PER_PAGE).map((r) => (
                   <tr key={r.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
@@ -413,6 +414,33 @@ export default function AdminPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+        
+        {reviews.length > 0 && !loading && (
+          <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-t border-gray-100 bg-gray-50/50 gap-4">
+            <span className="text-sm text-gray-500 font-medium">
+              แสดง {(currentReviewPage - 1) * ITEMS_PER_PAGE + 1} ถึง {Math.min(currentReviewPage * ITEMS_PER_PAGE, reviews.length)} จาก {reviews.length} รายการ
+            </span>
+            <div className="join shadow-sm">
+              <button 
+                className="join-item btn btn-sm bg-white border-gray-200 hover:bg-gray-100" 
+                disabled={currentReviewPage === 1}
+                onClick={() => setCurrentReviewPage(prev => Math.max(1, prev - 1))}
+              >
+                « ก่อนหน้า
+              </button>
+              <button className="join-item btn btn-sm bg-white border-gray-200 cursor-default hover:bg-white text-primary font-bold px-4">
+                หน้า {currentReviewPage} / {Math.ceil(reviews.length / ITEMS_PER_PAGE) || 1}
+              </button>
+              <button 
+                className="join-item btn btn-sm bg-white border-gray-200 hover:bg-gray-100" 
+                disabled={currentReviewPage === Math.ceil(reviews.length / ITEMS_PER_PAGE) || Math.ceil(reviews.length / ITEMS_PER_PAGE) === 0}
+                onClick={() => setCurrentReviewPage(prev => Math.min(Math.ceil(reviews.length / ITEMS_PER_PAGE), prev + 1))}
+              >
+                ถัดไป »
+              </button>
+            </div>
           </div>
         )}
       </div>
