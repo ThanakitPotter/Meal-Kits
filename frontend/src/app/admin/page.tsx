@@ -350,42 +350,42 @@ export default function AdminPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="table w-full border border-gray-100">
-              <thead className="bg-base-200/50 text-[#333333]">
+            <table className="table w-full">
+              <thead className="bg-gray-50 text-gray-500 uppercase text-xs tracking-wider border-b border-gray-100">
                 <tr>
-                  <th>ลูกค้า</th>
-                  <th>คะแนน</th>
-                  <th>ข้อความรีวิว</th>
-                  <th>วันที่รีวิว</th>
+                  <th className="font-semibold px-4 py-3">ลูกค้า</th>
+                  <th className="font-semibold px-4 py-3">คะแนน</th>
+                  <th className="font-semibold px-4 py-3">ข้อความรีวิว</th>
+                  <th className="font-semibold px-4 py-3">วันที่รีวิว</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-gray-100">
                 {reviews.map((r) => (
-                  <tr key={r.id} className="hover">
-                    <td>
+                  <tr key={r.id} className="hover:bg-gray-50/50 transition-colors">
+                    <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
                         <div className="avatar">
-                          <div className="w-10 h-10 rounded-full bg-gray-100 ring ring-gray-100 ring-offset-1">
-                            <img src={r.image} alt={r.userName} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                          <div className="w-10 h-10 rounded-full bg-gray-100 ring ring-gray-100 ring-offset-1 overflow-hidden">
+                            <img src={r.image} alt={r.userName} onError={(e) => { e.currentTarget.style.display = 'none'; }} className="object-cover w-full h-full" />
                           </div>
                         </div>
                         <div>
-                          <div className="font-bold text-[#333333]">{r.userName}</div>
-                          <div className="text-xs text-gray-500">{r.role}</div>
+                          <div className="font-bold text-gray-800">{r.userName}</div>
+                          <div className="text-xs text-gray-500 mt-0.5">{r.role}</div>
                         </div>
                       </div>
                     </td>
-                    <td>
+                    <td className="px-4 py-4">
                       <div className="flex gap-1 text-[#E0A800]">
                         {[...Array(5)].map((_, i) => (
-                          <Star key={i} size={14} className={i < r.rating ? "fill-[#E0A800]" : "text-gray-300"} />
+                          <Star key={i} size={14} className={i < r.rating ? "fill-[#E0A800]" : "text-gray-200"} />
                         ))}
                       </div>
                     </td>
-                    <td className="whitespace-normal min-w-[300px] text-gray-700 italic">
+                    <td className="px-4 py-4 whitespace-normal min-w-[300px] text-gray-700 italic">
                       "{r.review}"
                     </td>
-                    <td className="text-xs text-gray-500 whitespace-nowrap">
+                    <td className="px-4 py-4 text-xs text-gray-500 whitespace-nowrap">
                       {formatDate(r.createdAt)}
                     </td>
                   </tr>
