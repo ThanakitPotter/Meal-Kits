@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function AuthCallbackPage() {
+function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -28,5 +28,13 @@ export default function AuthCallbackPage() {
       <h2 className="text-xl font-bold">กำลังเข้าสู่ระบบ...</h2>
       <p className="text-base-content/60">กรุณารอสักครู่</p>
     </div>
+  );
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center">กำลังโหลด...</div>}>
+      <AuthCallbackContent />
+    </Suspense>
   );
 }
