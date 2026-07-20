@@ -15,6 +15,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("ทั้งหมด");
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
+  const [isListExpanded, setIsListExpanded] = useState(false);
   const categories = ["ทั้งหมด", "อาหารไทย", "ตะวันตก", "สุขภาพ"];
 
   useEffect(() => {
@@ -331,7 +332,7 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 pt-8">
-            {(selectedRating ? reviews.filter(r => r.rating === selectedRating) : reviews).map((review, i) => (
+            {(selectedRating ? reviews.filter(r => r.rating === selectedRating) : reviews).slice(0, 3).map((review, i) => (
               <div
                 key={i}
                 className={`card bg-white text-[#333333] shadow-lg border border-gray-100 hover:-translate-y-3 transition-all duration-300 hover:shadow-2xl relative overflow-hidden group ${i === 1 ? 'md:translate-y-8' : ''
@@ -373,6 +374,41 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Collapsible List for 15 latest reviewers */}
+          <div className="mt-16 max-w-4xl mx-auto">
+            <button 
+              onClick={() => setIsListExpanded(!isListExpanded)}
+              className="btn btn-outline border-gray-300 w-full rounded-2xl flex items-center justify-center gap-2 text-[#333333] hover:bg-gray-50"
+            >
+              {isListExpanded ? 'ปิดรายชื่อผู้รีวิว (ซ่อน)' : 'ดูรายชื่อลูกค้าที่รีวิว 15 คนล่าสุด'}
+              <svg className={`w-4 h-4 transition-transform ${isListExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            
+            {isListExpanded && (
+              <div className="mt-4 bg-white border border-gray-100 rounded-2xl p-6 shadow-sm animate-fade-in-up">
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {(selectedRating ? reviews.filter(r => r.rating === selectedRating) : reviews).slice(0, 15).map((review, i) => (
+                    <div key={i} className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-xl transition-colors">
+                      <div className="avatar">
+                        <div className="w-10 h-10 rounded-full bg-gray-100 overflow-hidden">
+                          <img src={review.image} alt={review.userName} className="object-cover w-full h-full" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-bold text-sm text-[#333333] truncate max-w-[180px]">{review.userName}</div>
+                        <div className="flex gap-0.5 text-warning mt-0.5">
+                          {[...Array(review.rating)].map((_, j) => (
+                            <Star key={j} size={10} fill="currentColor" />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
