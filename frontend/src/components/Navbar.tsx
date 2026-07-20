@@ -37,6 +37,13 @@ export default function Navbar() {
     }
   }, []);
 
+  // Re-fetch notifications when navigating pages
+  useEffect(() => {
+    if (user) {
+      fetchUnreviewedOrders(user.id);
+    }
+  }, [pathname, user?.id]);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
