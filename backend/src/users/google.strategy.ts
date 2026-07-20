@@ -9,11 +9,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     const clientID = process.env.GOOGLE_CLIENT_ID || 'dummy';
     const clientSecret = process.env.GOOGLE_CLIENT_SECRET || 'dummy';
     console.log('GoogleStrategy initialized with ClientID:', clientID);
+    const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
     
     super({
       clientID,
       clientSecret,
-      callbackURL: 'http://localhost:3001/api/users/google/callback', // We will proxy this in production if needed, or set exactly.
+      callbackURL: `${backendUrl}/api/users/google/callback`,
       scope: ['email', 'profile'],
     });
   }
