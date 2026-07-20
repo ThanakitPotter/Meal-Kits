@@ -53,8 +53,6 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
-}
 
 ::selection {
   background-color: var(--color-mustard-200);
