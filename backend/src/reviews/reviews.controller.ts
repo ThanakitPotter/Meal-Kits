@@ -11,6 +11,11 @@ export class ReviewsController {
     return this.reviewsService.findLatest();
   }
 
+  @Get('all')
+  findAll() {
+    return this.reviewsService.findAll();
+  }
+
   @Post()
   create(@Body() createReviewDto: CreateReviewDto) {
     return this.reviewsService.create(createReviewDto);

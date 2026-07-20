@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Order } from "@/types";
-import { RefreshCw, BarChart, ShoppingBag, Clock, Package, Truck, Inbox } from "lucide-react";
+import { RefreshCw, BarChart, ShoppingBag, Clock, Package, Truck, Inbox, Star, MessageSquare } from "lucide-react";
 
 const statusConfig: Record<
   string,
@@ -35,8 +35,10 @@ const statusOptions: Array<Order["status"]> = [
 export default function AdminPage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"orders" | "reviews">("orders");
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -52,10 +54,13 @@ export default function AdminPage() {
 
   const fetchOrders = () => {
     setLoading(true);
-    fetch("/api/orders")
-      .then((res) => res.json())
-      .then((data) => {
-        setOrders(data);
+    Promise.all([
+      fetch("/api/orders").then((res) => res.json()),
+      fetch("/api/reviews/all").then((res) => res.json())
+    ])
+      .then(([ordersData, reviewsData]) => {
+        setOrders(ordersData);
+        if (Array.isArray(reviewsData)) setReviews(reviewsData);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -173,8 +178,25 @@ export default function AdminPage() {
         </div>
       </div>
 
+      {/* ─── Tabs ─── */}
+      <div className="tabs tabs-boxed mb-6 bg-white border border-gray-100 p-1 w-max shadow-sm">
+        <button 
+          className={`tab px-6 transition-all ${activeTab === 'orders' ? 'tab-active bg-[#E0A800] !text-white font-bold' : 'text-[#333333] hover:bg-gray-50'}`} 
+          onClick={() => setActiveTab('orders')}
+        >
+          <ShoppingBag size={16} className="mr-2" /> จัดการออเดอร์
+        </button> 
+        <button 
+          className={`tab px-6 transition-all ${activeTab === 'reviews' ? 'tab-active bg-[#E0A800] !text-white font-bold' : 'text-[#333333] hover:bg-gray-50'}`} 
+          onClick={() => setActiveTab('reviews')}
+        >
+          <MessageSquare size={16} className="mr-2" /> รีวิวจากลูกค้า
+        </button> 
+      </div>
+
       {/* ─── Orders Table ─── */}
-      <div className="card bg-white text-[#333333] shadow-sm border border-gray-100 overflow-hidden">
+      {activeTab === 'orders' && (
+      <div className="card bg-white text-[#333333] shadow-sm border border-gray-100 overflow-hidden animate-fade-in-up">
         <div className="p-6 border-b border-gray-100">
           <h2 className="card-title text-lg font-bold">รายการล่าสุด</h2>
         </div>
@@ -266,6 +288,73 @@ export default function AdminPage() {
           </div>
         )}
       </div>
+      )}
+
+      {/* ─── Reviews Table ─── */}
+      {activeTab === 'reviews' && (
+      <div className="card bg-white text-[#333333] shadow-sm border border-gray-100 overflow-hidden animate-fade-in-up">
+        <div className="p-6 border-b border-gray-100">
+          <h2 className="card-title text-lg font-bold">บันทึกรีวิวทั้งหมด</h2>
+        </div>
+
+        {loading ? (
+          <div className="p-12 flex flex-col items-center justify-center">
+            <span className="loading loading-spinner loading-lg text-primary mb-4"></span>
+            <p className="text-base-content/50">กำลังโหลดข้อมูล...</p>
+          </div>
+        ) : reviews.length === 0 ? (
+          <div className="p-12 flex flex-col items-center justify-center text-base-content/40">
+            <MessageSquare size={48} className="mb-4 text-gray-300" />
+            <p>ยังไม่มีรีวิวจากลูกค้า</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="table w-full border border-gray-100">
+              <thead className="bg-base-200/50 text-[#333333]">
+                <tr>
+                  <th>ลูกค้า</th>
+                  <th>คะแนน</th>
+                  <th>ข้อความรีวิว</th>
+                  <th>วันที่รีวิว</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reviews.map((r) => (
+                  <tr key={r.id} className="hover">
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div className="avatar">
+                          <div className="w-10 h-10 rounded-full bg-gray-100 ring ring-gray-100 ring-offset-1">
+                            <img src={r.image} alt={r.userName} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="font-bold text-[#333333]">{r.userName}</div>
+                          <div className="text-xs text-gray-500">{r.role}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="flex gap-1 text-[#E0A800]">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} size={14} className={i < r.rating ? "fill-[#E0A800]" : "text-gray-300"} />
+                        ))}
+                      </div>
+                    </td>
+                    <td className="whitespace-normal min-w-[300px] text-gray-700 italic">
+                      "{r.review}"
+                    </td>
+                    <td className="text-xs text-gray-500 whitespace-nowrap">
+                      {formatDate(r.createdAt)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+      )}
     </div>
   );
 }

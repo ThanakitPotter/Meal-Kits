@@ -60,6 +60,23 @@ export class ReviewsService {
     return reviews;
   }
 
+  async findAll() {
+    const reviews = await this.reviewRepository.find({
+      order: { createdAt: 'DESC' },
+    });
+
+    for (const r of reviews) {
+      if (r.userId) {
+        const user = await this.userRepository.findOne({ where: { id: r.userId } });
+        if (user && user.avatarUrl) {
+          r.image = user.avatarUrl;
+        }
+      }
+    }
+
+    return reviews;
+  }
+
   async seed() {
     const mockReviews = [
       {
