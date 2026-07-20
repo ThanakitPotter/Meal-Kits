@@ -3,7 +3,7 @@ import { MapPin, Info } from "lucide-react";
 export default function ServiceAreasPage() {
   return (
     <div className="container mx-auto px-4 py-20 max-w-3xl">
-      <h1 className="text-4xl font-extrabold text-center mb-6">พื้นที่ให้บริการ (Service Areas)</h1>
+      <h1 className="text-4xl font-extrabold text-center mb-6 text-[#333333]">พื้นที่ให้บริการ (Service Areas)</h1>
       <p className="text-center text-lg text-[#333333]/70 mb-12">
         เราจัดส่งชุดอาหารพร้อมทำ (Meal Kits) แบบควบคุมอุณหภูมิ เพื่อให้วัตถุดิบสดใหม่เสมอ
       </p>

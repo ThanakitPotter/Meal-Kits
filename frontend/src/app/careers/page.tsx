@@ -1,7 +1,7 @@
 export default function CareersPage() {
   return (
     <div className="container mx-auto px-4 py-20 max-w-4xl">
-      <h1 className="text-4xl font-extrabold text-center mb-6">ร่วมงานกับเรา (Careers)</h1>
+      <h1 className="text-4xl font-extrabold text-center mb-6 text-[#333333]">ร่วมงานกับเรา (Careers)</h1>
       <p className="text-center text-lg text-[#333333]/70 mb-12">
         มาร่วมเป็นส่วนหนึ่งในการส่งมอบความอร่อยถึงบ้านกับ MK340
       </p>
@@ -14,7 +14,7 @@ export default function CareersPage() {
               ผู้ที่มีใจรักในการทำอาหารและคิดค้นสูตรใหม่ๆ คุณจะได้ร่วมออกแบบ Meal Kits ที่ใครๆ ก็ทำตามได้
             </p>
             <div className="card-actions justify-end mt-4">
-              <button className="btn btn-outline btn-sm">ดูรายละเอียด</button>
+              <button className="btn bg-white border border-gray-300 text-[#333333] hover:bg-gray-50 btn-sm">ดูรายละเอียด</button>
             </div>
           </div>
         </div>
