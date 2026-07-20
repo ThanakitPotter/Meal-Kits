@@ -24,16 +24,13 @@ export class MenusService {
   }
 
   async seedMenus(): Promise<string> {
-    const count = await this.menusRepository.count();
-    if (count === 0) {
-      for (const menuData of MOCK_MENUS) {
-        // Exclude the mock string ID to let postgres generate a UUID
-        const { id, ...data } = menuData;
-        const newMenu = this.menusRepository.create(data);
-        await this.menusRepository.save(newMenu);
-      }
-      return 'Seeded menus successfully!';
+    await this.menusRepository.delete({});
+    for (const menuData of MOCK_MENUS) {
+      // Exclude the mock string ID to let postgres generate a UUID
+      const { id, ...data } = menuData;
+      const newMenu = this.menusRepository.create(data);
+      await this.menusRepository.save(newMenu);
     }
-    return 'Menus already exist, no seeding needed.';
+    return `Seeded ${MOCK_MENUS.length} menus successfully!`;
   }
 }
