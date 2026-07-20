@@ -195,8 +195,9 @@ export default function CheckoutPage() {
                   <input
                     type="text"
                     required
+                    maxLength={50}
                     value={form.customerName}
-                    onChange={(e) => updateField("customerName", e.target.value)}
+                    onChange={(e) => updateField("customerName", e.target.value.slice(0, 50))}
                     placeholder="ชื่อ-นามสกุล"
                     className="input input-bordered w-full bg-base-100 text-base-content focus:border-primary focus:ring-1 focus:ring-primary transition-all rounded-xl"
                   />
@@ -207,8 +208,12 @@ export default function CheckoutPage() {
                   <input
                     type="tel"
                     required
+                    maxLength={10}
                     value={form.customerPhone}
-                    onChange={(e) => updateField("customerPhone", e.target.value)}
+                    onChange={(e) => {
+                      const onlyNums = e.target.value.replace(/[^0-9]/g, '');
+                      updateField("customerPhone", onlyNums.slice(0, 10));
+                    }}
                     placeholder="0xx-xxx-xxxx"
                     className="input input-bordered w-full bg-base-100 text-base-content focus:border-primary focus:ring-1 focus:ring-primary transition-all rounded-xl"
                   />
@@ -219,8 +224,9 @@ export default function CheckoutPage() {
                   <textarea
                     required
                     rows={3}
+                    maxLength={100}
                     value={form.shippingAddress}
-                    onChange={(e) => updateField("shippingAddress", e.target.value)}
+                    onChange={(e) => updateField("shippingAddress", e.target.value.slice(0, 100))}
                     placeholder="บ้านเลขที่ ซอย ถนน แขวง/ตำบล เขต/อำเภอ จังหวัด รหัสไปรษณีย์"
                     className="textarea textarea-bordered w-full resize-none bg-base-100 text-base-content focus:border-primary focus:ring-1 focus:ring-primary transition-all rounded-xl"
                   />
