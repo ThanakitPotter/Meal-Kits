@@ -151,7 +151,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                       onClick={() => setServings(1)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all ${servings === 1
                           ? 'btn-primary'
-                          : 'btn-outline border-gray-200 text-[#333333] hover:bg-gray-50'
+                          : 'btn-outline border-gray-200 !text-gray-700 hover:bg-gray-50'
                         }`}
                     >
                       <span className="text-xl font-bold">1 คน</span>
@@ -162,7 +162,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                       onClick={() => setServings(2)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${servings === 2
                           ? 'btn-primary'
-                          : 'btn-outline border-gray-200 text-[#333333] hover:bg-gray-50'
+                          : 'btn-outline border-gray-200 !text-gray-700 hover:bg-gray-50'
                         }`}
                     >
                       <div className="flex items-center gap-2">
@@ -175,7 +175,7 @@ export default function MenuDetailPage({ params }: { params: Promise<{ id: strin
                       onClick={() => setServings(4)}
                       className={`btn h-auto py-4 flex-col gap-1 transition-all relative ${servings === 4
                           ? 'btn-primary'
-                          : 'btn-outline border-gray-200 text-[#333333] hover:bg-gray-50'
+                          : 'btn-outline border-gray-200 !text-gray-700 hover:bg-gray-50'
                         }`}
                     >
                       <div className="flex items-center gap-2">
