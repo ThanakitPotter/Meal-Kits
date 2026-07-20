@@ -24,6 +24,9 @@ export class Review {
   @Column('text')
   review: string;
 
+  @Column({ nullable: true })
+  menuNames: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

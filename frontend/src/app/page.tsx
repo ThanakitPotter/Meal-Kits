@@ -14,6 +14,7 @@ export default function Home() {
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("ทั้งหมด");
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const categories = ["ทั้งหมด", "ผัด", "ต้ม-แกง", "ทอด-ย่าง"];
 
   useEffect(() => {
@@ -305,13 +306,32 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-extrabold mb-3 text-[#333333]">
               รีวิวจากลูกค้าที่สั่งไปแล้ว
             </h2>
-            <p className="text-[#333333]/60 max-w-lg mx-auto">
+            <p className="text-[#333333]/60 max-w-lg mx-auto mb-6">
               เสียงตอบรับจากลูกค้าจริง ที่การันตีความอร่อยและความสะดวกสบาย
             </p>
+            
+            {/* ─── Rating Filter ─── */}
+            <div className="flex flex-wrap justify-center gap-2">
+              <button
+                onClick={() => setSelectedRating(null)}
+                className={`btn btn-sm rounded-full ${selectedRating === null ? 'bg-[#E0A800] text-white hover:bg-[#c98e10] border-none' : 'btn-outline border-gray-300 text-gray-600 hover:bg-gray-100'}`}
+              >
+                ทั้งหมด
+              </button>
+              {[5, 4, 3, 2, 1].map((rating) => (
+                <button
+                  key={rating}
+                  onClick={() => setSelectedRating(rating)}
+                  className={`btn btn-sm rounded-full gap-1 ${selectedRating === rating ? 'bg-[#E0A800] text-white hover:bg-[#c98e10] border-none' : 'btn-outline border-gray-300 text-gray-600 hover:bg-gray-100'}`}
+                >
+                  {rating} <Star size={14} className={selectedRating === rating ? 'fill-white' : 'fill-warning text-warning'} />
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 pt-8">
-            {reviews.map((review, i) => (
+            {(selectedRating ? reviews.filter(r => r.rating === selectedRating) : reviews).map((review, i) => (
               <div
                 key={i}
                 className={`card bg-white text-[#333333] shadow-lg border border-gray-100 hover:-translate-y-3 transition-all duration-300 hover:shadow-2xl relative overflow-hidden group ${i === 1 ? 'md:translate-y-8' : ''
@@ -331,6 +351,11 @@ export default function Home() {
                       {review.dateStr}
                     </span>
                   </div>
+                  {review.menuNames && (
+                    <div className="text-xs text-[#E0A800] bg-[#E0A800]/10 px-3 py-1.5 rounded-md mb-3 font-semibold border border-[#E0A800]/20 inline-flex items-center gap-1.5 line-clamp-1">
+                      <UtensilsCrossed size={12} /> {review.menuNames}
+                    </div>
+                  )}
                   <p className="text-[#333333]/80 mb-8 leading-relaxed font-medium">
                     "{review.review}"
                   </p>

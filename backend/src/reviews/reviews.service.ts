@@ -18,17 +18,22 @@ export class ReviewsService {
   ) {}
 
   async create(createReviewDto: CreateReviewDto) {
-    const { userId, rating, review } = createReviewDto;
+    const { userId, rating, review, orderId } = createReviewDto;
 
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    const hasOrder = await this.orderRepository.findOne({ where: { userId } });
+    const hasOrder = orderId
+      ? await this.orderRepository.findOne({ where: { id: orderId } })
+      : await this.orderRepository.findOne({ where: { userId } });
+
     if (!hasOrder) {
-      throw new BadRequestException('Only customers who have placed an order can leave a review.');
+      throw new BadRequestException('Order not found or user has no orders.');
     }
+
+    const menuNames = hasOrder.items ? hasOrder.items.map((i: any) => i.menuName).join(', ') : undefined;
 
     const newReview = this.reviewRepository.create({
       userId,
@@ -37,6 +42,7 @@ export class ReviewsService {
       image: user.avatarUrl || `https://i.pravatar.cc/150?u=${userId}`,
       rating,
       review,
+      menuNames,
     });
 
     return this.reviewRepository.save(newReview);
