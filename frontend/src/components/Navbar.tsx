@@ -35,13 +35,16 @@ export default function Navbar() {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[100] mt-3 w-52 p-2 shadow"
           >
             <li>
               <Link href="/" className={pathname === "/" ? "active text-primary" : ""}>
                 <ShoppingBag size={18} /> สั่งอาหาร
               </Link>
             </li>
+            <li><Link href="/#menus">เมนูแนะนำ</Link></li>
+            <li><Link href="/how-to-order">วิธีการสั่งซื้อ</Link></li>
+            <li><Link href="/about">เกี่ยวกับเรา</Link></li>
             {user?.role === 'admin' && (
               <li>
                 <Link href="/admin" className={pathname === "/admin" ? "active text-primary" : ""}>
@@ -64,13 +67,28 @@ export default function Navbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 gap-2 font-medium">
           <li>
-            <Link href="/" className={pathname === "/" ? "active !bg-primary !text-primary-content" : ""}>
+            <Link href="/" className={pathname === "/" ? "active !bg-primary !text-primary-content font-bold" : "hover:text-primary transition-colors"}>
               สั่งอาหาร
+            </Link>
+          </li>
+          <li>
+            <Link href="/#menus" className="hover:text-primary transition-colors">
+              เมนูแนะนำ
+            </Link>
+          </li>
+          <li>
+            <Link href="/how-to-order" className={pathname === "/how-to-order" ? "active !bg-primary !text-primary-content font-bold" : "hover:text-primary transition-colors"}>
+              วิธีการสั่งซื้อ
+            </Link>
+          </li>
+          <li>
+            <Link href="/about" className={pathname === "/about" ? "active !bg-primary !text-primary-content font-bold" : "hover:text-primary transition-colors"}>
+              เกี่ยวกับเรา
             </Link>
           </li>
           {user?.role === 'admin' && (
             <li>
-              <Link href="/admin" className={pathname === "/admin" ? "active !bg-primary !text-primary-content" : ""}>
+              <Link href="/admin" className={pathname === "/admin" ? "active !bg-primary !text-primary-content font-bold" : "hover:text-primary transition-colors"}>
                 แอดมิน
               </Link>
             </li>
