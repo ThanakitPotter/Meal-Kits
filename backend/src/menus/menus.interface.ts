@@ -7,7 +7,7 @@ export interface Menu {
   image: string;
   prepTime: string;
   ingredients: string[];
-  category: 'ผัด' | 'ต้ม-แกง' | 'ทอด-ย่าง';
+  category: 'อาหารไทย' | 'ตะวันตก' | 'สุขภาพ';
   isActive: boolean;
 }
 
@@ -32,7 +32,7 @@ export const MOCK_MENUS: Menu[] = [
       'พริกป่น + น้ำตาลทราย',
       'มะนาว 1 ลูก',
     ],
-    category: 'ผัด',
+    category: 'อาหารไทย',
     isActive: true,
   },
   {
@@ -55,7 +55,7 @@ export const MOCK_MENUS: Menu[] = [
       'นมข้นจืด 1 ซอง',
       'น้ำปลา + น้ำมะนาว',
     ],
-    category: 'ต้ม-แกง',
+    category: 'อาหารไทย',
     isActive: true,
   },
   {
@@ -76,7 +76,7 @@ export const MOCK_MENUS: Menu[] = [
       'ผักดองเกาหลี (กิมจิ)',
       'ข้าวสวยหอมมะลิ 1 ถุง',
     ],
-    category: 'ทอด-ย่าง',
+    category: 'ตะวันตก',
     isActive: true,
   },
   {
@@ -96,7 +96,7 @@ export const MOCK_MENUS: Menu[] = [
       'ไข่เป็ด 1 ฟอง',
       'ข้าวสวยหอมมะลิ 1 ถุง',
     ],
-    category: 'ผัด',
+    category: 'อาหารไทย',
     isActive: true,
   },
   {
@@ -116,7 +116,7 @@ export const MOCK_MENUS: Menu[] = [
       'ใบโหระพา + พริกชี้ฟ้าแดง',
       'น้ำปลา + น้ำตาลมะพร้าว',
     ],
-    category: 'ต้ม-แกง',
+    category: 'อาหารไทย',
     isActive: true,
   },
   {
@@ -136,7 +136,7 @@ export const MOCK_MENUS: Menu[] = [
       'เกลือหิมาลัย + พริกไทยดำ',
       'เนยจืด',
     ],
-    category: 'ทอด-ย่าง',
+    category: 'สุขภาพ',
     isActive: true,
   },
 ];

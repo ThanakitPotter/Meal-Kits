@@ -7,7 +7,7 @@ export interface Menu {
   image: string;
   prepTime: string;
   ingredients: string[];
-  category: 'ผัด' | 'ต้ม-แกง' | 'ทอด-ย่าง';
+  category: 'อาหารไทย' | 'ตะวันตก' | 'สุขภาพ';
   isActive: boolean;
 }
 

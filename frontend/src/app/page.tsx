@@ -15,7 +15,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("ทั้งหมด");
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
-  const categories = ["ทั้งหมด", "ผัด", "ต้ม-แกง", "ทอด-ย่าง"];
+  const categories = ["ทั้งหมด", "อาหารไทย", "ตะวันตก", "สุขภาพ"];
 
   useEffect(() => {
     // Initial fetch

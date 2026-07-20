@@ -27,7 +27,7 @@ export class Menu {
   ingredients!: string[];
 
   @Column()
-  category!: 'ผัด' | 'ต้ม-แกง' | 'ทอด-ย่าง';
+  category!: 'อาหารไทย' | 'ตะวันตก' | 'สุขภาพ';
 
   @Column({ default: true })
   isActive!: boolean;
