@@ -18,7 +18,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MK340 Meal Kits — ชุดอาหารพร้อมทำ ส่งถึงบ้าน",
+  title: "Meal Kits — ชุดอาหารพร้อมทำ ส่งถึงบ้าน",
   description:
     "แพลตฟอร์มสั่ง Meal Kits ชุดอาหารพร้อมทำ ส่งตรงถึงบ้านทุกเดือน อร่อยเหมือนมีเชฟมาทำให้ที่บ้าน",
 };
