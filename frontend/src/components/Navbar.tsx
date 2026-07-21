@@ -245,14 +245,16 @@ export default function Navbar() {
             </ul>
           </div>
         )}
-        <Link href="/cart" className="btn btn-ghost btn-circle relative mr-2 text-[#333333]">
-          <ShoppingCart size={22} />
-          {cartCount > 0 && (
-            <span className="badge badge-sm badge-primary absolute top-1 right-0 font-bold border-none">
-              {cartCount}
-            </span>
-          )}
-        </Link>
+        {user && (
+          <Link href="/cart" className="btn btn-ghost btn-circle relative mr-2 text-[#333333]">
+            <ShoppingCart size={22} />
+            {cartCount > 0 && (
+              <span className="badge badge-sm badge-primary absolute top-1 right-0 font-bold border-none">
+                {cartCount}
+              </span>
+            )}
+          </Link>
+        )}
         {user ? (
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar placeholder hover:bg-base-200 focus:outline-none focus:ring-0 outline-none text-[#333333]">
