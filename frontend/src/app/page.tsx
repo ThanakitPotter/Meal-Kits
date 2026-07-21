@@ -300,57 +300,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── Our Story Section ─── */}
-      <section className="bg-[#f9f9f9] py-16 md:py-24 border-t border-gray-100">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#333333]">
-              เรื่องราวของเรา (Our Story)
-            </h2>
-          </div>
-
-          <div className="max-w-4xl mx-auto bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100">
-            <h3 className="text-2xl font-bold text-[#E0A800] mb-6">
-              จุดเริ่มต้นของ  Meal Kits
-            </h3>
-
-            <p className="text-[#333333]/80 leading-relaxed mb-6">
-              เราเริ่มต้นจากความเชื่อที่ว่า "ทุกคนสามารถทำอาหารอร่อยๆ ทานเองที่บ้านได้" แต่ในยุคที่เร่งรีบ หลายคนไม่มีเวลาไปเดินตลาด ไม่รู้จะซื้อวัตถุดิบปริมาณเท่าไหร่ หรือเบื่อที่จะต้องคิดเมนูในแต่ละวัน
-            </p>
-
-            <p className="text-[#333333]/80 leading-relaxed mb-10">
-              จึงถือกำเนิดขึ้นเพื่อเป็นผู้ช่วยส่วนตัวในครัวของคุณ เรามีทีมเชฟที่คอยคิดค้นสูตรอาหารยอดฮิต คัดสรรวัตถุดิบที่สดใหม่ในปริมาณที่พอดีเป๊ะ แพ็คอย่างใส่ใจ และส่งตรงถึงบ้าน เพื่อให้การเข้าครัวของคุณเป็นเรื่องสนุก ไม่วุ่นวาย และไร้ของเหลือทิ้ง (Zero Food Waste)
-            </p>
-
-            <h3 className="text-2xl font-bold text-[#E0A800] mb-6">
-              คำมั่นสัญญาของเรา
-            </h3>
-
-            <ul className="space-y-4 mb-10 text-[#333333]/80 list-disc list-outside ml-6 marker:text-[#333333]">
-              <li className="pl-1">วัตถุดิบคุณภาพดีที่สุด สด สะอาด ปลอดภัย</li>
-              <li className="pl-1">สัดส่วนพอดีเป๊ะ หมดปัญหาซื้อของมาแล้วใช้ไม่หมด</li>
-              <li className="pl-1">รสชาติอร่อยระดับร้านอาหาร ทำตามได้ง่ายๆ ใน 15-30 นาที</li>
-            </ul>
-
-            <div className="text-center mt-12">
-              <a
-                href="#menus"
-                onClick={(e) => {
-                  e.preventDefault();
-                  const target = document.getElementById("menus");
-                  if (!target) return;
-                  const targetPosition = target.getBoundingClientRect().top + window.scrollY;
-                  window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-                }}
-                className="btn bg-[#E0A800] hover:bg-[#c98e10] text-white border-none rounded-full px-8 shadow-md"
-              >
-                ← กลับไปเลือกเมนู
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ─── Customer Reviews Section ─── */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
