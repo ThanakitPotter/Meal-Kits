@@ -130,11 +130,11 @@ export default function Navbar() {
   };
 
   return (
-    <div className="navbar bg-white text-[#333333] shadow-sm border-b border-gray-100 sticky top-0 z-50 px-4 md:px-8">
+    <div className="navbar bg-white text-[#333333] shadow-sm border-b border-gray-100 sticky top-0 z-50 px-2 sm:px-4 md:px-8">
       <div className="navbar-start">
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden text-[#333333]">
-            <MenuIcon size={24} />
+          <div tabIndex={0} role="button" className="btn btn-ghost btn-sm sm:btn-md lg:hidden text-[#333333] px-1 sm:px-4">
+            <MenuIcon size={24} className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <ul
             tabIndex={0}
@@ -156,11 +156,11 @@ export default function Navbar() {
             )}
           </ul>
         </div>
-        <Link href="/" onClick={handleScrollToTop} className="btn btn-ghost h-auto hover:bg-transparent py-1 gap-2 text-[#333333]">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl md:text-3xl">🍳</span>
-            <span className="text-xl md:text-2xl font-extrabold tracking-tight text-[#333333]">
-              Meal <span className="text-[#E0A800]">Kits</span>
+        <Link href="/" onClick={handleScrollToTop} className="btn btn-ghost px-1 sm:px-4 h-auto hover:bg-transparent py-1 gap-1 sm:gap-2 text-[#333333]">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <span className="text-xl sm:text-2xl md:text-3xl hidden min-[360px]:inline-block">🍳</span>
+            <span className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight text-[#333333]">
+              Meal<span className="text-[#E0A800] ml-1">Kits</span>
             </span>
           </div>
         </Link>
@@ -193,18 +193,18 @@ export default function Navbar() {
         </ul>
       </div>
 
-      <div className="navbar-end gap-2">
+      <div className="navbar-end gap-1 md:gap-2">
         {user && (
           <div className="dropdown dropdown-end">
             <div 
               tabIndex={0} 
               role="button" 
-              className="btn btn-ghost btn-circle relative mr-1 text-[#333333]"
+              className="btn btn-ghost btn-circle btn-sm md:btn-md relative mr-0 sm:mr-1 text-[#333333]"
               onClick={markAsRead}
             >
-              <Bell size={22} />
+              <Bell size={22} className="w-5 h-5 sm:w-[22px] sm:h-[22px]" />
               {hasUnread && (
-                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse border border-white"></span>
+                <span className="absolute top-0 right-0 sm:top-1 sm:right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse border border-white"></span>
               )}
             </div>
             <ul tabIndex={0} className="dropdown-content menu bg-white text-[#333333] rounded-box z-[100] w-72 p-2 shadow-xl border border-gray-100 mt-4">
@@ -246,10 +246,10 @@ export default function Navbar() {
           </div>
         )}
         {user && (
-          <Link href="/cart" className="btn btn-ghost btn-circle relative mr-2 text-[#333333]">
-            <ShoppingCart size={22} />
+          <Link href="/cart" className="btn btn-ghost btn-circle btn-sm md:btn-md relative mr-0 sm:mr-2 text-[#333333]">
+            <ShoppingCart size={22} className="w-5 h-5 sm:w-[22px] sm:h-[22px]" />
             {cartCount > 0 && (
-              <span className="badge badge-sm badge-primary absolute top-1 right-0 font-bold border-none">
+              <span className="badge badge-sm badge-primary absolute top-0 right-0 sm:top-1 sm:right-0 font-bold border-none scale-75 sm:scale-100 origin-top-right">
                 {cartCount}
               </span>
             )}
@@ -257,12 +257,12 @@ export default function Navbar() {
         )}
         {user ? (
           <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar placeholder hover:bg-base-200 focus:outline-none focus:ring-0 outline-none text-[#333333]">
-              <div className="bg-primary text-primary-content flex items-center justify-center rounded-full w-10 ring ring-primary ring-offset-base-100 ring-offset-2 overflow-hidden">
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle btn-sm md:btn-md avatar placeholder hover:bg-base-200 focus:outline-none focus:ring-0 outline-none text-[#333333]">
+              <div className="bg-primary text-primary-content flex items-center justify-center rounded-full w-8 sm:w-10 ring ring-primary ring-offset-base-100 ring-offset-1 sm:ring-offset-2 overflow-hidden">
                 {user.avatarUrl ? (
                   <img src={user.avatarUrl} alt="Avatar" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
                 ) : (
-                  <User size={20} />
+                  <User size={20} className="w-4 h-4 sm:w-5 sm:h-5" />
                 )}
               </div>
             </div>
