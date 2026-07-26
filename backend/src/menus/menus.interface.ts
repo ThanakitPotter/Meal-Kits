@@ -12,6 +12,19 @@ export interface Menu {
 }
 
 export const MOCK_MENUS: Menu[] = [
+  // --- เมนูทดสอบระบบ ---
+  {
+    id: '0',
+    name: 'ชุดทดสอบระบบ (1 บาท)',
+    slug: 'test-menu-1-baht',
+    description: 'เมนูพิเศษสำหรับทดสอบสั่งซื้อจริง ราคา 1 บาท โอนสแกนพร้อมเพย์ผ่าน QR Code ได้ทันทีเพื่อทดสอบระบบร้านค้า',
+    price: 1,
+    image: '/images/krapao.jpg',
+    prepTime: '1 นาที',
+    ingredients: ['ชุดวัตถุดิบทดสอบระบบ', 'ซอสปรุงรสทดสอบ', 'คู่มือการทำอาหาร'],
+    category: 'อาหารไทย',
+    isActive: true,
+  },
   // --- อาหารไทย ---
   {
     id: '1',

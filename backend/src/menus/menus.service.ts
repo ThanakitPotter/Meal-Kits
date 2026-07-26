@@ -1,15 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Menu } from './menu.entity';
 import { MOCK_MENUS } from './menus.interface';
 
 @Injectable()
-export class MenusService {
+export class MenusService implements OnModuleInit {
   constructor(
     @InjectRepository(Menu)
     private menusRepository: Repository<Menu>,
   ) {}
+
+  async onModuleInit() {
+    const testMenu = await this.menusRepository.findOne({ where: { slug: 'test-menu-1-baht' } });
+    if (!testMenu) {
+      await this.seedMenus();
+    }
+  }
 
   findAll(): Promise<Menu[]> {
     return this.menusRepository.find({ where: { isActive: true } });

@@ -209,6 +209,13 @@ export default function Home() {
                         <UtensilsCrossed size={14} /> {menu.category}
                       </span>
                     </div>
+                    {menu.price === 1 && (
+                      <div className="absolute top-4 right-4">
+                        <span className="badge badge-lg bg-emerald-500 text-white font-extrabold shadow-md border-none px-3 py-1">
+                          TEST 1 บาท
+                        </span>
+                      </div>
+                    )}
                   </figure>
 
                   <div className="card-body">
