@@ -45,14 +45,15 @@ export default function Navbar() {
     }
   }, []);
 
-  // Re-fetch notifications when navigating pages and periodically
+  // Re-fetch notifications when navigating pages and periodically (optimized for visibility)
   useEffect(() => {
     if (user) {
       fetchNotifications(user.id);
       
-      // Check for new notifications every 5 seconds (Real-time feel)
       const interval = setInterval(() => {
-        fetchNotifications(user.id);
+        if (document.visibilityState === "visible") {
+          fetchNotifications(user.id);
+        }
       }, 5000);
       
       return () => clearInterval(interval);

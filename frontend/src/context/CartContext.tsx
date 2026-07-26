@@ -1,6 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 
 export type CartItem = {
   id: string; // unique id for cart item, usually menuId + servings
@@ -45,7 +52,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentKey, setCurrentKey] = useState<string>("meal_kits_cart_guest");
 
-  const loadCartForKey = (key: string) => {
+  const loadCartForKey = useCallback((key: string) => {
     try {
       const savedCart = localStorage.getItem(key);
       if (savedCart) {
@@ -57,26 +64,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       console.error("Failed to parse cart data", e);
       setCartItems([]);
     }
-  };
+  }, []);
 
-  // Load initial cart and monitor user ID changes
+  // Load initial cart and monitor user ID changes efficiently
   useEffect(() => {
     const key = getCartStorageKey();
     setCurrentKey(key);
     loadCartForKey(key);
     setIsLoaded(true);
-
-    // Monitor for login/logout or account switching
-    const interval = setInterval(() => {
-      const newKey = getCartStorageKey();
-      setCurrentKey((prevKey) => {
-        if (newKey !== prevKey) {
-          loadCartForKey(newKey);
-          return newKey;
-        }
-        return prevKey;
-      });
-    }, 1000);
 
     const handleStorageChange = () => {
       const newKey = getCartStorageKey();
@@ -89,12 +84,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       });
     };
 
-    window.addEventListener("storage", handleStorageChange);
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("storage", handleStorageChange);
+    // Check account change when window becomes visible or storage changes
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        handleStorageChange();
+      }
     };
-  }, []);
+
+    window.addEventListener("storage", handleStorageChange);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [loadCartForKey]);
 
   // Save to local storage under the current user's specific key
   useEffect(() => {
@@ -103,9 +107,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [cartItems, isLoaded, currentKey]);
 
-  const addToCart = (item: Omit<CartItem, "id">) => {
+  const addToCart = useCallback((item: Omit<CartItem, "id">) => {
     setCartItems((prev) => {
-      // Create a unique ID based on menuId and servings
       const id = `${item.menuId}-${item.servings}`;
       const existing = prev.find((i) => i.id === id);
 
@@ -116,13 +119,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { ...item, id }];
     });
-  };
+  }, []);
 
-  const removeFromCart = (id: string) => {
+  const removeFromCart = useCallback((id: string) => {
     setCartItems((prev) => prev.filter((i) => i.id !== id));
-  };
+  }, []);
 
-  const updateQuantity = (id: string, delta: number) => {
+  const updateQuantity = useCallback((id: string, delta: number) => {
     setCartItems((prev) =>
       prev.map((i) => {
         if (i.id === id) {
@@ -132,32 +135,48 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         return i;
       })
     );
-  };
+  }, []);
 
-  const clearCart = () => setCartItems([]);
+  const clearCart = useCallback(() => {
+    setCartItems([]);
+  }, []);
 
-  const cartTotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
+  const cartTotal = useMemo(
+    () =>
+      cartItems.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+      ),
+    [cartItems]
   );
-  
-  const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
-  return (
-    <CartContext.Provider
-      value={{
-        cartItems,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        clearCart,
-        cartTotal,
-        cartCount,
-      }}
-    >
-      {children}
-    </CartContext.Provider>
+  const cartCount = useMemo(
+    () => cartItems.reduce((count, item) => count + item.quantity, 0),
+    [cartItems]
   );
+
+  const value = useMemo(
+    () => ({
+      cartItems,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      cartTotal,
+      cartCount,
+    }),
+    [
+      cartItems,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      cartTotal,
+      cartCount,
+    ]
+  );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
 export function useCart() {

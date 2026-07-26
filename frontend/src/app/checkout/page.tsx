@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
@@ -46,28 +46,35 @@ export default function CheckoutPage() {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      const user = JSON.parse(storedUser);
-      setForm((prev) => ({
-        ...prev,
-        customerName: user.name || "",
-        customerPhone: user.phone || "",
-      }));
+      try {
+        const user = JSON.parse(storedUser);
+        setForm((prev) => ({
+          ...prev,
+          customerName: user.name || "",
+          customerPhone: user.phone || "",
+        }));
+      } catch (e) {
+        console.error("Failed to parse stored user", e);
+      }
     }
   }, []);
 
-  const updateField = (field: string, value: string) => {
+  const updateField = useCallback((field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
-  };
+  }, []);
 
-  const isFormValid =
-    form.customerName.trim() &&
-    form.customerPhone.trim() &&
-    form.shippingAddress.trim() &&
-    cartItems.length > 0;
+  const isFormValid = useMemo(
+    () =>
+      form.customerName.trim().length > 0 &&
+      form.customerPhone.trim().length > 0 &&
+      form.shippingAddress.trim().length > 0 &&
+      cartItems.length > 0,
+    [form.customerName, form.customerPhone, form.shippingAddress, cartItems.length]
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isFormValid) return;
+    if (!isFormValid || submitting) return;
     setSubmitting(true);
     try {
       const storedUser = localStorage.getItem("user");
@@ -149,6 +156,8 @@ export default function CheckoutPage() {
                     <img
                       src="https://upload.wikimedia.org/wikipedia/commons/c/c5/PromptPay-logo.png"
                       alt="PromptPay"
+                      loading="lazy"
+                      decoding="async"
                       className="h-4 w-auto object-contain"
                     />
                     <span>สแกน QR พร้อมเพย์ (ฟรี 0%)</span>
@@ -170,13 +179,13 @@ export default function CheckoutPage() {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href="/"
-              className="flex-1 py-3.5 px-4 rounded-xl border border-gray-200 hover:bg-gray-50 text-[#333333] font-medium text-sm transition-all text-center"
+              className="flex-1 py-3.5 px-4 rounded-xl border border-gray-200 hover:bg-gray-50 text-[#333333] font-medium text-sm transition-all duration-200 text-center"
             >
               กลับหน้าแรก
             </Link>
             <Link
               href="/orders"
-              className="flex-1 py-3.5 px-4 rounded-xl bg-[#E0A800] hover:bg-[#c98e10] text-white font-bold text-sm transition-all text-center shadow-xs"
+              className="flex-1 py-3.5 px-4 rounded-xl bg-[#E0A800] hover:bg-[#c98e10] text-white font-bold text-sm transition-all duration-200 text-center shadow-xs"
             >
               ดูสถานะออเดอร์
             </Link>
@@ -201,7 +210,7 @@ export default function CheckoutPage() {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-[#E0A800] hover:bg-[#c98e10] text-white font-bold text-sm transition-all shadow-xs"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-[#E0A800] hover:bg-[#c98e10] text-white font-bold text-sm transition-all duration-200 shadow-xs"
           >
             กลับไปเลือกสินค้า
           </Link>
@@ -262,7 +271,7 @@ export default function CheckoutPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <label
                     onClick={() => updateField("orderType", "one-time")}
-                    className={`cursor-pointer border rounded-xl p-4 transition-all flex items-center justify-between ${
+                    className={`cursor-pointer border rounded-xl p-4 transition-all duration-200 flex items-center justify-between ${
                       form.orderType === "one-time"
                         ? "border-[#E0A800] bg-[#E0A800]/[0.035]"
                         : "border-gray-200 hover:border-gray-300 bg-white"
@@ -288,7 +297,7 @@ export default function CheckoutPage() {
 
                   <label
                     onClick={() => updateField("orderType", "subscription")}
-                    className={`cursor-pointer border rounded-xl p-4 transition-all flex items-center justify-between ${
+                    className={`cursor-pointer border rounded-xl p-4 transition-all duration-200 flex items-center justify-between ${
                       form.orderType === "subscription"
                         ? "border-[#E0A800] bg-[#E0A800]/[0.035]"
                         : "border-gray-200 hover:border-gray-300 bg-white"
@@ -363,7 +372,7 @@ export default function CheckoutPage() {
                       value={form.customerName}
                       onChange={(e) => updateField("customerName", e.target.value.slice(0, 50))}
                       placeholder="เช่น ธนกฤต นำชัยมาหา"
-                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d2d2d] placeholder:text-gray-400 focus:outline-none focus:border-[#E0A800] focus:ring-1 focus:ring-[#E0A800] transition-all"
+                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d2d2d] placeholder:text-gray-400 focus:outline-none focus:border-[#E0A800] focus:ring-1 focus:ring-[#E0A800] transition-all duration-200"
                     />
                   </div>
 
@@ -381,7 +390,7 @@ export default function CheckoutPage() {
                         updateField("customerPhone", onlyNums.slice(0, 10));
                       }}
                       placeholder="064-xxx-xxxx"
-                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d2d2d] placeholder:text-gray-400 focus:outline-none focus:border-[#E0A800] focus:ring-1 focus:ring-[#E0A800] transition-all font-mono"
+                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d2d2d] placeholder:text-gray-400 focus:outline-none focus:border-[#E0A800] focus:ring-1 focus:ring-[#E0A800] transition-all duration-200 font-mono"
                     />
                   </div>
 
@@ -396,7 +405,7 @@ export default function CheckoutPage() {
                       value={form.shippingAddress}
                       onChange={(e) => updateField("shippingAddress", e.target.value.slice(0, 150))}
                       placeholder="บ้านเลขที่ ซอย ถนน แขวง/ตำบล เขต/อำเภอ จังหวัด รหัสไปรษณีย์"
-                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d2d2d] placeholder:text-gray-400 focus:outline-none focus:border-[#E0A800] focus:ring-1 focus:ring-[#E0A800] transition-all resize-none"
+                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d2d2d] placeholder:text-gray-400 focus:outline-none focus:border-[#E0A800] focus:ring-1 focus:ring-[#E0A800] transition-all duration-200 resize-none"
                     />
                   </div>
                 </div>
@@ -417,7 +426,7 @@ export default function CheckoutPage() {
                   {/* PromptPay Option */}
                   <div
                     onClick={() => setPaymentMethod("promptpay")}
-                    className={`cursor-pointer border rounded-2xl p-5 transition-all ${
+                    className={`cursor-pointer border rounded-2xl p-5 transition-all duration-200 ${
                       paymentMethod === "promptpay"
                         ? "border-[#E0A800] bg-[#E0A800]/[0.035]"
                         : "border-gray-200 hover:border-gray-300 bg-white"
@@ -444,6 +453,8 @@ export default function CheckoutPage() {
                             <img
                               src="https://upload.wikimedia.org/wikipedia/commons/c/c5/PromptPay-logo.png"
                               alt="PromptPay"
+                              loading="lazy"
+                              decoding="async"
                               className="h-4 w-auto object-contain"
                             />
                           </div>
@@ -468,6 +479,8 @@ export default function CheckoutPage() {
                                 <img
                                   src="https://upload.wikimedia.org/wikipedia/commons/c/c5/PromptPay-logo.png"
                                   alt="PromptPay"
+                                  loading="lazy"
+                                  decoding="async"
                                   className="h-5 w-auto object-contain"
                                 />
                               </div>
@@ -487,6 +500,8 @@ export default function CheckoutPage() {
                                 <img
                                   src={`https://promptpay.io/${STORE_PROMPTPAY_ID}/${cartTotal}.png`}
                                   alt="PromptPay QR Code"
+                                  loading="lazy"
+                                  decoding="async"
                                   className="w-full h-full object-contain"
                                   onError={() => setQrImgError(true)}
                                 />
@@ -623,7 +638,7 @@ export default function CheckoutPage() {
                   {/* COD Option */}
                   <div
                     onClick={() => setPaymentMethod("cod")}
-                    className={`cursor-pointer border rounded-2xl p-5 transition-all ${
+                    className={`cursor-pointer border rounded-2xl p-5 transition-all duration-200 ${
                       paymentMethod === "cod"
                         ? "border-[#E0A800] bg-[#E0A800]/[0.035]"
                         : "border-gray-200 hover:border-gray-300 bg-white"
@@ -686,7 +701,7 @@ export default function CheckoutPage() {
                 </span>
               </div>
 
-              {/* Items List */}
+              {/* Items List (NO SCROLLBAR, OPTIMIZED DISPLAY) */}
               <div className="space-y-4 mb-6">
                 {cartItems.map((item) => (
                   <div
@@ -767,7 +782,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* Submit Button (Mustard Gold Signature) */}
+              {/* Submit Button (Mustard Gold Signature, Hardware Accelerated) */}
               <button
                 type="submit"
                 form="checkout-form"
