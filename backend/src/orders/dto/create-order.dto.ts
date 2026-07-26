@@ -7,4 +7,6 @@ export class CreateOrderDto {
   shippingAddress!: string;
   items!: { menuId: string, menuName: string, servings: number, price: number, quantity: number }[];
   totalPrice!: number;
+  paymentMethod?: string;
+  paymentSlipUrl?: string;
 }

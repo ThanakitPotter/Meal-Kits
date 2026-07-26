@@ -32,6 +32,12 @@ export class Order {
   @Column('int')
   totalPrice!: number;
 
+  @Column({ default: 'สแกน QR พร้อมเพย์' })
+  paymentMethod!: string;
+
+  @Column({ nullable: true, type: 'text' })
+  paymentSlipUrl?: string;
+
   @Column({ default: false })
   isReviewed!: boolean;
 

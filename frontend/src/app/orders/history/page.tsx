@@ -228,9 +228,19 @@ export default function OrderHistoryPage() {
 
                           {/* Price */}
                           <td className="px-6 py-4 align-top">
-                            <span className="font-bold text-[#2d2d2d] text-base">
+                            <span className="font-bold text-[#2d2d2d] text-base block">
                               ฿{order.totalPrice.toLocaleString()}
                             </span>
+                            {order.paymentMethod && (
+                              <span className="inline-block mt-1 text-[11px] font-semibold text-charcoal-700 bg-gray-100 px-2 py-0.5 rounded-md">
+                                {order.paymentMethod.includes("PromptPay") || order.paymentMethod.includes("พร้อมเพย์") ? "📱 พร้อมเพย์ (QR)" : "💵 ปลายทาง COD"}
+                              </span>
+                            )}
+                            {order.paymentSlipUrl && (
+                              <span className="inline-block mt-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                                ✓ แนบสลิปแล้ว
+                              </span>
+                            )}
                           </td>
 
                           {/* Status Badge */}

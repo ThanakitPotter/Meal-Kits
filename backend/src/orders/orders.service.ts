@@ -68,6 +68,8 @@ export class OrdersService {
       items: createOrderDto.items,
       status: 'รอดำเนินการ',
       totalPrice: createOrderDto.totalPrice,
+      paymentMethod: createOrderDto.paymentMethod || 'สแกน QR พร้อมเพย์ (ฟรี 0%)',
+      paymentSlipUrl: createOrderDto.paymentSlipUrl,
     });
 
     return this.ordersRepository.save(newOrder);

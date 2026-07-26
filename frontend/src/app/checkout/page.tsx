@@ -11,6 +11,22 @@ export default function CheckoutPage() {
   const { cartItems, cartTotal, clearCart } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [successId, setSuccessId] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"promptpay" | "cod">("promptpay");
+  const [slipImage, setSlipImage] = useState<string | null>(null);
+  const [slipFileName, setSlipFileName] = useState<string>("");
+
+  const handleSlipUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSlipFileName(file.name);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSlipImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   // Scroll to top when order is successful
   useEffect(() => {
@@ -77,7 +93,12 @@ export default function CheckoutPage() {
           orderType: form.orderType,
           deliveryFrequency: form.orderType === 'subscription' ? form.deliveryFrequency : undefined,
           items,
-          totalPrice: cartTotal
+          totalPrice: cartTotal,
+          paymentMethod:
+            paymentMethod === "promptpay"
+              ? "สแกน QR พร้อมเพย์ (ฟรี 0%)"
+              : "เก็บเงินปลายทาง (COD)",
+          paymentSlipUrl: slipImage || undefined,
         }),
       });
       const order = await res.json();
@@ -112,6 +133,19 @@ export default function CheckoutPage() {
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-green-500"></div>
               <p className="text-gray-500 font-medium mb-1 text-sm uppercase tracking-wider">หมายเลขคำสั่งซื้อ</p>
               <h3 className="font-mono text-2xl font-bold text-gray-800 mb-4">#{successId.slice(0,8).toUpperCase()}</h3>
+              <div className="bg-white rounded-xl p-3 border border-gray-200 mb-4 text-xs sm:text-sm font-semibold text-gray-700 flex flex-wrap items-center justify-center gap-2">
+                <span>ช่องทางชำระเงิน:</span>
+                <span className="text-mustard-700 font-bold">
+                  {paymentMethod === "promptpay"
+                    ? "📱 สแกน QR พร้อมเพย์ (ฟรี 0%)"
+                    : "💵 เก็บเงินปลายทาง (COD)"}
+                </span>
+                {slipImage && (
+                  <span className="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
+                    ✓ แนบสลิปแล้ว
+                  </span>
+                )}
+              </div>
               <p className="text-gray-600 text-sm leading-relaxed">
                 ระบบได้รับคำสั่งซื้อของคุณแล้ว เราจะเริ่มเตรียมวัตถุดิบที่สดใหม่และจัดส่งให้คุณโดยเร็วที่สุด
               </p>
@@ -257,15 +291,317 @@ export default function CheckoutPage() {
                     <span className="bg-primary text-primary-content w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span>
                     ช่องทางการชำระเงิน
                   </h2>
-                  <div className="space-y-3">
-                    <label className="label cursor-pointer justify-start gap-4 p-4 border border-base-300 rounded-xl hover:border-primary/50 transition-all bg-base-100">
-                      <input type="radio" name="payment" className="radio radio-primary radio-sm" defaultChecked />
-                      <span className="label-text font-medium text-base-content">โอนเงินผ่านธนาคาร (PromptPay)</span>
-                    </label>
-                    <label className="label cursor-pointer justify-start gap-4 p-4 border border-base-300 rounded-xl hover:border-primary/50 transition-all bg-base-100">
-                      <input type="radio" name="payment" className="radio radio-primary radio-sm" />
-                      <span className="label-text font-medium text-base-content">บัตรเครดิต / เดบิต</span>
-                    </label>
+
+                  <div className="space-y-4">
+                    {/* Option 1: สแกน QR พร้อมเพย์ (PromptPay - ฟรี 0%) */}
+                    <div
+                      onClick={() => setPaymentMethod("promptpay")}
+                      className={`cursor-pointer border-2 rounded-2xl p-5 transition-all duration-300 ${
+                        paymentMethod === "promptpay"
+                          ? "border-mustard-500 bg-mustard-500/5 shadow-md"
+                          : "border-gray-200 hover:border-mustard-300 bg-white"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                              paymentMethod === "promptpay"
+                                ? "border-mustard-600 bg-mustard-500"
+                                : "border-gray-300"
+                            }`}
+                          >
+                            {paymentMethod === "promptpay" && (
+                              <div className="w-2 h-2 rounded-full bg-white"></div>
+                            )}
+                          </div>
+                          <div>
+                            <span className="font-bold text-base text-[#2d2d2d] flex items-center gap-2">
+                              📱 สแกน QR พร้อมเพย์ (PromptPay)
+                              <span className="text-xs bg-emerald-500 text-white font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+                                ฟรี 0%
+                              </span>
+                            </span>
+                            <p className="text-xs text-gray-500 mt-0.5">
+                              สแกนจ่ายทันทีผ่าน Mobile Banking ได้ทุกธนาคาร
+                            </p>
+                          </div>
+                        </div>
+                        <span className="text-xs font-bold text-mustard-700 bg-mustard-100/80 px-2.5 py-1 rounded-lg">
+                          แนะนำ
+                        </span>
+                      </div>
+
+                      {/* Expandable PromptPay QR Code Modal Box */}
+                      {paymentMethod === "promptpay" && (
+                        <div className="mt-5 pt-5 border-t border-mustard-200/60 animate-fade-in-up">
+                          {/* Thai QR Payment Standard Style Header */}
+                          <div className="bg-[#193B68] text-white rounded-2xl p-5 shadow-lg max-w-sm mx-auto border border-blue-800">
+                            <div className="flex items-center justify-between border-b border-blue-400/30 pb-3 mb-4">
+                              <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center font-black text-[#193B68] text-xs">
+                                  QR
+                                </div>
+                                <div>
+                                  <h4 className="text-sm font-extrabold tracking-wide">
+                                    THAI QR PAYMENT
+                                  </h4>
+                                  <p className="text-[10px] text-blue-200">
+                                    พร้อมเพย์ (PromptPay)
+                                  </p>
+                                </div>
+                              </div>
+                              <span className="text-xs bg-white/10 px-2.5 py-1 rounded-full font-medium">
+                                ฟรีค่าธรรมเนียม
+                              </span>
+                            </div>
+
+                            {/* QR Code SVG / Crisp Graphic */}
+                            <div className="bg-white p-4 rounded-xl flex flex-col items-center justify-center mb-4 text-[#2d2d2d] shadow-inner">
+                              <div className="w-44 h-44 bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-center p-2 relative">
+                                {/* SVG QR Code pattern */}
+                                <svg
+                                  viewBox="0 0 100 100"
+                                  className="w-full h-full text-[#193B68]"
+                                >
+                                  <path
+                                    d="M5,5 h25 v25 h-25 Z M10,10 v15 h15 v-15 Z M15,15 h5 v5 h-5 Z"
+                                    fill="currentColor"
+                                  />
+                                  <path
+                                    d="M70,5 h25 v25 h-25 Z M75,10 v15 h15 v-15 Z M80,15 h5 v5 h-5 Z"
+                                    fill="currentColor"
+                                  />
+                                  <path
+                                    d="M5,70 h25 v25 h-25 Z M10,75 v15 h15 v-15 Z M15,80 h5 v5 h-5 Z"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="40"
+                                    y="8"
+                                    width="5"
+                                    height="5"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="50"
+                                    y="8"
+                                    width="5"
+                                    height="15"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="40"
+                                    y="20"
+                                    width="15"
+                                    height="5"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="35"
+                                    y="35"
+                                    width="30"
+                                    height="5"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="35"
+                                    y="45"
+                                    width="5"
+                                    height="20"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="45"
+                                    y="45"
+                                    width="10"
+                                    height="10"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="60"
+                                    y="45"
+                                    width="5"
+                                    height="15"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="75"
+                                    y="40"
+                                    width="15"
+                                    height="5"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="75"
+                                    y="55"
+                                    width="10"
+                                    height="15"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="45"
+                                    y="70"
+                                    width="20"
+                                    height="5"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="70"
+                                    y="75"
+                                    width="15"
+                                    height="10"
+                                    fill="currentColor"
+                                  />
+                                  <rect
+                                    x="40"
+                                    y="85"
+                                    width="15"
+                                    height="10"
+                                    fill="currentColor"
+                                  />
+                                </svg>
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                  <div className="w-10 h-10 bg-white rounded-full shadow-md border-2 border-[#193B68] flex items-center justify-center font-bold text-xs text-[#193B68]">
+                                    MK
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-center mt-3">
+                                <p className="text-xs text-gray-500">
+                                  บัญชีรับเงิน: บริษัท มีลคิตส์ ประเทศไทย
+                                </p>
+                                <p className="text-sm font-mono font-bold text-[#193B68] mt-0.5">
+                                  089-999-9999
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="text-center bg-blue-900/40 rounded-xl p-2.5">
+                              <p className="text-xs text-blue-200">
+                                ยอดชำระเงินที่ต้องโอน
+                              </p>
+                              <p className="text-xl font-extrabold text-amber-300 tracking-tight mt-0.5">
+                                ฿{cartTotal.toLocaleString()} บาท
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Slip Upload Interactive Area */}
+                          <div className="mt-5 max-w-sm mx-auto">
+                            <label className="block text-xs font-bold text-gray-700 mb-2">
+                              📎 อัปโหลดสลิปการโอนเงิน (Transfer Slip)
+                            </label>
+
+                            {!slipImage ? (
+                              <label className="flex flex-col items-center justify-center border-2 border-dashed border-mustard-300 hover:border-mustard-500 rounded-2xl p-4 bg-white/80 cursor-pointer transition-all group">
+                                <div className="w-10 h-10 rounded-full bg-mustard-100 flex items-center justify-center text-mustard-600 mb-2 group-hover:scale-110 transition-transform">
+                                  <span className="text-lg">📁</span>
+                                </div>
+                                <span className="text-xs font-bold text-[#2d2d2d]">
+                                  คลิกเพื่อแนบรูปสลิป
+                                </span>
+                                <span className="text-[11px] text-gray-400 mt-0.5">
+                                  รองรับไฟล์ภาพ JPG, PNG
+                                </span>
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={handleSlipUpload}
+                                  className="hidden"
+                                />
+                              </label>
+                            ) : (
+                              <div className="flex items-center justify-between p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+                                <div className="flex items-center gap-2.5 overflow-hidden">
+                                  <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-emerald-300">
+                                    <img
+                                      src={slipImage}
+                                      alt="Slip Preview"
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                  <div className="overflow-hidden">
+                                    <p className="text-xs font-bold text-emerald-800 flex items-center gap-1">
+                                      <span>✓ แนบสลิปเรียบร้อยแล้ว</span>
+                                    </p>
+                                    <p className="text-[11px] text-emerald-600 truncate max-w-[160px]">
+                                      {slipFileName}
+                                    </p>
+                                  </div>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setSlipImage(null);
+                                    setSlipFileName("");
+                                  }}
+                                  className="text-xs text-red-500 hover:text-red-700 font-semibold px-2 py-1"
+                                >
+                                  ลบ
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Option 2: เก็บเงินปลายทาง (COD) */}
+                    <div
+                      onClick={() => setPaymentMethod("cod")}
+                      className={`cursor-pointer border-2 rounded-2xl p-5 transition-all duration-300 ${
+                        paymentMethod === "cod"
+                          ? "border-mustard-500 bg-mustard-500/5 shadow-md"
+                          : "border-gray-200 hover:border-mustard-300 bg-white"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                              paymentMethod === "cod"
+                                ? "border-mustard-600 bg-mustard-500"
+                                : "border-gray-300"
+                            }`}
+                          >
+                            {paymentMethod === "cod" && (
+                              <div className="w-2 h-2 rounded-full bg-white"></div>
+                            )}
+                          </div>
+                          <div>
+                            <span className="font-bold text-base text-[#2d2d2d] flex items-center gap-2">
+                              💵 เก็บเงินปลายทาง (Cash on Delivery)
+                              <span className="text-xs bg-gray-100 text-gray-700 font-bold px-2 py-0.5 rounded-full">
+                                จ่ายกับคนส่ง
+                              </span>
+                            </span>
+                            <p className="text-xs text-gray-500 mt-0.5">
+                              เตรียมเงินสดชำระที่หน้าบ้านเมื่อรับวัตถุดิบ
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Expandable COD description */}
+                      {paymentMethod === "cod" && (
+                        <div className="mt-4 pt-4 border-t border-mustard-200/60 flex items-start gap-3 bg-amber-50/60 p-3.5 rounded-xl animate-fade-in-up">
+                          <span className="text-lg">🚚</span>
+                          <div>
+                            <p className="text-xs font-bold text-[#2d2d2d]">
+                              ไม่มีค่าธรรมเนียมเพิ่มเติม
+                            </p>
+                            <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">
+                              พนักงานจัดส่งจะติดต่อคุณทางเบอร์{" "}
+                              <b>{form.customerPhone || "โทรศัพท์ของคุณ"}</b>{" "}
+                              ก่อนเข้าไปส่งอาหาร กรุณาเตรียมเงินสดจำนวน{" "}
+                              <b>฿{cartTotal.toLocaleString()} บาท</b> พอดี
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </form>
