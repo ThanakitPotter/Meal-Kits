@@ -14,6 +14,8 @@ import {
   Calendar,
   Sparkles,
   CheckCircle2,
+  QrCode,
+  Wallet,
 } from "lucide-react";
 
 const statusConfig: Record<
@@ -232,13 +234,24 @@ export default function OrderHistoryPage() {
                               ฿{order.totalPrice.toLocaleString()}
                             </span>
                             {order.paymentMethod && (
-                              <span className="inline-block mt-1 text-[11px] font-semibold text-charcoal-700 bg-gray-100 px-2 py-0.5 rounded-md">
-                                {order.paymentMethod.includes("PromptPay") || order.paymentMethod.includes("พร้อมเพย์") ? "📱 พร้อมเพย์ (QR)" : "💵 ปลายทาง COD"}
+                              <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-semibold text-charcoal-700 bg-gray-100 px-2 py-0.5 rounded-md">
+                                {order.paymentMethod.includes("PromptPay") || order.paymentMethod.includes("พร้อมเพย์") ? (
+                                  <>
+                                    <QrCode className="w-3 h-3 text-mustard-600" />
+                                    <span>พร้อมเพย์ (QR)</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Wallet className="w-3 h-3 text-mustard-600" />
+                                    <span>ปลายทาง COD</span>
+                                  </>
+                                )}
                               </span>
                             )}
                             {order.paymentSlipUrl && (
-                              <span className="inline-block mt-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-                                ✓ แนบสลิปแล้ว
+                              <span className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                <span>แนบสลิปแล้ว</span>
                               </span>
                             )}
                           </td>

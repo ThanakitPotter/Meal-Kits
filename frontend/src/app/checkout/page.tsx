@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { ArrowLeft, CheckCircle2, Info } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Info, QrCode, Wallet, Zap, Truck } from "lucide-react";
 
 // เบอร์พร้อมเพย์รับเงินของร้าน (สามารถเปลี่ยนเป็นเบอร์จริง e.g. "0812345678" หรือ เลขภาษี 13 หลักของร้านได้เลย)
 const STORE_PROMPTPAY_ID = "0641028753";
@@ -124,10 +124,18 @@ export default function CheckoutPage() {
               <h3 className="font-mono text-2xl font-bold text-gray-800 mb-4">#{successId.slice(0, 8).toUpperCase()}</h3>
               <div className="bg-white rounded-xl p-3 border border-gray-200 mb-4 text-xs sm:text-sm font-semibold text-gray-700 flex flex-wrap items-center justify-center gap-2">
                 <span>ช่องทางชำระเงิน:</span>
-                <span className="text-mustard-700 font-bold">
-                  {paymentMethod === "promptpay"
-                    ? "📱 สแกน QR พร้อมเพย์ (ฟรี 0%)"
-                    : "💵 เก็บเงินปลายทาง (COD)"}
+                <span className="text-mustard-700 font-bold inline-flex items-center gap-1.5">
+                  {paymentMethod === "promptpay" ? (
+                    <>
+                      <QrCode className="w-4 h-4 inline" />
+                      <span>สแกน QR พร้อมเพย์ (ฟรี 0%)</span>
+                    </>
+                  ) : (
+                    <>
+                      <Wallet className="w-4 h-4 inline" />
+                      <span>เก็บเงินปลายทาง (COD)</span>
+                    </>
+                  )}
                 </span>
               </div>
               <p className="text-gray-600 text-sm leading-relaxed">
@@ -299,7 +307,8 @@ export default function CheckoutPage() {
                           </div>
                           <div>
                             <span className="font-bold text-base text-[#2d2d2d] flex items-center gap-2">
-                              📱 สแกน QR พร้อมเพย์ (PromptPay)
+                              <QrCode className="w-5 h-5 text-mustard-600" />
+                              <span>สแกน QR พร้อมเพย์ (PromptPay)</span>
                               <span className="text-xs bg-emerald-500 text-white font-bold px-2.5 py-0.5 rounded-full shadow-sm">
                                 ฟรี 0%
                               </span>
@@ -462,7 +471,7 @@ export default function CheckoutPage() {
                               </div>
                               <div className="text-center mt-3">
                                 <p className="text-xs text-gray-500">
-                                  บัญชีรับเงิน: บริษัท มีลคิตส์ ประเทศไทย
+                                  บัญชีรับเงิน: ธนกฤต นำชัยมาหา
                                 </p>
                                 <p className="text-sm font-mono font-bold text-[#193B68] mt-0.5">
                                   {STORE_PROMPTPAY_ID}
@@ -482,8 +491,9 @@ export default function CheckoutPage() {
 
                           {/* Easy Scan-and-Go Notice */}
                           <div className="mt-4 max-w-sm mx-auto bg-emerald-50/90 border border-emerald-200 rounded-xl p-3.5 text-center">
-                            <p className="text-xs font-bold text-emerald-800">
-                              ⚡ สแกนจ่ายเสร็จแล้ว กด &quot;ยืนยันคำสั่งซื้อ&quot; ด้านล่างได้ทันที
+                            <p className="text-xs font-bold text-emerald-800 flex items-center justify-center gap-1">
+                              <Zap className="w-4 h-4 text-emerald-600 shrink-0" />
+                              <span>สแกนจ่ายเสร็จแล้ว กด &quot;ยืนยันคำสั่งซื้อ&quot; ด้านล่างได้ทันที</span>
                             </p>
                             <p className="text-[11px] text-emerald-600 mt-0.5">
                               รับคำสั่งซื้อทันทีโดยไม่ต้องแนบสลิป
@@ -515,7 +525,8 @@ export default function CheckoutPage() {
                           </div>
                           <div>
                             <span className="font-bold text-base text-[#2d2d2d] flex items-center gap-2">
-                              💵 เก็บเงินปลายทาง (Cash on Delivery)
+                              <Wallet className="w-5 h-5 text-mustard-600" />
+                              <span>เก็บเงินปลายทาง (Cash on Delivery)</span>
                               <span className="text-xs bg-gray-100 text-gray-700 font-bold px-2 py-0.5 rounded-full">
                                 จ่ายกับคนส่ง
                               </span>
@@ -530,7 +541,7 @@ export default function CheckoutPage() {
                       {/* Expandable COD description */}
                       {paymentMethod === "cod" && (
                         <div className="mt-4 pt-4 border-t border-mustard-200/60 flex items-start gap-3 bg-amber-50/60 p-3.5 rounded-xl animate-fade-in-up">
-                          <span className="text-lg">🚚</span>
+                          <Truck className="w-5 h-5 text-mustard-600 shrink-0 mt-0.5" />
                           <div>
                             <p className="text-xs font-bold text-[#2d2d2d]">
                               ไม่มีค่าธรรมเนียมเพิ่มเติม

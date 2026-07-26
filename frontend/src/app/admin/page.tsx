@@ -32,6 +32,9 @@ import {
   DollarSign,
   Sparkles,
   Flame,
+  QrCode,
+  Wallet,
+  FileText,
 } from "lucide-react";
 
 const statusConfig: Record<
@@ -800,12 +803,23 @@ export default function AdminPage() {
                                 ฿{order.totalPrice.toLocaleString()}
                               </span>
                               {order.paymentMethod ? (
-                                <span className="inline-block mt-1 text-[11px] font-semibold text-charcoal-700 bg-gray-100 px-2 py-0.5 rounded-md">
-                                  {order.paymentMethod.includes("PromptPay") || order.paymentMethod.includes("พร้อมเพย์") ? "📱 พร้อมเพย์ (QR)" : "💵 เก็บเงินปลายทาง"}
+                                <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-semibold text-charcoal-700 bg-gray-100 px-2 py-0.5 rounded-md">
+                                  {order.paymentMethod.includes("PromptPay") || order.paymentMethod.includes("พร้อมเพย์") ? (
+                                    <>
+                                      <QrCode className="w-3 h-3 text-mustard-600" />
+                                      <span>พร้อมเพย์ (QR)</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Wallet className="w-3 h-3 text-mustard-600" />
+                                      <span>เก็บเงินปลายทาง</span>
+                                    </>
+                                  )}
                                 </span>
                               ) : (
-                                <span className="inline-block mt-1 text-[11px] font-semibold text-charcoal-700 bg-gray-100 px-2 py-0.5 rounded-md">
-                                  📱 พร้อมเพย์ (QR)
+                                <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-semibold text-charcoal-700 bg-gray-100 px-2 py-0.5 rounded-md">
+                                  <QrCode className="w-3 h-3 text-mustard-600" />
+                                  <span>พร้อมเพย์ (QR)</span>
                                 </span>
                               )}
                               {order.paymentSlipUrl && (
@@ -813,10 +827,11 @@ export default function AdminPage() {
                                   href={order.paymentSlipUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 mt-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 px-2 py-0.5 rounded-md cursor-pointer transition-colors block w-max"
+                                  className="inline-flex items-center gap-1 mt-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 px-2 py-0.5 rounded-md cursor-pointer transition-colors w-max"
                                   title="คลิกเพื่อดูรูปสลิป"
                                 >
-                                  <span>📎 ดูสลิปโอนเงิน</span>
+                                  <FileText className="w-3 h-3 text-emerald-600" />
+                                  <span>ดูสลิปโอนเงิน</span>
                                 </a>
                               )}
                             </td>
