@@ -13,9 +13,8 @@ import {
   ArrowLeft,
   Star,
   Calendar,
-  ChevronRight,
   Sparkles,
-  RefreshCw,
+  CheckCircle2,
 } from "lucide-react";
 import ReviewModal from "@/components/ReviewModal";
 
@@ -47,7 +46,7 @@ export default function UserOrdersPage() {
   const [selectedReviewOrder, setSelectedReviewOrder] = useState<string | null>(
     null
   );
-  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState<"current" | "history">("current");
 
   const fetchOrders = (userId: string) => {
     fetch(`/api/orders/user/${userId}`)
@@ -76,23 +75,24 @@ export default function UserOrdersPage() {
     return () => clearInterval(interval);
   }, [router]);
 
-  // Filter orders by status tab
-  const filteredOrders = useMemo(() => {
-    if (statusFilter === "all") return orders;
-    return orders.filter((o) => o.status === statusFilter);
-  }, [orders, statusFilter]);
+  // Current active orders: status is pending, preparing, OR delivered but not yet reviewed
+  const currentOrders = useMemo(() => {
+    return orders.filter(
+      (o) =>
+        o.status === "รอดำเนินการ" ||
+        o.status === "กำลังจัดเตรียม" ||
+        (o.status === "จัดส่งแล้ว" && !o.isReviewed)
+    );
+  }, [orders]);
 
-  const statusCounts = useMemo(
-    () =>
-      orders.reduce(
-        (acc, o) => {
-          acc[o.status] = (acc[o.status] || 0) + 1;
-          return acc;
-        },
-        {} as Record<string, number>
-      ),
-    [orders]
-  );
+  // Order history: delivered AND already reviewed by customer
+  const historyOrders = useMemo(() => {
+    return orders.filter(
+      (o) => o.status === "จัดส่งแล้ว" && o.isReviewed
+    );
+  }, [orders]);
+
+  const displayOrders = activeTab === "current" ? currentOrders : historyOrders;
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("th-TH", {
@@ -116,10 +116,10 @@ export default function UserOrdersPage() {
                 <span>MY ORDERS</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-[#2d2d2d] tracking-tight flex items-center gap-3">
-                <span>ประวัติการสั่งซื้อ</span>
+                <span>คำสั่งซื้อของฉัน</span>
               </h1>
               <p className="text-sm text-gray-500 mt-1">
-                ติดตามสถานะออเดอร์ Meal Kits ทั้งหมดของคุณได้ในที่เดียว
+                ติดตามสถานะออเดอร์ล่าสุด และดูประวัติการสั่งซื้อที่สำเร็จแล้วของคุณได้ที่นี่
               </p>
             </div>
 
@@ -135,47 +135,55 @@ export default function UserOrdersPage() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 mt-8">
-        {/* Status Filter Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-6">
-          {[
-            { key: "all", label: "ทั้งหมด", count: orders.length },
-            {
-              key: "รอดำเนินการ",
-              label: "รอดำเนินการ",
-              count: statusCounts["รอดำเนินการ"] || 0,
-            },
-            {
-              key: "กำลังจัดเตรียม",
-              label: "กำลังจัดเตรียม",
-              count: statusCounts["กำลังจัดเตรียม"] || 0,
-            },
-            {
-              key: "จัดส่งแล้ว",
-              label: "จัดส่งแล้ว",
-              count: statusCounts["จัดส่งแล้ว"] || 0,
-            },
-          ].map((item) => (
-            <button
-              key={item.key}
-              onClick={() => setStatusFilter(item.key)}
-              className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 flex items-center gap-1.5 ${
-                statusFilter === item.key
-                  ? "bg-[#2d2d2d] text-white shadow-sm"
-                  : "bg-white border border-gray-200/80 text-gray-600 hover:bg-gray-50"
+        {/* Two Main Tabs: Active Orders vs Completed Order History */}
+        <div className="flex items-center gap-3 overflow-x-auto pb-2 mb-6">
+          <button
+            onClick={() => setActiveTab("current")}
+            className={`px-5 py-3 rounded-2xl text-sm font-bold whitespace-nowrap transition-all duration-200 flex items-center gap-2.5 ${
+              activeTab === "current"
+                ? "bg-[#2d2d2d] text-white shadow-md -translate-y-0.5"
+                : "bg-white border border-gray-200/80 text-gray-600 hover:bg-gray-50 hover:text-[#2d2d2d]"
+            }`}
+          >
+            <Clock
+              size={17}
+              className={activeTab === "current" ? "text-mustard-400" : "text-gray-400"}
+            />
+            <span>ออเดอร์ที่เพิ่งสั่ง (กำลังดำเนินการ / รอรีวิว)</span>
+            <span
+              className={`px-2 py-0.5 rounded-lg text-xs font-mono font-semibold ${
+                activeTab === "current"
+                  ? "bg-white/20 text-white"
+                  : "bg-gray-100 text-gray-600"
               }`}
             >
-              <span>{item.label}</span>
-              <span
-                className={`px-1.5 py-0.5 rounded-md text-[10px] ${
-                  statusFilter === item.key
-                    ? "bg-white/20 text-white"
-                    : "bg-gray-100 text-gray-500"
-                }`}
-              >
-                {item.count}
-              </span>
-            </button>
-          ))}
+              {currentOrders.length}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("history")}
+            className={`px-5 py-3 rounded-2xl text-sm font-bold whitespace-nowrap transition-all duration-200 flex items-center gap-2.5 ${
+              activeTab === "history"
+                ? "bg-[#2d2d2d] text-white shadow-md -translate-y-0.5"
+                : "bg-white border border-gray-200/80 text-gray-600 hover:bg-gray-50 hover:text-[#2d2d2d]"
+            }`}
+          >
+            <ShoppingBag
+              size={17}
+              className={activeTab === "history" ? "text-emerald-400" : "text-gray-400"}
+            />
+            <span>ประวัติการสั่งซื้อ (เสร็จสิ้น & รีวิวแล้ว)</span>
+            <span
+              className={`px-2 py-0.5 rounded-lg text-xs font-mono font-semibold ${
+                activeTab === "history"
+                  ? "bg-white/20 text-white"
+                  : "bg-gray-100 text-gray-600"
+              }`}
+            >
+              {historyOrders.length}
+            </span>
+          </button>
         </div>
 
         {/* Main Orders Container */}
@@ -183,37 +191,55 @@ export default function UserOrdersPage() {
           {loading ? (
             <div className="py-20 flex flex-col items-center justify-center">
               <span className="loading loading-spinner loading-lg text-mustard-500 mb-4"></span>
-              <p className="text-sm text-gray-400">กำลังโหลดประวัติการสั่งซื้อ...</p>
+              <p className="text-sm text-gray-400">กำลังโหลดคำสั่งซื้อ...</p>
             </div>
-          ) : filteredOrders.length === 0 ? (
+          ) : displayOrders.length === 0 ? (
             <div className="py-20 flex flex-col items-center justify-center text-center px-4">
               <div className="w-16 h-16 rounded-3xl bg-gray-100 flex items-center justify-center text-gray-400 mb-4">
                 <Inbox size={32} />
               </div>
               <p className="text-base font-bold text-[#2d2d2d]">
-                {statusFilter !== "all"
-                  ? "ไม่พบออเดอร์ในสถานะนี้"
-                  : "ยังไม่มีประวัติการสั่งซื้อ"}
+                {activeTab === "current"
+                  ? "ไม่มีออเดอร์ที่กำลังดำเนินการในขณะนี้"
+                  : "ยังไม่มีประวัติการสั่งซื้อที่เสร็จสิ้น"}
               </p>
               <p className="text-xs text-gray-400 mt-1 mb-6 max-w-sm">
-                {statusFilter !== "all"
-                  ? "ลองเปลี่ยนตัวกรองเพื่อดูรายการทั้งหมดในสถานะอื่น"
-                  : "คุณยังไม่เคยสั่ง Meal Kits กับเรา ลองสั่งชุดอาหารอร่อย ๆ ไปลองทำดูสิครับ!"}
+                {activeTab === "current"
+                  ? "ออเดอร์ที่จัดส่งและรีวิวเรียบร้อยแล้ว จะถูกย้ายไปเก็บที่แท็บ 'ประวัติการสั่งซื้อ' ครับ"
+                  : "เมื่อคุณได้รับอาหารและทำการรีวิวเมนูเรียบร้อยแล้ว ประวัติคำสั่งซื้อจะมาแสดงที่นี่ครับ"}
               </p>
-              {statusFilter !== "all" ? (
-                <button
-                  onClick={() => setStatusFilter("all")}
-                  className="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors"
-                >
-                  ดูออเดอร์ทั้งหมด
-                </button>
+              {activeTab === "current" ? (
+                historyOrders.length > 0 ? (
+                  <button
+                    onClick={() => setActiveTab("history")}
+                    className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors"
+                  >
+                    ดูประวัติการสั่งซื้อ ({historyOrders.length})
+                  </button>
+                ) : (
+                  <Link
+                    href="/"
+                    className="px-6 py-3 rounded-2xl bg-mustard-500 hover:bg-mustard-600 text-white text-sm font-semibold shadow-md hover:shadow-lg transition-all"
+                  >
+                    เริ่มสั่งอาหารเลย
+                  </Link>
+                )
               ) : (
-                <Link
-                  href="/"
-                  className="px-6 py-3 rounded-2xl bg-mustard-500 hover:bg-mustard-600 text-white text-sm font-semibold shadow-md hover:shadow-lg transition-all"
-                >
-                  เริ่มสั่งอาหารเลย
-                </Link>
+                currentOrders.length > 0 ? (
+                  <button
+                    onClick={() => setActiveTab("current")}
+                    className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-gray-700 transition-colors"
+                  >
+                    ดูออเดอร์ปัจจุบัน ({currentOrders.length})
+                  </button>
+                ) : (
+                  <Link
+                    href="/"
+                    className="px-6 py-3 rounded-2xl bg-mustard-500 hover:bg-mustard-600 text-white text-sm font-semibold shadow-md hover:shadow-lg transition-all"
+                  >
+                    เริ่มสั่งอาหารเลย
+                  </Link>
+                )
               )}
             </div>
           ) : (
@@ -231,7 +257,7 @@ export default function UserOrdersPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 text-sm">
-                    {filteredOrders.map((order) => {
+                    {displayOrders.map((order) => {
                       const status =
                         statusConfig[order.status] || {
                           label: order.status,
@@ -248,7 +274,7 @@ export default function UserOrdersPage() {
                         >
                           {/* Order ID & Date */}
                           <td className="px-6 py-4 align-top">
-                            <div className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-charcoal-800 bg-gray-100/90 px-2.5 py-1 rounded-lg">
+                            <div className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[#2d2d2d] bg-gray-100/90 px-2.5 py-1 rounded-lg">
                               #{order.id.slice(0, 8)}
                             </div>
                             <div className="text-xs text-gray-400 flex items-center gap-1 mt-1.5">
@@ -305,7 +331,7 @@ export default function UserOrdersPage() {
                                   onClick={() =>
                                     setSelectedReviewOrder(order.id)
                                   }
-                                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-mustard-500 hover:bg-mustard-600 text-white text-xs font-semibold shadow-sm hover:shadow transition-all duration-200 active:scale-[0.98]"
+                                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-mustard-500 hover:bg-mustard-600 text-white text-xs font-semibold shadow-sm hover:shadow transition-all duration-200 active:scale-[0.98] animate-pulse"
                                 >
                                   <Star
                                     size={14}
@@ -316,7 +342,8 @@ export default function UserOrdersPage() {
                               )}
                             {order.status === "จัดส่งแล้ว" &&
                               order.isReviewed && (
-                                <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium">
+                                <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-semibold bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200/60">
+                                  <CheckCircle2 size={14} />
                                   <span>รีวิวเรียบร้อย</span>
                                 </span>
                               )}
@@ -330,7 +357,7 @@ export default function UserOrdersPage() {
 
               {/* Mobile List View */}
               <div className="md:hidden divide-y divide-gray-100">
-                {filteredOrders.map((order) => {
+                {displayOrders.map((order) => {
                   const status =
                     statusConfig[order.status] || {
                       label: order.status,
@@ -397,6 +424,15 @@ export default function UserOrdersPage() {
                             <Star size={15} className="fill-white" />
                             <span>รีวิวเมนูนี้เลย</span>
                           </button>
+                        </div>
+                      )}
+
+                      {order.status === "จัดส่งแล้ว" && order.isReviewed && (
+                        <div className="mt-3 pt-2 border-t border-gray-100 flex justify-end">
+                          <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-semibold">
+                            <CheckCircle2 size={14} />
+                            <span>รีวิวเรียบร้อยแล้ว</span>
+                          </span>
                         </div>
                       )}
                     </div>
