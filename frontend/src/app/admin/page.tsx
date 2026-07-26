@@ -57,6 +57,44 @@ const getNextDeliveryDate = (createdAt: string, frequency?: string) => {
   return date;
 };
 
+// Smooth animated number counter with ease-out cubic animation
+const AnimatedCounter = ({
+  value,
+  prefix = "",
+  duration = 1200,
+}: {
+  value: number;
+  prefix?: string;
+  duration?: number;
+}) => {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    let startTimestamp: number | null = null;
+    let animationFrameId: number;
+
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      // easeOutCubic curve for smooth decelerating count-up
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(easeProgress * value);
+      setDisplayValue(current);
+
+      if (progress < 1) {
+        animationFrameId = window.requestAnimationFrame(step);
+      } else {
+        setDisplayValue(value);
+      }
+    };
+
+    animationFrameId = window.requestAnimationFrame(step);
+    return () => window.cancelAnimationFrame(animationFrameId);
+  }, [value, duration]);
+
+  return <span>{prefix}{displayValue.toLocaleString()}</span>;
+};
+
 const statusOptions: Array<Order["status"]> = [
   "รอดำเนินการ",
   "กำลังจัดเตรียม",
@@ -237,70 +275,138 @@ export default function AdminPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-8">
-        {/* ─── Minimalist Stat Cards ─── */}
+        {/* ─── Minimalist Interactive Stat Cards with Count-Up Animation ─── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-8">
           {/* Card 1: Total Orders */}
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_35px_rgba(0,0,0,0.06)] transition-all duration-300">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs sm:text-sm font-medium text-gray-500">
+          <div
+            onClick={() => {
+              setActiveTab("orders");
+              setStatusFilter("all");
+            }}
+            style={{ animationDelay: "0ms" }}
+            className={`group relative overflow-hidden bg-white rounded-3xl p-5 sm:p-6 border transition-all duration-300 ease-out cursor-pointer animate-fade-in-up ${
+              activeTab === "orders" && statusFilter === "all"
+                ? "border-[#2d2d2d] shadow-[0_16px_35px_rgba(0,0,0,0.08)] -translate-y-1"
+                : "border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:border-gray-300 hover:-translate-y-1.5"
+            }`}
+          >
+            {/* Soft background hover glow */}
+            <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-gray-100/60 blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none" />
+            
+            <div className="flex items-center justify-between mb-3 relative z-10">
+              <span className="text-xs sm:text-sm font-medium text-gray-500 group-hover:text-gray-700 transition-colors">
                 คำสั่งซื้อทั้งหมด
               </span>
-              <div className="w-10 h-10 rounded-2xl bg-gray-100/80 flex items-center justify-center text-[#2d2d2d]">
+              <div className="w-10 h-10 rounded-2xl bg-gray-100/80 flex items-center justify-center text-[#2d2d2d] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 ease-out">
                 <ShoppingBag size={18} />
               </div>
             </div>
-            <p className="text-2xl sm:text-3xl font-bold text-[#2d2d2d] tracking-tight">
-              {orders.length}
+            <p className="text-2xl sm:text-3xl font-bold text-[#2d2d2d] tracking-tight relative z-10">
+              <AnimatedCounter value={orders.length} />
             </p>
-            <p className="text-xs text-gray-400 mt-1">ออเดอร์ในระบบทั้งหมด</p>
+            <div className="flex items-center justify-between mt-2 text-xs text-gray-400 relative z-10">
+              <span>ออเดอร์ในระบบทั้งหมด</span>
+              <span className="text-[11px] font-semibold text-gray-500 opacity-0 group-hover:opacity-100 transition-all duration-200 translate-x-1 group-hover:translate-x-0">
+                ดูรายการ &rarr;
+              </span>
+            </div>
           </div>
 
           {/* Card 2: Total Revenue */}
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_35px_rgba(0,0,0,0.06)] transition-all duration-300">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs sm:text-sm font-medium text-gray-500">
+          <div
+            style={{ animationDelay: "100ms" }}
+            className="group relative overflow-hidden bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(224,168,0,0.14)] hover:border-mustard-200/80 hover:-translate-y-1.5 transition-all duration-300 ease-out animate-fade-in-up"
+          >
+            {/* Soft background hover glow */}
+            <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-mustard-500/10 blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none" />
+
+            <div className="flex items-center justify-between mb-3 relative z-10">
+              <span className="text-xs sm:text-sm font-medium text-gray-500 group-hover:text-mustard-700 transition-colors">
                 รายได้รวม
               </span>
-              <div className="w-10 h-10 rounded-2xl bg-mustard-50 flex items-center justify-center text-mustard-600">
+              <div className="w-10 h-10 rounded-2xl bg-mustard-50 flex items-center justify-center text-mustard-600 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 ease-out">
                 <BarChart size={18} />
               </div>
             </div>
-            <p className="text-2xl sm:text-3xl font-bold text-mustard-600 tracking-tight">
-              ฿{totalRevenue.toLocaleString()}
+            <p className="text-2xl sm:text-3xl font-bold text-mustard-600 tracking-tight relative z-10">
+              <AnimatedCounter value={totalRevenue} prefix="฿" />
             </p>
-            <p className="text-xs text-gray-400 mt-1">ยอดรวมคำสั่งซื้อ</p>
+            <div className="flex items-center justify-between mt-2 text-xs text-gray-400 relative z-10">
+              <span>ยอดรวมคำสั่งซื้อ</span>
+              <span className="text-[11px] font-semibold text-mustard-600 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                รายได้สะสม
+              </span>
+            </div>
           </div>
 
           {/* Card 3: Pending Orders */}
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_35px_rgba(0,0,0,0.06)] transition-all duration-300">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs sm:text-sm font-medium text-gray-500">
+          <div
+            onClick={() => {
+              setActiveTab("orders");
+              setStatusFilter("รอดำเนินการ");
+            }}
+            style={{ animationDelay: "200ms" }}
+            className={`group relative overflow-hidden bg-white rounded-3xl p-5 sm:p-6 border transition-all duration-300 ease-out cursor-pointer animate-fade-in-up ${
+              activeTab === "orders" && statusFilter === "รอดำเนินการ"
+                ? "border-red-400 shadow-[0_16px_35px_rgba(239,68,68,0.16)] -translate-y-1"
+                : "border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(239,68,68,0.14)] hover:border-red-200 hover:-translate-y-1.5"
+            }`}
+          >
+            {/* Soft background hover glow */}
+            <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-red-500/10 blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none" />
+
+            <div className="flex items-center justify-between mb-3 relative z-10">
+              <span className="text-xs sm:text-sm font-medium text-gray-500 group-hover:text-red-600 transition-colors">
                 รอดำเนินการ
               </span>
-              <div className="w-10 h-10 rounded-2xl bg-red-50 flex items-center justify-center text-red-600">
+              <div className="w-10 h-10 rounded-2xl bg-red-50 flex items-center justify-center text-red-600 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300 ease-out">
                 <Clock size={18} />
               </div>
             </div>
-            <p className="text-2xl sm:text-3xl font-bold text-red-600 tracking-tight">
-              {statusCounts["รอดำเนินการ"] || 0}
+            <p className="text-2xl sm:text-3xl font-bold text-red-600 tracking-tight relative z-10">
+              <AnimatedCounter value={statusCounts["รอดำเนินการ"] || 0} />
             </p>
-            <p className="text-xs text-gray-400 mt-1">ต้องรีบดำเนินการจัดส่ง</p>
+            <div className="flex items-center justify-between mt-2 text-xs text-gray-400 relative z-10">
+              <span>ต้องรีบดำเนินการจัดส่ง</span>
+              <span className="text-[11px] font-semibold text-red-600 opacity-0 group-hover:opacity-100 transition-all duration-200 translate-x-1 group-hover:translate-x-0">
+                กรองดู &rarr;
+              </span>
+            </div>
           </div>
 
           {/* Card 4: Preparing Orders */}
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_35px_rgba(0,0,0,0.06)] transition-all duration-300">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs sm:text-sm font-medium text-gray-500">
+          <div
+            onClick={() => {
+              setActiveTab("orders");
+              setStatusFilter("กำลังจัดเตรียม");
+            }}
+            style={{ animationDelay: "300ms" }}
+            className={`group relative overflow-hidden bg-white rounded-3xl p-5 sm:p-6 border transition-all duration-300 ease-out cursor-pointer animate-fade-in-up ${
+              activeTab === "orders" && statusFilter === "กำลังจัดเตรียม"
+                ? "border-amber-400 shadow-[0_16px_35px_rgba(245,158,11,0.16)] -translate-y-1"
+                : "border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(245,158,11,0.14)] hover:border-amber-200 hover:-translate-y-1.5"
+            }`}
+          >
+            {/* Soft background hover glow */}
+            <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-amber-500/10 blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none" />
+
+            <div className="flex items-center justify-between mb-3 relative z-10">
+              <span className="text-xs sm:text-sm font-medium text-gray-500 group-hover:text-amber-700 transition-colors">
                 กำลังจัดเตรียม
               </span>
-              <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600">
+              <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 ease-out">
                 <Package size={18} />
               </div>
             </div>
-            <p className="text-2xl sm:text-3xl font-bold text-amber-600 tracking-tight">
-              {statusCounts["กำลังจัดเตรียม"] || 0}
+            <p className="text-2xl sm:text-3xl font-bold text-amber-600 tracking-tight relative z-10">
+              <AnimatedCounter value={statusCounts["กำลังจัดเตรียม"] || 0} />
             </p>
-            <p className="text-xs text-gray-400 mt-1">อยู่ในครัว / เตรียมจัดส่ง</p>
+            <div className="flex items-center justify-between mt-2 text-xs text-gray-400 relative z-10">
+              <span>อยู่ในครัว / เตรียมจัดส่ง</span>
+              <span className="text-[11px] font-semibold text-amber-600 opacity-0 group-hover:opacity-100 transition-all duration-200 translate-x-1 group-hover:translate-x-0">
+                กรองดู &rarr;
+              </span>
+            </div>
           </div>
         </div>
 
