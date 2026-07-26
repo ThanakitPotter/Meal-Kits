@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { ArrowLeft, CheckCircle2, Info, QrCode, Wallet, Zap, Truck } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Info, QrCode, Wallet, Truck } from "lucide-react";
 
 // เบอร์พร้อมเพย์รับเงินของร้าน (สามารถเปลี่ยนเป็นเบอร์จริง e.g. "0812345678" หรือ เลขภาษี 13 หลักของร้านได้เลย)
 const STORE_PROMPTPAY_ID = "0641028753";
@@ -491,9 +491,8 @@ export default function CheckoutPage() {
 
                           {/* Easy Scan-and-Go Notice */}
                           <div className="mt-4 max-w-sm mx-auto bg-emerald-50/90 border border-emerald-200 rounded-xl p-3.5 text-center">
-                            <p className="text-xs font-bold text-emerald-800 flex items-center justify-center gap-1">
-                              <Zap className="w-4 h-4 text-emerald-600 shrink-0" />
-                              <span>สแกนจ่ายเสร็จแล้ว กด &quot;ยืนยันคำสั่งซื้อ&quot; ด้านล่างได้ทันที</span>
+                            <p className="text-xs font-bold text-emerald-800">
+                              สแกนจ่ายเสร็จแล้ว กด &quot;ยืนยันคำสั่งซื้อ&quot; ด้านล่างได้ทันที
                             </p>
                             <p className="text-[11px] text-emerald-600 mt-0.5">
                               รับคำสั่งซื้อทันทีโดยไม่ต้องแนบสลิป
