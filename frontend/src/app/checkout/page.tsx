@@ -15,21 +15,7 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [successId, setSuccessId] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<"promptpay" | "cod">("promptpay");
-  const [slipImage, setSlipImage] = useState<string | null>(null);
-  const [slipFileName, setSlipFileName] = useState<string>("");
   const [qrImgError, setQrImgError] = useState(false);
-
-  const handleSlipUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSlipFileName(file.name);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSlipImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
 
   // Scroll to top when order is successful
@@ -102,7 +88,6 @@ export default function CheckoutPage() {
             paymentMethod === "promptpay"
               ? "สแกน QR พร้อมเพย์ (ฟรี 0%)"
               : "เก็บเงินปลายทาง (COD)",
-          paymentSlipUrl: slipImage || undefined,
         }),
       });
       const order = await res.json();
@@ -144,11 +129,6 @@ export default function CheckoutPage() {
                     ? "📱 สแกน QR พร้อมเพย์ (ฟรี 0%)"
                     : "💵 เก็บเงินปลายทาง (COD)"}
                 </span>
-                {slipImage && (
-                  <span className="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
-                    ✓ แนบสลิปแล้ว
-                  </span>
-                )}
               </div>
               <p className="text-gray-600 text-sm leading-relaxed">
                 ระบบได้รับคำสั่งซื้อของคุณแล้ว เราจะเริ่มเตรียมวัตถุดิบที่สดใหม่และจัดส่งให้คุณโดยเร็วที่สุด
@@ -500,62 +480,14 @@ export default function CheckoutPage() {
                             </div>
                           </div>
 
-                          {/* Slip Upload Interactive Area */}
-                          <div className="mt-5 max-w-sm mx-auto">
-                            <label className="block text-xs font-bold text-gray-700 mb-2">
-                              📎 อัปโหลดสลิปการโอนเงิน (Transfer Slip)
-                            </label>
-
-                            {!slipImage ? (
-                              <label className="flex flex-col items-center justify-center border-2 border-dashed border-mustard-300 hover:border-mustard-500 rounded-2xl p-4 bg-white/80 cursor-pointer transition-all group">
-                                <div className="w-10 h-10 rounded-full bg-mustard-100 flex items-center justify-center text-mustard-600 mb-2 group-hover:scale-110 transition-transform">
-                                  <span className="text-lg">📁</span>
-                                </div>
-                                <span className="text-xs font-bold text-[#2d2d2d]">
-                                  คลิกเพื่อแนบรูปสลิป
-                                </span>
-                                <span className="text-[11px] text-gray-400 mt-0.5">
-                                  รองรับไฟล์ภาพ JPG, PNG
-                                </span>
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  onChange={handleSlipUpload}
-                                  className="hidden"
-                                />
-                              </label>
-                            ) : (
-                              <div className="flex items-center justify-between p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
-                                <div className="flex items-center gap-2.5 overflow-hidden">
-                                  <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-emerald-300">
-                                    <img
-                                      src={slipImage}
-                                      alt="Slip Preview"
-                                      className="w-full h-full object-cover"
-                                    />
-                                  </div>
-                                  <div className="overflow-hidden">
-                                    <p className="text-xs font-bold text-emerald-800 flex items-center gap-1">
-                                      <span>✓ แนบสลิปเรียบร้อยแล้ว</span>
-                                    </p>
-                                    <p className="text-[11px] text-emerald-600 truncate max-w-[160px]">
-                                      {slipFileName}
-                                    </p>
-                                  </div>
-                                </div>
-                                <button
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setSlipImage(null);
-                                    setSlipFileName("");
-                                  }}
-                                  className="text-xs text-red-500 hover:text-red-700 font-semibold px-2 py-1"
-                                >
-                                  ลบ
-                                </button>
-                              </div>
-                            )}
+                          {/* Easy Scan-and-Go Notice */}
+                          <div className="mt-4 max-w-sm mx-auto bg-emerald-50/90 border border-emerald-200 rounded-xl p-3.5 text-center">
+                            <p className="text-xs font-bold text-emerald-800">
+                              ⚡ สแกนจ่ายเสร็จแล้ว กด &quot;ยืนยันคำสั่งซื้อ&quot; ด้านล่างได้ทันที
+                            </p>
+                            <p className="text-[11px] text-emerald-600 mt-0.5">
+                              รับคำสั่งซื้อทันทีโดยไม่ต้องแนบสลิป
+                            </p>
                           </div>
                         </div>
                       )}
