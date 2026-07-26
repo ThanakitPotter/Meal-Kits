@@ -507,116 +507,136 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* ─── Tabs & Actions Bar ─── */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-          {/* Navigation Pill Tabs */}
-          <div className="inline-flex p-1.5 bg-gray-200/60 rounded-2xl w-max">
+        {/* ─── Row 1: Navigation Pill Tabs (Equal Width & Neatly Aligned) ─── */}
+        <div className="mb-6 overflow-x-auto pb-1">
+          <div className="inline-flex p-1.5 bg-gray-200/70 rounded-2xl border border-gray-300/40 shadow-inner w-full sm:w-auto">
             <button
               onClick={() => setActiveTab("orders")}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+              className={`flex-1 sm:flex-initial flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl text-sm sm:text-base font-bold whitespace-nowrap transition-all duration-200 min-w-[200px] ${
                 activeTab === "orders"
-                  ? "bg-white text-[#2d2d2d] shadow-sm"
+                  ? "bg-white text-[#2d2d2d] shadow-md scale-[1.01]"
                   : "text-gray-600 hover:text-[#2d2d2d]"
               }`}
             >
-              <ShoppingBag size={16} />
+              <ShoppingBag
+                size={18}
+                className={
+                  activeTab === "orders"
+                    ? "text-mustard-600 shrink-0"
+                    : "text-gray-400 shrink-0"
+                }
+              />
               <span>จัดการออเดอร์ ({orders.length})</span>
             </button>
             <button
               onClick={() => setActiveTab("analytics")}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+              className={`flex-1 sm:flex-initial flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl text-sm sm:text-base font-bold whitespace-nowrap transition-all duration-200 min-w-[200px] ${
                 activeTab === "analytics"
-                  ? "bg-white text-[#2d2d2d] shadow-sm"
+                  ? "bg-white text-[#2d2d2d] shadow-md scale-[1.01]"
                   : "text-gray-600 hover:text-[#2d2d2d]"
               }`}
             >
-              <BarChart3 size={16} className="text-mustard-600" />
+              <BarChart3
+                size={18}
+                className={
+                  activeTab === "analytics"
+                    ? "text-mustard-600 shrink-0"
+                    : "text-mustard-600/70 shrink-0"
+                }
+              />
               <span>กราฟสถิติ & เมนูฮิต</span>
             </button>
             <button
               onClick={() => setActiveTab("reviews")}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+              className={`flex-1 sm:flex-initial flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl text-sm sm:text-base font-bold whitespace-nowrap transition-all duration-200 min-w-[200px] ${
                 activeTab === "reviews"
-                  ? "bg-white text-[#2d2d2d] shadow-sm"
+                  ? "bg-white text-[#2d2d2d] shadow-md scale-[1.01]"
                   : "text-gray-600 hover:text-[#2d2d2d]"
               }`}
             >
-              <MessageSquare size={16} />
+              <MessageSquare
+                size={18}
+                className={
+                  activeTab === "reviews"
+                    ? "text-mustard-600 shrink-0"
+                    : "text-gray-400 shrink-0"
+                }
+              />
               <span>รีวิวจากลูกค้า ({reviews.length})</span>
             </button>
           </div>
+        </div>
 
-          {/* Search & Filter Bar (Only shown on Orders tab) */}
-          {activeTab === "orders" && (
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              {/* Status Filter Pills */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-                {[
-                  { key: "all", label: "ทั้งหมด", count: orders.length },
-                  {
-                    key: "รอดำเนินการ",
-                    label: "รอดำเนินการ",
-                    count: statusCounts["รอดำเนินการ"] || 0,
-                  },
-                  {
-                    key: "กำลังจัดเตรียม",
-                    label: "กำลังจัดเตรียม",
-                    count: statusCounts["กำลังจัดเตรียม"] || 0,
-                  },
-                  {
-                    key: "จัดส่งแล้ว",
-                    label: "จัดส่งแล้ว",
-                    count: statusCounts["จัดส่งแล้ว"] || 0,
-                  },
-                ].map((item) => (
-                  <button
-                    key={item.key}
-                    onClick={() => setStatusFilter(item.key)}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
+        {/* ─── Row 2: Search & Filter Bar (Only shown on Orders tab) ─── */}
+        {activeTab === "orders" && (
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6 bg-white p-4 rounded-2xl border border-gray-100 shadow-[0_2px_15px_rgba(0,0,0,0.02)]">
+            {/* Status Filter Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+              {[
+                { key: "all", label: "ทั้งหมด", count: orders.length },
+                {
+                  key: "รอดำเนินการ",
+                  label: "รอดำเนินการ",
+                  count: statusCounts["รอดำเนินการ"] || 0,
+                },
+                {
+                  key: "กำลังจัดเตรียม",
+                  label: "กำลังจัดเตรียม",
+                  count: statusCounts["กำลังจัดเตรียม"] || 0,
+                },
+                {
+                  key: "จัดส่งแล้ว",
+                  label: "จัดส่งแล้ว",
+                  count: statusCounts["จัดส่งแล้ว"] || 0,
+                },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => setStatusFilter(item.key)}
+                  className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 ${
+                    statusFilter === item.key
+                      ? "bg-[#2d2d2d] text-white shadow-sm"
+                      : "bg-gray-50 border border-gray-200/80 text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  {item.label}{" "}
+                  <span
+                    className={`ml-1.5 px-2 py-0.5 rounded-md text-[11px] font-mono ${
                       statusFilter === item.key
-                        ? "bg-[#2d2d2d] text-white shadow-sm"
-                        : "bg-white border border-gray-200/80 text-gray-600 hover:bg-gray-50"
+                        ? "bg-white/20 text-white"
+                        : "bg-gray-200/80 text-gray-600"
                     }`}
                   >
-                    {item.label}{" "}
-                    <span
-                      className={`ml-1 px-1.5 py-0.5 rounded-md text-[10px] ${
-                        statusFilter === item.key
-                          ? "bg-white/20 text-white"
-                          : "bg-gray-100 text-gray-500"
-                      }`}
-                    >
-                      {item.count}
-                    </span>
-                  </button>
-                ))}
-              </div>
-
-              {/* Minimalist Search Box */}
-              <div className="relative w-full sm:w-64">
-                <Search
-                  size={16}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-                />
-                <input
-                  type="text"
-                  placeholder="ค้นหารหัส, ชื่อลูกค้า, เบอร์..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-9 py-2 bg-white text-sm text-[#2d2d2d] rounded-xl border border-gray-200/80 focus:border-mustard-500 focus:ring-4 focus:ring-mustard-500/10 outline-none transition-all placeholder:text-gray-400"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    <X size={14} />
-                  </button>
-                )}
-              </div>
+                    {item.count}
+                  </span>
+                </button>
+              ))}
             </div>
-          )}
-        </div>
+
+            {/* Minimalist Search Box */}
+            <div className="relative w-full md:w-72 shrink-0">
+              <Search
+                size={16}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+              />
+              <input
+                type="text"
+                placeholder="ค้นหารหัส, ชื่อลูกค้า, เบอร์..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-9 py-2.5 bg-gray-50/80 text-sm text-[#2d2d2d] rounded-xl border border-gray-200/80 focus:border-mustard-500 focus:bg-white focus:ring-4 focus:ring-mustard-500/10 outline-none transition-all placeholder:text-gray-400 font-medium"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Quick Analytics Alert Banner inside Orders view */}
         {activeTab === "orders" && (
