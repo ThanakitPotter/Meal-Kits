@@ -62,6 +62,7 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("meal_kits_cart_guest");
     setUser(null);
     window.location.href = "/";
   };

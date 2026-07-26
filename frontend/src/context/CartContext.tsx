@@ -22,31 +22,86 @@ type CartContextType = {
   cartCount: number;
 };
 
+const getCartStorageKey = () => {
+  if (typeof window === "undefined") return "meal_kits_cart_guest";
+  try {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      if (user && user.id) {
+        return `meal_kits_cart_${user.id}`;
+      }
+    }
+  } catch (e) {
+    console.error("Failed to parse user from localStorage", e);
+  }
+  return "meal_kits_cart_guest";
+};
+
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [currentKey, setCurrentKey] = useState<string>("meal_kits_cart_guest");
 
-  // Load from local storage
-  useEffect(() => {
-    const savedCart = localStorage.getItem("meal_kits_cart");
-    if (savedCart) {
-      try {
+  const loadCartForKey = (key: string) => {
+    try {
+      const savedCart = localStorage.getItem(key);
+      if (savedCart) {
         setCartItems(JSON.parse(savedCart));
-      } catch (e) {
-        console.error("Failed to parse cart data", e);
+      } else {
+        setCartItems([]);
       }
+    } catch (e) {
+      console.error("Failed to parse cart data", e);
+      setCartItems([]);
     }
+  };
+
+  // Load initial cart and monitor user ID changes
+  useEffect(() => {
+    const key = getCartStorageKey();
+    setCurrentKey(key);
+    loadCartForKey(key);
     setIsLoaded(true);
+
+    // Monitor for login/logout or account switching
+    const interval = setInterval(() => {
+      const newKey = getCartStorageKey();
+      setCurrentKey((prevKey) => {
+        if (newKey !== prevKey) {
+          loadCartForKey(newKey);
+          return newKey;
+        }
+        return prevKey;
+      });
+    }, 1000);
+
+    const handleStorageChange = () => {
+      const newKey = getCartStorageKey();
+      setCurrentKey((prevKey) => {
+        if (newKey !== prevKey) {
+          loadCartForKey(newKey);
+          return newKey;
+        }
+        return prevKey;
+      });
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
-  // Save to local storage
+  // Save to local storage under the current user's specific key
   useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem("meal_kits_cart", JSON.stringify(cartItems));
+    if (isLoaded && currentKey) {
+      localStorage.setItem(currentKey, JSON.stringify(cartItems));
     }
-  }, [cartItems, isLoaded]);
+  }, [cartItems, isLoaded, currentKey]);
 
   const addToCart = (item: Omit<CartItem, "id">) => {
     setCartItems((prev) => {
