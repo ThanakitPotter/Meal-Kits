@@ -112,38 +112,38 @@ export default function CheckoutPage() {
   };
 
   // ==========================================
-  // SUCCESS VIEW (MINIMALIST & CLEAN)
+  // SUCCESS VIEW (MINIMALIST & CLEAN IN BRAND COLORS)
   // ==========================================
   if (successId) {
     return (
       <div className="min-h-[75vh] bg-[#FAFAFA] py-16 sm:py-24 px-4 flex items-center justify-center">
-        <div className="max-w-lg w-full bg-white border border-neutral-200/80 rounded-3xl p-8 sm:p-10 text-center shadow-xs">
+        <div className="max-w-lg w-full bg-white border border-gray-200/80 rounded-3xl p-8 sm:p-10 text-center shadow-xs">
           <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-emerald-100">
             <CheckCircle2 size={36} />
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-semibold text-neutral-900 tracking-tight mb-2">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-[#2d2d2d] tracking-tight mb-2">
             คำสั่งซื้อสำเร็จ
           </h1>
-          <p className="text-sm text-neutral-500 mb-8">
+          <p className="text-sm text-gray-500 mb-8">
             ขอบคุณที่ไว้วางใจ Meal Kits เราได้รับข้อมูลและเริ่มเตรียมวัตถุดิบให้คุณแล้ว
           </p>
 
-          <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl p-6 mb-8 text-left space-y-4">
-            <div className="flex items-center justify-between border-b border-neutral-200/60 pb-3">
-              <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+          <div className="bg-gray-50/80 border border-gray-200/60 rounded-2xl p-6 mb-8 text-left space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-200/60 pb-3">
+              <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
                 หมายเลขคำสั่งซื้อ
               </span>
-              <span className="font-mono text-sm font-semibold text-neutral-900">
+              <span className="font-mono text-sm font-semibold text-[#2d2d2d]">
                 #{successId.slice(0, 8).toUpperCase()}
               </span>
             </div>
 
-            <div className="flex items-center justify-between border-b border-neutral-200/60 pb-3">
-              <span className="text-xs font-medium text-neutral-500">
+            <div className="flex items-center justify-between border-b border-gray-200/60 pb-3">
+              <span className="text-xs font-medium text-gray-500">
                 ช่องทางชำระเงิน
               </span>
-              <span className="text-xs sm:text-sm font-medium text-neutral-900 flex items-center gap-2">
+              <span className="text-xs sm:text-sm font-medium text-[#2d2d2d] flex items-center gap-2">
                 {paymentMethod === "promptpay" ? (
                   <>
                     <img
@@ -155,14 +155,14 @@ export default function CheckoutPage() {
                   </>
                 ) : (
                   <>
-                    <Wallet className="w-4 h-4 text-neutral-700" />
+                    <Wallet className="w-4 h-4 text-[#2d2d2d]" />
                     <span>เก็บเงินปลายทาง (COD)</span>
                   </>
                 )}
               </span>
             </div>
 
-            <p className="text-xs text-neutral-500 leading-relaxed pt-1">
+            <p className="text-xs text-gray-500 leading-relaxed pt-1">
               ระบบกำลังดำเนินการจัดเตรียมวัตถุดิบที่สดใหม่และจะทำการจัดส่งแบบควบคุมอุณหภูมิให้คุณตามรอบที่กำหนด
             </p>
           </div>
@@ -170,13 +170,13 @@ export default function CheckoutPage() {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href="/"
-              className="flex-1 py-3.5 px-4 rounded-xl border border-neutral-200 hover:bg-neutral-50 text-neutral-700 font-medium text-sm transition-all text-center"
+              className="flex-1 py-3.5 px-4 rounded-xl border border-gray-200 hover:bg-gray-50 text-[#333333] font-medium text-sm transition-all text-center"
             >
               กลับหน้าแรก
             </Link>
             <Link
               href="/orders"
-              className="flex-1 py-3.5 px-4 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white font-medium text-sm transition-all text-center shadow-xs"
+              className="flex-1 py-3.5 px-4 rounded-xl bg-[#E0A800] hover:bg-[#c98e10] text-white font-bold text-sm transition-all text-center shadow-xs"
             >
               ดูสถานะออเดอร์
             </Link>
@@ -192,16 +192,16 @@ export default function CheckoutPage() {
   if (cartItems.length === 0 && !successId) {
     return (
       <div className="min-h-[70vh] bg-[#FAFAFA] flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white border border-neutral-200/80 rounded-3xl p-10 text-center shadow-xs">
-          <p className="text-neutral-900 font-semibold text-lg mb-2">
+        <div className="max-w-md w-full bg-white border border-gray-200/80 rounded-3xl p-10 text-center shadow-xs">
+          <p className="text-[#2d2d2d] font-semibold text-lg mb-2">
             ตะกร้าสินค้าของคุณว่างเปล่า
           </p>
-          <p className="text-neutral-500 text-sm mb-6">
+          <p className="text-gray-500 text-sm mb-6">
             เลือกเมนูอาหารที่ชอบแล้วกลับมาทำรายการอีกครั้ง
           </p>
           <Link
             href="/"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white font-medium text-sm transition-all"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-xl bg-[#E0A800] hover:bg-[#c98e10] text-white font-bold text-sm transition-all shadow-xs"
           >
             กลับไปเลือกสินค้า
           </Link>
@@ -211,22 +211,22 @@ export default function CheckoutPage() {
   }
 
   // ==========================================
-  // MAIN CHECKOUT VIEW (ULTRA-MINIMALIST)
+  // MAIN CHECKOUT VIEW (ULTRA-MINIMALIST & MEAL KITS BRAND THEME)
   // ==========================================
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-neutral-900 pb-20">
+    <div className="min-h-screen bg-[#FAFAFA] text-[#333333] pb-20">
       {/* Top Header */}
-      <div className="border-b border-neutral-200/60 bg-white">
+      <div className="border-b border-gray-200/70 bg-white">
         <div className="container mx-auto max-w-5xl px-4 sm:px-6 py-4 flex items-center justify-between">
           <Link
             href="/cart"
-            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-neutral-500 hover:text-neutral-900 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-500 hover:text-[#2d2d2d] transition-colors"
           >
             <ArrowLeft size={16} />
             <span>กลับไปตะกร้าสินค้า</span>
           </Link>
-          <div className="flex items-center gap-2 text-xs text-neutral-400 font-medium">
-            <Lock size={13} className="text-neutral-500" />
+          <div className="flex items-center gap-2 text-xs text-gray-400 font-medium">
+            <Lock size={13} className="text-gray-500" />
             <span>การชำระเงินปลอดภัย 100%</span>
           </div>
         </div>
@@ -235,10 +235,10 @@ export default function CheckoutPage() {
       <div className="container mx-auto max-w-5xl px-4 sm:px-6 pt-8 sm:pt-12">
         {/* Page Title */}
         <div className="mb-8 sm:mb-10">
-          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#2d2d2d]">
             ชำระเงิน
           </h1>
-          <p className="text-sm text-neutral-500 mt-1">
+          <p className="text-sm text-gray-500 mt-1">
             กรุณากรอกข้อมูลการจัดส่งและเลือกวิธีการชำระเงิน
           </p>
         </div>
@@ -249,12 +249,12 @@ export default function CheckoutPage() {
           <div className="lg:col-span-7 space-y-8">
             <form id="checkout-form" onSubmit={handleSubmit} className="space-y-8">
               {/* SECTION 1: ORDER TYPE */}
-              <div className="bg-white border border-neutral-200/80 rounded-2xl p-6 sm:p-8 shadow-2xs space-y-6">
+              <div className="bg-white border border-gray-200/80 rounded-2xl p-6 sm:p-8 shadow-2xs space-y-6">
                 <div>
-                  <h2 className="text-base sm:text-lg font-semibold text-neutral-900 tracking-tight">
+                  <h2 className="text-base sm:text-lg font-semibold text-[#2d2d2d] tracking-tight">
                     รูปแบบการสั่งซื้อ
                   </h2>
-                  <p className="text-xs text-neutral-500 mt-0.5">
+                  <p className="text-xs text-gray-500 mt-0.5">
                     เลือกว่าต้องการสั่งครั้งเดียวหรือสมัครรับวัตถุดิบเป็นประจำ
                   </p>
                 </div>
@@ -264,23 +264,23 @@ export default function CheckoutPage() {
                     onClick={() => updateField("orderType", "one-time")}
                     className={`cursor-pointer border rounded-xl p-4 transition-all flex items-center justify-between ${
                       form.orderType === "one-time"
-                        ? "border-neutral-900 bg-neutral-900/[0.02]"
-                        : "border-neutral-200 hover:border-neutral-300 bg-white"
+                        ? "border-[#E0A800] bg-[#E0A800]/[0.035]"
+                        : "border-gray-200 hover:border-gray-300 bg-white"
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
                           form.orderType === "one-time"
-                            ? "border-neutral-900 bg-neutral-900"
-                            : "border-neutral-300"
+                            ? "border-[#E0A800] bg-[#E0A800]"
+                            : "border-gray-300"
                         }`}
                       >
                         {form.orderType === "one-time" && (
                           <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
                         )}
                       </div>
-                      <span className="text-sm font-medium text-neutral-900">
+                      <span className="text-sm font-medium text-[#2d2d2d]">
                         สั่งครั้งเดียว
                       </span>
                     </div>
@@ -290,16 +290,16 @@ export default function CheckoutPage() {
                     onClick={() => updateField("orderType", "subscription")}
                     className={`cursor-pointer border rounded-xl p-4 transition-all flex items-center justify-between ${
                       form.orderType === "subscription"
-                        ? "border-neutral-900 bg-neutral-900/[0.02]"
-                        : "border-neutral-200 hover:border-neutral-300 bg-white"
+                        ? "border-[#E0A800] bg-[#E0A800]/[0.035]"
+                        : "border-gray-200 hover:border-gray-300 bg-white"
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
                           form.orderType === "subscription"
-                            ? "border-neutral-900 bg-neutral-900"
-                            : "border-neutral-300"
+                            ? "border-[#E0A800] bg-[#E0A800]"
+                            : "border-gray-300"
                         }`}
                       >
                         {form.orderType === "subscription" && (
@@ -307,33 +307,33 @@ export default function CheckoutPage() {
                         )}
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-neutral-900 block">
+                        <span className="text-sm font-medium text-[#2d2d2d] block">
                           สั่งประจำ
                         </span>
                       </div>
                     </div>
-                    <span className="text-[10px] font-medium bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded-md">
+                    <span className="text-[10px] font-semibold bg-[#E0A800]/15 text-[#8a5309] px-2 py-0.5 rounded-md">
                       สะดวก
                     </span>
                   </label>
                 </div>
 
                 {form.orderType === "subscription" && (
-                  <div className="pt-2 border-t border-neutral-100 space-y-3">
-                    <label className="block text-xs font-medium text-neutral-700">
+                  <div className="pt-2 border-t border-gray-100 space-y-3">
+                    <label className="block text-xs font-medium text-[#333333]">
                       รอบการจัดส่ง
                     </label>
                     <select
                       value={form.deliveryFrequency}
                       onChange={(e) => updateField("deliveryFrequency", e.target.value)}
-                      className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 text-sm text-neutral-900 focus:outline-none focus:border-neutral-900 transition-colors"
+                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d2d2d] focus:outline-none focus:border-[#E0A800] transition-colors"
                     >
                       <option value="weekly">ทุกสัปดาห์ (Weekly)</option>
                       <option value="biweekly">ทุก 2 สัปดาห์ (Bi-weekly)</option>
                       <option value="monthly">ทุกเดือน (Monthly)</option>
                     </select>
-                    <p className="text-xs text-neutral-500 flex items-center gap-1.5">
-                      <Clock size={13} className="text-neutral-400 shrink-0" />
+                    <p className="text-xs text-gray-500 flex items-center gap-1.5">
+                      <Clock size={13} className="text-[#E0A800] shrink-0" />
                       ระบบจะทำการจัดส่งวัตถุดิบตามรอบระยะเวลาที่คุณเลือก
                     </p>
                   </div>
@@ -341,19 +341,19 @@ export default function CheckoutPage() {
               </div>
 
               {/* SECTION 2: SHIPPING ADDRESS */}
-              <div className="bg-white border border-neutral-200/80 rounded-2xl p-6 sm:p-8 shadow-2xs space-y-6">
+              <div className="bg-white border border-gray-200/80 rounded-2xl p-6 sm:p-8 shadow-2xs space-y-6">
                 <div>
-                  <h2 className="text-base sm:text-lg font-semibold text-neutral-900 tracking-tight">
+                  <h2 className="text-base sm:text-lg font-semibold text-[#2d2d2d] tracking-tight">
                     ข้อมูลจัดส่ง
                   </h2>
-                  <p className="text-xs text-neutral-500 mt-0.5">
+                  <p className="text-xs text-gray-500 mt-0.5">
                     ที่อยู่สำหรับจัดส่งชุดวัตถุดิบอาหารแบบควบคุมอุณหภูมิ
                   </p>
                 </div>
 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-xs font-medium text-neutral-600 mb-1.5">
+                    <label className="block text-xs font-medium text-gray-600 mb-1.5">
                       ชื่อ-นามสกุลผู้รับ <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -363,12 +363,12 @@ export default function CheckoutPage() {
                       value={form.customerName}
                       onChange={(e) => updateField("customerName", e.target.value.slice(0, 50))}
                       placeholder="เช่น ธนกฤต นำชัยมาหา"
-                      className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 transition-colors"
+                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d2d2d] placeholder:text-gray-400 focus:outline-none focus:border-[#E0A800] focus:ring-1 focus:ring-[#E0A800] transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-neutral-600 mb-1.5">
+                    <label className="block text-xs font-medium text-gray-600 mb-1.5">
                       เบอร์โทรศัพท์ติดต่อ <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -381,12 +381,12 @@ export default function CheckoutPage() {
                         updateField("customerPhone", onlyNums.slice(0, 10));
                       }}
                       placeholder="064-xxx-xxxx"
-                      className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 transition-colors font-mono"
+                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d2d2d] placeholder:text-gray-400 focus:outline-none focus:border-[#E0A800] focus:ring-1 focus:ring-[#E0A800] transition-all font-mono"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-neutral-600 mb-1.5">
+                    <label className="block text-xs font-medium text-gray-600 mb-1.5">
                       ที่อยู่จัดส่งครบถ้วน <span className="text-red-500">*</span>
                     </label>
                     <textarea
@@ -396,19 +396,19 @@ export default function CheckoutPage() {
                       value={form.shippingAddress}
                       onChange={(e) => updateField("shippingAddress", e.target.value.slice(0, 150))}
                       placeholder="บ้านเลขที่ ซอย ถนน แขวง/ตำบล เขต/อำเภอ จังหวัด รหัสไปรษณีย์"
-                      className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900 transition-colors resize-none"
+                      className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#2d2d2d] placeholder:text-gray-400 focus:outline-none focus:border-[#E0A800] focus:ring-1 focus:ring-[#E0A800] transition-all resize-none"
                     />
                   </div>
                 </div>
               </div>
 
               {/* SECTION 3: PAYMENT METHOD */}
-              <div className="bg-white border border-neutral-200/80 rounded-2xl p-6 sm:p-8 shadow-2xs space-y-6">
+              <div className="bg-white border border-gray-200/80 rounded-2xl p-6 sm:p-8 shadow-2xs space-y-6">
                 <div>
-                  <h2 className="text-base sm:text-lg font-semibold text-neutral-900 tracking-tight">
+                  <h2 className="text-base sm:text-lg font-semibold text-[#2d2d2d] tracking-tight">
                     วิธีการชำระเงิน
                   </h2>
-                  <p className="text-xs text-neutral-500 mt-0.5">
+                  <p className="text-xs text-gray-500 mt-0.5">
                     เลือกช่องทางที่สะดวก ไม่มีค่าธรรมเนียมเพิ่มเติม
                   </p>
                 </div>
@@ -419,8 +419,8 @@ export default function CheckoutPage() {
                     onClick={() => setPaymentMethod("promptpay")}
                     className={`cursor-pointer border rounded-2xl p-5 transition-all ${
                       paymentMethod === "promptpay"
-                        ? "border-neutral-900 bg-neutral-900/[0.015]"
-                        : "border-neutral-200 hover:border-neutral-300 bg-white"
+                        ? "border-[#E0A800] bg-[#E0A800]/[0.035]"
+                        : "border-gray-200 hover:border-gray-300 bg-white"
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -428,8 +428,8 @@ export default function CheckoutPage() {
                         <div
                           className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
                             paymentMethod === "promptpay"
-                              ? "border-neutral-900 bg-neutral-900"
-                              : "border-neutral-300"
+                              ? "border-[#E0A800] bg-[#E0A800]"
+                              : "border-gray-300"
                           }`}
                         >
                           {paymentMethod === "promptpay" && (
@@ -437,10 +437,10 @@ export default function CheckoutPage() {
                           )}
                         </div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-sm font-medium text-neutral-900">
+                          <span className="text-sm font-medium text-[#2d2d2d]">
                             สแกน QR พร้อมเพย์
                           </span>
-                          <div className="bg-white border border-neutral-200 rounded px-2 py-0.5 flex items-center shadow-2xs">
+                          <div className="bg-white border border-gray-200 rounded px-2 py-0.5 flex items-center shadow-2xs">
                             <img
                               src="https://upload.wikimedia.org/wikipedia/commons/c/c5/PromptPay-logo.png"
                               alt="PromptPay"
@@ -452,17 +452,17 @@ export default function CheckoutPage() {
                           </span>
                         </div>
                       </div>
-                      <span className="text-xs font-medium text-neutral-500">
+                      <span className="text-xs font-semibold text-[#8a5309]">
                         แนะนำ
                       </span>
                     </div>
 
                     {/* Expandable Minimalist QR display */}
                     {paymentMethod === "promptpay" && (
-                      <div className="mt-5 pt-5 border-t border-neutral-100">
-                        <div className="max-w-xs mx-auto bg-neutral-900 text-white rounded-2xl p-5 text-center shadow-xs">
-                          {/* Minimalist QR Header with PromptPay Logo */}
-                          <div className="flex items-center justify-between border-b border-neutral-800 pb-3 mb-4">
+                      <div className="mt-5 pt-5 border-t border-gray-100">
+                        <div className="max-w-xs mx-auto bg-[#193B68] text-white rounded-2xl p-5 text-center shadow-xs">
+                          {/* Official Thai QR Payment Blue Header with PromptPay Logo */}
+                          <div className="flex items-center justify-between border-b border-blue-400/30 pb-3 mb-4">
                             <div className="flex items-center gap-2">
                               <div className="bg-white rounded-lg px-2 py-1 flex items-center justify-center shrink-0">
                                 <img
@@ -471,11 +471,11 @@ export default function CheckoutPage() {
                                   className="h-5 w-auto object-contain"
                                 />
                               </div>
-                              <span className="text-xs font-semibold tracking-wide text-neutral-200">
+                              <span className="text-xs font-bold tracking-wide text-white">
                                 THAI QR PAYMENT
                               </span>
                             </div>
-                            <span className="text-[10px] text-neutral-400 font-mono">
+                            <span className="text-[10px] text-blue-200 font-mono">
                               0% FEE
                             </span>
                           </div>
@@ -493,7 +493,7 @@ export default function CheckoutPage() {
                               ) : (
                                 <svg
                                   viewBox="0 0 100 100"
-                                  className="w-full h-full text-neutral-900"
+                                  className="w-full h-full text-[#193B68]"
                                 >
                                   <path
                                     d="M5,5 h25 v25 h-25 Z M10,10 v15 h15 v-15 Z M15,15 h5 v5 h-5 Z"
@@ -597,23 +597,23 @@ export default function CheckoutPage() {
                           </div>
 
                           <div className="space-y-1">
-                            <p className="text-xs text-neutral-400">
+                            <p className="text-xs text-blue-200">
                               บัญชีรับเงิน: ธนกฤต นำชัยมาหา
                             </p>
-                            <p className="text-sm font-mono font-medium text-white">
+                            <p className="text-sm font-mono font-bold text-white">
                               {STORE_PROMPTPAY_ID}
                             </p>
                           </div>
 
-                          <div className="mt-4 pt-3 border-t border-neutral-800 flex items-center justify-between text-xs">
-                            <span className="text-neutral-400">ยอดชำระ</span>
-                            <span className="font-mono font-semibold text-white text-sm">
+                          <div className="mt-4 pt-3 border-t border-blue-400/30 flex items-center justify-between text-xs">
+                            <span className="text-blue-200">ยอดชำระ</span>
+                            <span className="font-mono font-bold text-[#E0A800] text-sm">
                               ฿{cartTotal.toLocaleString()}
                             </span>
                           </div>
                         </div>
 
-                        <p className="text-center text-xs text-neutral-500 mt-3">
+                        <p className="text-center text-xs text-gray-500 mt-3">
                           สแกนจ่ายเสร็จแล้ว กดยืนยันคำสั่งซื้อด้านล่างได้ทันที โดยไม่ต้องแนบสลิป
                         </p>
                       </div>
@@ -625,8 +625,8 @@ export default function CheckoutPage() {
                     onClick={() => setPaymentMethod("cod")}
                     className={`cursor-pointer border rounded-2xl p-5 transition-all ${
                       paymentMethod === "cod"
-                        ? "border-neutral-900 bg-neutral-900/[0.015]"
-                        : "border-neutral-200 hover:border-neutral-300 bg-white"
+                        ? "border-[#E0A800] bg-[#E0A800]/[0.035]"
+                        : "border-gray-200 hover:border-gray-300 bg-white"
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -634,8 +634,8 @@ export default function CheckoutPage() {
                         <div
                           className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
                             paymentMethod === "cod"
-                              ? "border-neutral-900 bg-neutral-900"
-                              : "border-neutral-300"
+                              ? "border-[#E0A800] bg-[#E0A800]"
+                              : "border-gray-300"
                           }`}
                         >
                           {paymentMethod === "cod" && (
@@ -643,10 +643,10 @@ export default function CheckoutPage() {
                           )}
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-neutral-900">
+                          <span className="text-sm font-medium text-[#2d2d2d]">
                             เก็บเงินปลายทาง (COD)
                           </span>
-                          <span className="text-[11px] bg-neutral-100 text-neutral-600 font-medium px-2 py-0.5 rounded-md">
+                          <span className="text-[11px] bg-gray-100 text-gray-600 font-medium px-2 py-0.5 rounded-md">
                             เงินสด
                           </span>
                         </div>
@@ -654,13 +654,13 @@ export default function CheckoutPage() {
                     </div>
 
                     {paymentMethod === "cod" && (
-                      <div className="mt-4 pt-4 border-t border-neutral-100 text-xs text-neutral-500 space-y-1">
-                        <p className="font-medium text-neutral-700">
+                      <div className="mt-4 pt-4 border-t border-gray-100 text-xs text-gray-500 space-y-1">
+                        <p className="font-medium text-gray-700">
                           ชำระเงินสดกับพนักงานจัดส่งที่หน้าบ้าน
                         </p>
                         <p>
                           กรุณาเตรียมเงินสดจำนวน{" "}
-                          <span className="font-mono font-semibold text-neutral-900">
+                          <span className="font-mono font-bold text-[#2d2d2d]">
                             ฿{cartTotal.toLocaleString()}
                           </span>{" "}
                           พอดี เพื่อความสะดวกรวดเร็ว
@@ -675,13 +675,13 @@ export default function CheckoutPage() {
 
           {/* Right Column: Order Summary (NOT STICKY) */}
           <div className="lg:col-span-5">
-            <div className="bg-white border border-neutral-200/80 rounded-2xl p-6 sm:p-7 shadow-2xs">
+            <div className="bg-white border border-gray-200/80 rounded-2xl p-6 sm:p-7 shadow-2xs">
               {/* Header */}
-              <div className="flex items-center justify-between pb-5 border-b border-neutral-200/60 mb-5">
-                <h2 className="text-base font-semibold text-neutral-900">
+              <div className="flex items-center justify-between pb-5 border-b border-gray-200/60 mb-5">
+                <h2 className="text-base font-semibold text-[#2d2d2d]">
                   สรุปคำสั่งซื้อ
                 </h2>
-                <span className="text-xs font-medium bg-neutral-100 text-neutral-600 px-2.5 py-1 rounded-full">
+                <span className="text-xs font-semibold bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full">
                   {cartItems.length} รายการ
                 </span>
               </div>
@@ -694,32 +694,32 @@ export default function CheckoutPage() {
                     className="flex items-start justify-between gap-3 text-sm"
                   >
                     <div className="flex items-start gap-3 min-w-0">
-                      <span className="font-mono font-medium text-xs bg-neutral-100 text-neutral-700 px-2 py-0.5 rounded-md shrink-0 mt-0.5">
+                      <span className="font-mono font-bold text-xs bg-[#E0A800]/15 text-[#8a5309] px-2 py-0.5 rounded-md shrink-0 mt-0.5">
                         {item.quantity}×
                       </span>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <p className="font-medium text-neutral-900 truncate">
+                          <p className="font-medium text-[#2d2d2d] truncate">
                             {item.menuName}
                           </p>
                           {item.price === 1 && (
-                            <span className="text-[10px] bg-emerald-100 text-emerald-800 font-medium px-1.5 py-0.5 rounded">
+                            <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">
                               TEST 1฿
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-neutral-400 mt-0.5">
+                        <p className="text-xs text-gray-400 mt-0.5">
                           สำหรับ {item.servings} ท่าน
                         </p>
                       </div>
                     </div>
 
                     <div className="text-right shrink-0">
-                      <p className="font-mono font-medium text-neutral-900">
+                      <p className="font-mono font-semibold text-[#2d2d2d]">
                         ฿{(item.price * item.quantity).toLocaleString()}
                       </p>
                       {item.quantity > 1 && (
-                        <p className="text-[11px] text-neutral-400 font-mono">
+                        <p className="text-[11px] text-gray-400 font-mono">
                           (฿{item.price.toLocaleString()}/ชิ้น)
                         </p>
                       )}
@@ -729,53 +729,53 @@ export default function CheckoutPage() {
               </div>
 
               {/* Cost Breakdown */}
-              <div className="border-t border-neutral-200/60 pt-4 space-y-2.5 text-sm mb-6">
-                <div className="flex justify-between items-center text-neutral-600">
+              <div className="border-t border-gray-200/60 pt-4 space-y-2.5 text-sm mb-6">
+                <div className="flex justify-between items-center text-gray-600">
                   <span className="text-xs sm:text-sm">ค่าอาหารรวม</span>
-                  <span className="font-mono font-medium text-neutral-900">
+                  <span className="font-mono font-medium text-[#2d2d2d]">
                     ฿{cartTotal.toLocaleString()}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center text-neutral-600">
+                <div className="flex justify-between items-center text-gray-600">
                   <span className="text-xs sm:text-sm flex items-center gap-1.5">
-                    <Truck size={14} className="text-neutral-400" />
+                    <Truck size={14} className="text-gray-400" />
                     ค่าจัดส่งแบบควบคุมอุณหภูมิ
                   </span>
-                  <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
+                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
                     ฟรี
                   </span>
                 </div>
 
-                <div className="border-t border-neutral-200/60 pt-4 flex justify-between items-baseline">
+                <div className="border-t border-gray-200/60 pt-4 flex justify-between items-baseline">
                   <div>
-                    <span className="font-semibold text-neutral-900 text-sm block">
+                    <span className="font-bold text-[#2d2d2d] text-sm block">
                       ยอดรวมทั้งสิ้น
                     </span>
-                    <span className="text-[11px] text-neutral-400">
+                    <span className="text-[11px] text-gray-400">
                       ราคารวมภาษีมูลค่าเพิ่มแล้ว
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="font-mono font-semibold text-2xl text-neutral-900">
+                    <span className="font-mono font-extrabold text-2xl sm:text-3xl text-[#E0A800]">
                       ฿{cartTotal.toLocaleString()}
                     </span>
-                    <span className="text-xs font-medium text-neutral-500 ml-1">
+                    <span className="text-xs font-bold text-gray-600 ml-1">
                       บาท
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Submit Button */}
+              {/* Submit Button (Mustard Gold Signature) */}
               <button
                 type="submit"
                 form="checkout-form"
                 disabled={submitting || !isFormValid}
-                className={`w-full py-4 px-6 rounded-xl font-medium text-sm sm:text-base transition-all duration-200 flex items-center justify-center gap-2 ${
+                className={`w-full py-4 px-6 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 flex items-center justify-center gap-2 ${
                   isFormValid && !submitting
-                    ? "bg-neutral-900 hover:bg-neutral-800 text-white shadow-xs active:scale-[0.99]"
-                    : "bg-neutral-100 text-neutral-400 border border-neutral-200 cursor-not-allowed"
+                    ? "bg-[#E0A800] hover:bg-[#c98e10] text-white shadow-md hover:shadow-lg active:scale-[0.99]"
+                    : "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
                 }`}
               >
                 {submitting ? (
@@ -786,29 +786,29 @@ export default function CheckoutPage() {
                 ) : (
                   <>
                     <span>ยืนยันการสั่งซื้อและชำระเงิน</span>
-                    <ChevronRight size={17} />
+                    <ChevronRight size={18} />
                   </>
                 )}
               </button>
 
               {!isFormValid && (
-                <p className="text-[11px] text-neutral-400 text-center mt-3">
+                <p className="text-[11px] text-gray-400 text-center mt-3">
                   * กรุณากรอกชื่อ เบอร์โทร และที่อยู่จัดส่งทางซ้ายให้ครบถ้วน
                 </p>
               )}
 
               {/* Trust Badges */}
-              <div className="mt-6 pt-5 border-t border-neutral-100 flex flex-wrap items-center justify-center gap-4 text-[11px] text-neutral-400">
+              <div className="mt-6 pt-5 border-t border-gray-100 flex flex-wrap items-center justify-center gap-4 text-[11px] text-gray-400 font-medium">
                 <span className="inline-flex items-center gap-1">
-                  <ShieldCheck size={13} className="text-neutral-500" /> ปลอดภัย 100%
+                  <ShieldCheck size={13} className="text-gray-500" /> ปลอดภัย 100%
                 </span>
                 <span>•</span>
                 <span className="inline-flex items-center gap-1">
-                  <Sparkles size={13} className="text-neutral-500" /> วัตถุดิบสดใหม่
+                  <Sparkles size={13} className="text-[#E0A800]" /> วัตถุดิบสดใหม่
                 </span>
                 <span>•</span>
                 <span className="inline-flex items-center gap-1">
-                  <Truck size={13} className="text-neutral-500" /> จัดส่งตรงเวลา
+                  <Truck size={13} className="text-gray-500" /> จัดส่งตรงเวลา
                 </span>
               </div>
             </div>
