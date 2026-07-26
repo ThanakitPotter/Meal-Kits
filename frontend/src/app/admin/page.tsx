@@ -25,6 +25,13 @@ import {
   ShieldCheck,
   X,
   User,
+  BarChart3,
+  TrendingUp,
+  Award,
+  PieChart,
+  DollarSign,
+  Sparkles,
+  Flame,
 } from "lucide-react";
 
 const statusConfig: Record<
@@ -107,7 +114,13 @@ export default function AdminPage() {
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"orders" | "reviews">("orders");
+  const [activeTab, setActiveTab] = useState<
+    "orders" | "analytics" | "reviews"
+  >("orders");
+  const [analyticsTimeframe, setAnalyticsTimeframe] = useState<
+    "7days" | "14days" | "30days"
+  >("7days");
+  const [hoveredDayIndex, setHoveredDayIndex] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentReviewPage, setCurrentReviewPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -209,6 +222,89 @@ export default function AdminPage() {
       return matchStatus && matchQuery;
     });
   }, [orders, statusFilter, searchQuery]);
+
+  // ─── Analytics Calculations ───
+  const topSellingMenus = useMemo(() => {
+    const menuMap: Record<
+      string,
+      { name: string; totalQty: number; totalRevenue: number; servings: number }
+    > = {};
+    orders.forEach((order) => {
+      order.items?.forEach((item) => {
+        if (!menuMap[item.menuName]) {
+          menuMap[item.menuName] = {
+            name: item.menuName,
+            totalQty: 0,
+            totalRevenue: 0,
+            servings: item.servings || 2,
+          };
+        }
+        const qty = item.quantity || 1;
+        menuMap[item.menuName].totalQty += qty;
+        const itemShare =
+          order.totalPrice / (order.items.length || 1);
+        menuMap[item.menuName].totalRevenue += itemShare;
+      });
+    });
+    return Object.values(menuMap)
+      .sort((a, b) => b.totalQty - a.totalQty)
+      .slice(0, 5);
+  }, [orders]);
+
+  const maxMenuQty = useMemo(() => {
+    if (topSellingMenus.length === 0) return 1;
+    return Math.max(...topSellingMenus.map((m) => m.totalQty), 1);
+  }, [topSellingMenus]);
+
+  const revenueChartData = useMemo(() => {
+    const daysCount =
+      analyticsTimeframe === "30days"
+        ? 30
+        : analyticsTimeframe === "14days"
+        ? 14
+        : 7;
+    const days: {
+      dateLabel: string;
+      fullDate: string;
+      revenue: number;
+      ordersCount: number;
+    }[] = [];
+    const now = new Date();
+    for (let i = daysCount - 1; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().slice(0, 10);
+      const label = d.toLocaleDateString("th-TH", {
+        day: "numeric",
+        month: "short",
+      });
+
+      const dayOrders = orders.filter(
+        (o) => o.createdAt && o.createdAt.startsWith(dateStr)
+      );
+      const revenue = dayOrders.reduce(
+        (sum, o) => sum + (o.totalPrice || 0),
+        0
+      );
+      days.push({
+        dateLabel: label,
+        fullDate: dateStr,
+        revenue,
+        ordersCount: dayOrders.length,
+      });
+    }
+    return days;
+  }, [orders, analyticsTimeframe]);
+
+  const maxChartRevenue = useMemo(() => {
+    const maxVal = Math.max(...revenueChartData.map((d) => d.revenue), 1000);
+    return Math.ceil(maxVal * 1.15);
+  }, [revenueChartData]);
+
+  const avgOrderValue = useMemo(() => {
+    if (orders.length === 0) return 0;
+    return Math.round(totalRevenue / orders.length);
+  }, [orders, totalRevenue]);
 
   // Reset page when filter/search changes
   useEffect(() => {
@@ -314,8 +410,9 @@ export default function AdminPage() {
 
           {/* Card 2: Total Revenue */}
           <div
+            onClick={() => setActiveTab("analytics")}
             style={{ animationDelay: "100ms" }}
-            className="group relative overflow-hidden bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(224,168,0,0.14)] hover:border-mustard-200/80 hover:-translate-y-1.5 transition-all duration-300 ease-out animate-fade-in-up"
+            className="group relative overflow-hidden bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(224,168,0,0.14)] hover:border-mustard-200/80 hover:-translate-y-1.5 transition-all duration-300 ease-out animate-fade-in-up cursor-pointer"
           >
             {/* Soft background hover glow */}
             <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-mustard-500/10 blur-2xl group-hover:scale-150 transition-transform duration-500 pointer-events-none" />
@@ -334,7 +431,7 @@ export default function AdminPage() {
             <div className="flex items-center justify-between mt-2 text-xs text-gray-400 relative z-10">
               <span>ยอดรวมคำสั่งซื้อ</span>
               <span className="text-[11px] font-semibold text-mustard-600 opacity-0 group-hover:opacity-100 transition-all duration-200">
-                รายได้สะสม
+                ดูกราฟรายได้ &rarr;
               </span>
             </div>
           </div>
@@ -426,6 +523,17 @@ export default function AdminPage() {
               <span>จัดการออเดอร์ ({orders.length})</span>
             </button>
             <button
+              onClick={() => setActiveTab("analytics")}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                activeTab === "analytics"
+                  ? "bg-white text-[#2d2d2d] shadow-sm"
+                  : "text-gray-600 hover:text-[#2d2d2d]"
+              }`}
+            >
+              <BarChart3 size={16} className="text-mustard-600" />
+              <span>กราฟสถิติ & เมนูฮิต</span>
+            </button>
+            <button
               onClick={() => setActiveTab("reviews")}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 activeTab === "reviews"
@@ -509,6 +617,31 @@ export default function AdminPage() {
             </div>
           )}
         </div>
+
+        {/* Quick Analytics Alert Banner inside Orders view */}
+        {activeTab === "orders" && (
+          <div
+            onClick={() => setActiveTab("analytics")}
+            className="mb-6 bg-gradient-to-r from-mustard-500/10 via-amber-500/10 to-transparent border border-mustard-200/80 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 cursor-pointer hover:bg-mustard-500/15 transition-all duration-200 group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-mustard-500 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                <BarChart3 size={20} />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-[#2d2d2d]">
+                  ดูศูนย์วิเคราะห์สถิติยอดขายและ 5 อันดับเมนูฮิตขายดีที่สุด!
+                </h4>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  เช็คแนวโน้มรายได้ AOV และความพึงพอใจของลูกค้าแบบเรียลไทม์
+                </p>
+              </div>
+            </div>
+            <span className="text-xs font-bold text-mustard-700 bg-white px-4 py-2 rounded-xl shadow-sm border border-mustard-200 group-hover:translate-x-1 transition-transform shrink-0">
+              เปิดศูนย์วิเคราะห์สถิติ &rarr;
+            </span>
+          </div>
+        )}
 
         {/* ─── Orders Tab Content ─── */}
         {activeTab === "orders" && (
@@ -761,6 +894,512 @@ export default function AdminPage() {
                 </div>
               </>
             )}
+          </div>
+        )}
+
+        {/* ─── Analytics Tab Content ─── */}
+        {activeTab === "analytics" && (
+          <div className="space-y-6 animate-fade-in-up">
+            {/* Top Bar: Timeframe Filter & Summary Badges */}
+            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_25px_rgba(0,0,0,0.03)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-mustard-50 border border-mustard-200/60 text-mustard-800 text-xs font-semibold tracking-wide uppercase mb-1">
+                  <Sparkles size={13} className="text-mustard-600" />
+                  <span>SALES ANALYTICS CENTER</span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-extrabold text-[#2d2d2d] tracking-tight">
+                  ศูนย์วิเคราะห์ยอดขายและเมนูยอดนิยม
+                </h2>
+                <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+                  วิเคราะห์แนวโน้มรายได้ สถิติคำสั่งซื้อ และเมนูฮิตประจำร้าน
+                </p>
+              </div>
+
+              {/* Timeframe Selector Pills */}
+              <div className="inline-flex p-1 bg-gray-100 rounded-2xl shrink-0">
+                {(
+                  [
+                    { key: "7days", label: "7 วันล่าสุด" },
+                    { key: "14days", label: "14 วันล่าสุด" },
+                    { key: "30days", label: "30 วันล่าสุด" },
+                  ] as const
+                ).map((tf) => (
+                  <button
+                    key={tf.key}
+                    onClick={() => setAnalyticsTimeframe(tf.key)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
+                      analyticsTimeframe === tf.key
+                        ? "bg-[#2d2d2d] text-white shadow-sm"
+                        : "text-gray-600 hover:text-[#2d2d2d]"
+                    }`}
+                  >
+                    {tf.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Main Charts Row: Revenue Chart (7 Cols) + Top 5 Menus (5 Cols) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Left Column: Interactive SVG Daily Revenue Chart */}
+              <div className="lg:col-span-7 bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_25px_rgba(0,0,0,0.03)] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <h3 className="text-base font-bold text-[#2d2d2d] flex items-center gap-2">
+                        <TrendingUp size={18} className="text-mustard-600" />
+                        <span>แนวโน้มรายได้การขาย (Revenue Trend)</span>
+                      </h3>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        เปรียบเทียบยอดขายและจำนวนคำสั่งซื้อรายวันในจังหวะเวลาที่เลือก
+                      </p>
+                    </div>
+
+                    <div className="text-right">
+                      <span className="text-xs text-gray-400 block font-medium">
+                        รายได้เฉลี่ยต่อบิล
+                      </span>
+                      <span className="text-sm font-bold text-mustard-700 font-mono">
+                        ฿{avgOrderValue.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* SVG Chart Container */}
+                  <div className="mt-6 pt-2 pb-1 px-1 relative overflow-hidden">
+                    <svg
+                      viewBox="0 0 700 220"
+                      className="w-full h-56 sm:h-64 overflow-visible"
+                    >
+                      <defs>
+                        <linearGradient
+                          id="goldBarGrad"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="0%" stopColor="#E0A800" />
+                          <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.4" />
+                        </linearGradient>
+                        <linearGradient
+                          id="goldAreaGrad"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="0%" stopColor="#E0A800" stopOpacity="0.25" />
+                          <stop offset="100%" stopColor="#E0A800" stopOpacity="0.0" />
+                        </linearGradient>
+                      </defs>
+
+                      {/* Horizontal Grid lines and labels */}
+                      {[0, 0.33, 0.66, 1].map((pct, i) => {
+                        const y = 180 - pct * 150;
+                        const val = Math.round(maxChartRevenue * pct);
+                        return (
+                          <g key={i}>
+                            <line
+                              x1="45"
+                              y1={y}
+                              x2="690"
+                              y2={y}
+                              stroke="#F3F4F6"
+                              strokeDasharray="4 4"
+                              strokeWidth="1.5"
+                            />
+                            <text
+                              x="40"
+                              y={y + 4}
+                              textAnchor="end"
+                              className="text-[10px] fill-gray-400 font-mono font-medium"
+                            >
+                              ฿{val >= 1000 ? `${(val / 1000).toFixed(1)}k` : val}
+                            </text>
+                          </g>
+                        );
+                      })}
+
+                      {/* Daily Bars & Labels */}
+                      {revenueChartData.map((day, idx) => {
+                        const totalDays = revenueChartData.length;
+                        const xStep = 620 / totalDays;
+                        const x = 55 + idx * xStep + xStep * 0.15;
+                        const barWidth = Math.max(xStep * 0.55, 12);
+                        const barHeight = Math.max(
+                          (day.revenue / maxChartRevenue) * 150,
+                          4
+                        );
+                        const y = 180 - barHeight;
+                        const isHovered = hoveredDayIndex === idx;
+
+                        return (
+                          <g
+                            key={idx}
+                            onMouseEnter={() => setHoveredDayIndex(idx)}
+                            onMouseLeave={() => setHoveredDayIndex(null)}
+                            className="cursor-pointer group"
+                          >
+                            {/* Bar shadow on hover */}
+                            {isHovered && (
+                              <rect
+                                x={x - 4}
+                                y={30}
+                                width={barWidth + 8}
+                                height={150}
+                                fill="#F9FAFB"
+                                rx="8"
+                              />
+                            )}
+
+                            {/* Main Bar */}
+                            <rect
+                              x={x}
+                              y={y}
+                              width={barWidth}
+                              height={barHeight}
+                              rx="6"
+                              fill="url(#goldBarGrad)"
+                              className="transition-all duration-300 ease-out hover:brightness-110"
+                              stroke={isHovered ? "#B48600" : "none"}
+                              strokeWidth="2"
+                            />
+
+                            {/* Top point dot */}
+                            <circle
+                              cx={x + barWidth / 2}
+                              cy={y}
+                              r={isHovered ? "5" : "3"}
+                              fill="#E0A800"
+                              stroke="white"
+                              strokeWidth="1.5"
+                              className="transition-all duration-200"
+                            />
+
+                            {/* X-Axis Date Label */}
+                            <text
+                              x={x + barWidth / 2}
+                              y="200"
+                              textAnchor="middle"
+                              className={`text-[11px] font-medium transition-colors ${
+                                isHovered
+                                  ? "fill-[#2d2d2d] font-bold"
+                                  : "fill-gray-400"
+                              }`}
+                            >
+                              {day.dateLabel}
+                            </text>
+
+                            {/* Floating Interactive Tooltip */}
+                            {isHovered && (
+                              <g transform={`translate(${Math.min(Math.max(x - 30, 60), 580)}, ${Math.max(y - 48, 10)})`}>
+                                <rect
+                                  x="0"
+                                  y="0"
+                                  width="95"
+                                  height="40"
+                                  rx="8"
+                                  fill="#2d2d2d"
+                                  className="shadow-lg"
+                                />
+                                <text
+                                  x="47"
+                                  y="15"
+                                  textAnchor="middle"
+                                  className="text-[10px] fill-white font-bold font-mono"
+                                >
+                                  ฿{day.revenue.toLocaleString()}
+                                </text>
+                                <text
+                                  x="47"
+                                  y="30"
+                                  textAnchor="middle"
+                                  className="text-[9px] fill-mustard-400 font-medium"
+                                >
+                                  {day.ordersCount} คำสั่งซื้อ
+                                </text>
+                              </g>
+                            )}
+                          </g>
+                        );
+                      })}
+                    </svg>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+                  <div className="flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-md bg-mustard-500 inline-block" />
+                    <span>รายได้สุทธิประจำวัน (THB)</span>
+                  </div>
+                  <span>อัปเดตแบบเรียลไทม์ตามบิลที่เข้ามา</span>
+                </div>
+              </div>
+
+              {/* Right Column: Top 5 Best Selling Menu Items */}
+              <div className="lg:col-span-5 bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_25px_rgba(0,0,0,0.03)] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <h3 className="text-base font-bold text-[#2d2d2d] flex items-center gap-2">
+                        <Award size={19} className="text-mustard-600" />
+                        <span>5 อันดับเมนูฮิตขายดีที่สุด</span>
+                      </h3>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        จัดอันดับจากจำนวนเสิร์ฟที่ลูกค้าสั่งในระบบ
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 space-y-4">
+                    {topSellingMenus.length === 0 ? (
+                      <div className="py-12 text-center text-gray-400 text-sm">
+                        ยังไม่มีข้อมูลรายการอาหารที่ถูกสั่งซื้อ
+                      </div>
+                    ) : (
+                      topSellingMenus.map((menu, idx) => {
+                        const pct = Math.round(
+                          (menu.totalQty / maxMenuQty) * 100
+                        );
+                        const medalColors = [
+                          "bg-amber-100 text-amber-700 border-amber-200",
+                          "bg-gray-100 text-gray-700 border-gray-200",
+                          "bg-amber-50 text-amber-800 border-amber-100",
+                          "bg-gray-50 text-gray-600 border-gray-100",
+                          "bg-gray-50 text-gray-600 border-gray-100",
+                        ];
+
+                        return (
+                          <div key={menu.name} className="group">
+                            <div className="flex items-center justify-between text-xs sm:text-sm mb-1.5">
+                              <div className="flex items-center gap-2.5 truncate pr-2">
+                                <span
+                                  className={`w-6 h-6 rounded-lg border flex items-center justify-center font-bold text-xs shrink-0 ${
+                                    medalColors[idx] ||
+                                    "bg-gray-50 text-gray-500"
+                                  }`}
+                                >
+                                  #{idx + 1}
+                                </span>
+                                <span className="font-bold text-[#2d2d2d] truncate">
+                                  {menu.name}
+                                </span>
+                              </div>
+
+                              <div className="text-right shrink-0">
+                                <span className="font-extrabold text-[#2d2d2d] font-mono">
+                                  {menu.totalQty} เสิร์ฟ
+                                </span>
+                                <span className="text-[11px] text-gray-400 block font-mono">
+                                  ฿{Math.round(menu.totalRevenue).toLocaleString()}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Animated Progress Bar */}
+                            <div className="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                              <div
+                                style={{ width: `${pct}%` }}
+                                className={`h-full rounded-full transition-all duration-700 ease-out ${
+                                  idx === 0
+                                    ? "bg-gradient-to-r from-mustard-500 to-amber-400"
+                                    : idx === 1
+                                    ? "bg-gray-400"
+                                    : "bg-mustard-400/80"
+                                }`}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+
+                <div className="pt-4 mt-6 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+                  <span>ข้อมูลคำนวณจากทุกออเดอร์ในร้าน</span>
+                  <span className="font-semibold text-mustard-600">
+                    TOP 5 MEAL KITS
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Row: Order Status Distribution + Customer Satisfaction Insights */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Card 1: Order Status Distribution */}
+              <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_25px_rgba(0,0,0,0.03)] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-base font-bold text-[#2d2d2d] flex items-center gap-2">
+                        <PieChart size={18} className="text-mustard-600" />
+                        <span>สัดส่วนสถานะคำสั่งซื้อ (Order Status)</span>
+                      </h3>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        โครงสร้างออเดอร์ตามขั้นตอนการจัดเตรียมและจัดส่ง
+                      </p>
+                    </div>
+
+                    <span className="text-xs font-mono font-bold bg-gray-100 px-2.5 py-1 rounded-xl text-[#2d2d2d]">
+                      รวม {orders.length} บิล
+                    </span>
+                  </div>
+
+                  <div className="space-y-4 my-2">
+                    {[
+                      {
+                        label: "รอดำเนินการ",
+                        count: orders.filter((o) => o.status === "รอดำเนินการ")
+                          .length,
+                        color: "bg-red-500",
+                        bg: "bg-red-50 text-red-700",
+                      },
+                      {
+                        label: "กำลังจัดเตรียม",
+                        count: orders.filter(
+                          (o) => o.status === "กำลังจัดเตรียม"
+                        ).length,
+                        color: "bg-amber-500",
+                        bg: "bg-amber-50 text-amber-800",
+                      },
+                      {
+                        label: "จัดส่งแล้ว",
+                        count: orders.filter((o) => o.status === "จัดส่งแล้ว")
+                          .length,
+                        color: "bg-emerald-500",
+                        bg: "bg-emerald-50 text-emerald-800",
+                      },
+                    ].map((st) => {
+                      const total = orders.length || 1;
+                      const pct = Math.round((st.count / total) * 100);
+
+                      return (
+                        <div key={st.label} className="space-y-1.5">
+                          <div className="flex justify-between items-center text-xs sm:text-sm">
+                            <span className="font-semibold text-[#2d2d2d]">
+                              {st.label}
+                            </span>
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`px-2 py-0.5 rounded-lg text-xs font-bold font-mono ${st.bg}`}
+                              >
+                                {st.count} ออเดอร์
+                              </span>
+                              <span className="font-mono text-xs text-gray-400 w-9 text-right">
+                                {pct}%
+                              </span>
+                            </div>
+                          </div>
+                          <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                            <div
+                              style={{ width: `${pct}%` }}
+                              className={`h-full rounded-full transition-all duration-500 ${st.color}`}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="pt-4 mt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+                  <span>ช่วยให้แอดมินดูความหนาแน่นของครัวได้ทันที</span>
+                  <button
+                    onClick={() => setActiveTab("orders")}
+                    className="font-bold text-mustard-600 hover:underline"
+                  >
+                    ดูรายการออเดอร์ &rarr;
+                  </button>
+                </div>
+              </div>
+
+              {/* Card 2: Customer Satisfaction & Review Insights */}
+              <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_25px_rgba(0,0,0,0.03)] flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-base font-bold text-[#2d2d2d] flex items-center gap-2">
+                        <Flame size={18} className="text-mustard-600" />
+                        <span>ความพึงพอใจและรีวิว (Satisfaction)</span>
+                      </h3>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        คะแนนเฉลี่ยที่ลูกค้ามอบให้กับชุด Meal Kits ของเรา
+                      </p>
+                    </div>
+
+                    <span className="text-xs font-mono font-bold bg-mustard-50 text-mustard-800 px-2.5 py-1 rounded-xl">
+                      {reviews.length} รีวิว
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-6 my-4 bg-mustard-50/50 rounded-2xl p-5 border border-mustard-100/60">
+                    <div className="text-center">
+                      <div className="text-3xl sm:text-4xl font-extrabold text-mustard-600 font-mono">
+                        4.9
+                      </div>
+                      <div className="flex items-center justify-center gap-0.5 text-mustard-500 my-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            size={14}
+                            className="fill-mustard-500"
+                          />
+                        ))}
+                      </div>
+                      <span className="text-[11px] text-gray-500 font-medium">
+                        คะแนนเฉลี่ยรวม
+                      </span>
+                    </div>
+
+                    <div className="h-12 w-px bg-mustard-200/60" />
+
+                    <div className="space-y-1 flex-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-gray-600 font-medium">
+                          ความพอใจ 5 ดาว
+                        </span>
+                        <span className="font-bold text-[#2d2d2d] font-mono">
+                          96%
+                        </span>
+                      </div>
+                      <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          style={{ width: "96%" }}
+                          className="h-full bg-mustard-500 rounded-full"
+                        />
+                      </div>
+
+                      <div className="flex justify-between text-xs pt-1">
+                        <span className="text-gray-600 font-medium">
+                          อัตราการเขียนรีวิว
+                        </span>
+                        <span className="font-bold text-[#2d2d2d] font-mono">
+                          88%
+                        </span>
+                      </div>
+                      <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          style={{ width: "88%" }}
+                          className="h-full bg-emerald-500 rounded-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4 mt-2 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+                  <span>เสียงตอบรับจากลูกค้าจริงผู้ชิมอาหาร</span>
+                  <button
+                    onClick={() => setActiveTab("reviews")}
+                    className="font-bold text-mustard-600 hover:underline"
+                  >
+                    อ่านรีวิวทั้งหมด ({reviews.length}) &rarr;
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
