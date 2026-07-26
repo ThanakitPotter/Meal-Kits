@@ -170,8 +170,8 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-8 md:py-12">
-      <div className="breadcrumbs text-sm mb-6">
+    <div className="container mx-auto max-w-6xl px-3 sm:px-4 py-6 sm:py-8 md:py-12">
+      <div className="breadcrumbs text-xs sm:text-sm mb-4 sm:mb-6">
         <ul>
           <li><Link href="/">หน้าแรก</Link></li>
           <li><Link href="/cart">ตะกร้าสินค้า</Link></li>
@@ -179,23 +179,23 @@ export default function CheckoutPage() {
         </ul>
       </div>
 
-      <h1 className="text-3xl font-extrabold mb-8 text-base-content">ข้อมูลการจัดส่งและชำระเงิน</h1>
+      <h1 className="text-2xl sm:text-3xl font-extrabold mb-6 sm:mb-8 text-[#193B68] tracking-tight">ข้อมูลการจัดส่งและชำระเงิน</h1>
 
-      <div className="grid lg:grid-cols-2 gap-10">
+      <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
         <div>
-          <div className="card bg-white shadow-xl border border-gray-100 rounded-3xl overflow-hidden">
-            <div className="bg-gradient-to-r from-[#193B68] to-[#122b4d] p-6 text-white border-b border-blue-900/50">
-              <h2 className="text-xl font-bold flex items-center gap-2.5">
-                <span className="bg-mustard-500 text-white w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black shadow-md">1</span>
+          <div className="card bg-white shadow-xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden">
+            <div className="bg-gradient-to-r from-[#193B68] to-[#122b4d] p-4 sm:p-6 text-white border-b border-blue-900/50">
+              <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2.5">
+                <span className="bg-mustard-500 text-white w-7 sm:w-8 h-7 sm:h-8 rounded-xl flex items-center justify-center text-xs sm:text-sm font-black shadow-md">1</span>
                 <span>ที่อยู่จัดส่ง</span>
               </h2>
             </div>
-            <div className="card-body p-6 md:p-8">
-              <form id="checkout-form" onSubmit={handleSubmit} className="space-y-5">
+            <div className="card-body p-4 sm:p-6 md:p-8">
+              <form id="checkout-form" onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                 <div className="form-control">
                   <label className="label"><span className="label-text font-bold text-base-content/80">ประเภทการสั่งซื้อ <span className="text-error">*</span></span></label>
-                  <div className="grid grid-cols-2 gap-4 mt-1">
-                    <label className={`cursor-pointer flex items-center gap-3 p-4 border rounded-xl transition-all ${form.orderType === 'one-time' ? 'border-primary bg-primary/5' : 'border-base-300 hover:border-primary/50'}`}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 mt-1">
+                    <label className={`cursor-pointer flex items-center gap-2.5 sm:gap-3 p-3.5 sm:p-4 border rounded-xl transition-all ${form.orderType === 'one-time' ? 'border-primary bg-primary/5' : 'border-base-300 hover:border-primary/50'}`}>
                       <input
                         type="radio"
                         name="orderType"
@@ -203,9 +203,9 @@ export default function CheckoutPage() {
                         checked={form.orderType === 'one-time'}
                         onChange={() => updateField("orderType", "one-time")}
                       />
-                      <span className="label-text font-medium text-base-content">สั่งครั้งเดียว</span>
+                      <span className="label-text font-medium text-sm sm:text-base text-base-content">สั่งครั้งเดียว</span>
                     </label>
-                    <label className={`cursor-pointer flex items-center gap-3 p-4 border rounded-xl transition-all ${form.orderType === 'subscription' ? 'border-primary bg-primary/5' : 'border-base-300 hover:border-primary/50'}`}>
+                    <label className={`cursor-pointer flex items-center gap-2.5 sm:gap-3 p-3.5 sm:p-4 border rounded-xl transition-all ${form.orderType === 'subscription' ? 'border-primary bg-primary/5' : 'border-base-300 hover:border-primary/50'}`}>
                       <input
                         type="radio"
                         name="orderType"
@@ -213,7 +213,7 @@ export default function CheckoutPage() {
                         checked={form.orderType === 'subscription'}
                         onChange={() => updateField("orderType", "subscription")}
                       />
-                      <span className="label-text font-medium text-base-content">สั่งประจำ</span>
+                      <span className="label-text font-medium text-sm sm:text-base text-base-content">สั่งประจำ</span>
                     </label>
                   </div>
 
@@ -288,15 +288,15 @@ export default function CheckoutPage() {
                     {/* Option 1: สแกน QR พร้อมเพย์ (PromptPay - ฟรี 0%) */}
                     <div
                       onClick={() => setPaymentMethod("promptpay")}
-                      className={`cursor-pointer border-2 rounded-2xl p-5 transition-all duration-300 ${paymentMethod === "promptpay"
+                      className={`cursor-pointer border-2 rounded-2xl p-4 sm:p-5 transition-all duration-300 ${paymentMethod === "promptpay"
                           ? "border-mustard-500 bg-mustard-500/5 shadow-md"
                           : "border-gray-200 hover:border-mustard-300 bg-white"
                         }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
+                        <div className="flex items-start sm:items-center gap-2.5 sm:gap-3">
                           <div
-                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === "promptpay"
+                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 sm:mt-0 ${paymentMethod === "promptpay"
                                 ? "border-mustard-600 bg-mustard-500"
                                 : "border-gray-300"
                               }`}
@@ -306,8 +306,8 @@ export default function CheckoutPage() {
                             )}
                           </div>
                           <div>
-                            <span className="font-bold text-base text-[#2d2d2d] flex items-center gap-2">
-                              <QrCode className="w-5 h-5 text-mustard-600" />
+                            <span className="font-bold text-sm sm:text-base text-[#2d2d2d] flex flex-wrap items-center gap-1.5 sm:gap-2">
+                              <QrCode className="w-4 h-4 sm:w-5 sm:h-5 text-mustard-600 shrink-0" />
                               <span>สแกน QR พร้อมเพย์ (PromptPay)</span>
                               <span className="text-xs bg-emerald-500 text-white font-bold px-2.5 py-0.5 rounded-full shadow-sm">
                                 ฟรี 0%
@@ -318,7 +318,7 @@ export default function CheckoutPage() {
                             </p>
                           </div>
                         </div>
-                        <span className="text-xs font-bold text-mustard-700 bg-mustard-100/80 px-2.5 py-1 rounded-lg">
+                        <span className="text-xs font-bold text-mustard-700 bg-mustard-100/80 px-2.5 py-1 rounded-lg self-start sm:self-auto">
                           แนะนำ
                         </span>
                       </div>
@@ -327,7 +327,7 @@ export default function CheckoutPage() {
                       {paymentMethod === "promptpay" && (
                         <div className="mt-5 pt-5 border-t border-mustard-200/60 animate-fade-in-up">
                           {/* Thai QR Payment Standard Style Header */}
-                          <div className="bg-[#193B68] text-white rounded-2xl p-5 shadow-lg max-w-sm mx-auto border border-blue-800">
+                          <div className="bg-[#193B68] text-white rounded-2xl p-4 sm:p-5 shadow-lg max-w-full sm:max-w-sm mx-auto border border-blue-800">
                             <div className="flex items-center justify-between border-b border-blue-400/30 pb-3 mb-4">
                               <div className="flex items-center gap-2">
                                 <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center font-black text-[#193B68] text-xs">
@@ -490,7 +490,7 @@ export default function CheckoutPage() {
                           </div>
 
                           {/* Easy Scan-and-Go Notice */}
-                          <div className="mt-4 max-w-sm mx-auto bg-emerald-50/90 border border-emerald-200 rounded-xl p-3.5 text-center">
+                          <div className="mt-4 max-w-full sm:max-w-sm mx-auto bg-emerald-50/90 border border-emerald-200 rounded-xl p-3.5 text-center">
                             <p className="text-xs font-bold text-emerald-800">
                               สแกนจ่ายเสร็จแล้ว กด &quot;ยืนยันคำสั่งซื้อ&quot; ด้านล่างได้ทันที
                             </p>
@@ -505,15 +505,15 @@ export default function CheckoutPage() {
                     {/* Option 2: เก็บเงินปลายทาง (COD) */}
                     <div
                       onClick={() => setPaymentMethod("cod")}
-                      className={`cursor-pointer border-2 rounded-2xl p-5 transition-all duration-300 ${paymentMethod === "cod"
+                      className={`cursor-pointer border-2 rounded-2xl p-4 sm:p-5 transition-all duration-300 ${paymentMethod === "cod"
                           ? "border-mustard-500 bg-mustard-500/5 shadow-md"
                           : "border-gray-200 hover:border-mustard-300 bg-white"
                         }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
+                        <div className="flex items-start sm:items-center gap-2.5 sm:gap-3">
                           <div
-                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === "cod"
+                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 sm:mt-0 ${paymentMethod === "cod"
                                 ? "border-mustard-600 bg-mustard-500"
                                 : "border-gray-300"
                               }`}
@@ -523,8 +523,8 @@ export default function CheckoutPage() {
                             )}
                           </div>
                           <div>
-                            <span className="font-bold text-base text-[#2d2d2d] flex items-center gap-2">
-                              <Wallet className="w-5 h-5 text-mustard-600" />
+                            <span className="font-bold text-sm sm:text-base text-[#2d2d2d] flex flex-wrap items-center gap-1.5 sm:gap-2">
+                              <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-mustard-600 shrink-0" />
                               <span>เก็บเงินปลายทาง (Cash on Delivery)</span>
                               <span className="text-xs bg-gray-100 text-gray-700 font-bold px-2 py-0.5 rounded-full">
                                 จ่ายกับคนส่ง
@@ -563,57 +563,57 @@ export default function CheckoutPage() {
         </div>
 
         <div>
-          <div className="card bg-white shadow-2xl border border-gray-100 rounded-3xl sticky top-24 overflow-hidden">
+          <div className="card bg-white shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl lg:sticky lg:top-24 overflow-hidden">
             {/* Premium Header */}
-            <div className="bg-gradient-to-r from-[#193B68] to-[#142d50] p-6 md:p-7 text-white relative overflow-hidden">
+            <div className="bg-gradient-to-r from-[#193B68] to-[#142d50] p-5 sm:p-6 md:p-7 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-mustard-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
               <div className="relative z-10 flex items-center justify-between">
-                <h2 className="text-xl font-black tracking-wide flex items-center gap-2.5">
-                  <span className="bg-mustard-500 text-white w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black shadow-md">
+                <h2 className="text-lg sm:text-xl font-black tracking-wide flex items-center gap-2 sm:gap-2.5">
+                  <span className="bg-mustard-500 text-white w-7 sm:w-8 h-7 sm:h-8 rounded-xl flex items-center justify-center text-xs sm:text-sm font-black shadow-md">
                     3
                   </span>
                   <span>สรุปคำสั่งซื้อ</span>
                 </h2>
-                <span className="text-xs bg-white/10 px-3 py-1.5 rounded-full font-bold text-blue-100 border border-white/10">
+                <span className="text-[11px] sm:text-xs bg-white/10 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full font-bold text-blue-100 border border-white/10">
                   {cartItems.length} รายการ
                 </span>
               </div>
             </div>
 
-            <div className="card-body p-6 md:p-7">
+            <div className="card-body p-4 sm:p-6 md:p-7">
               {/* Modern Item Cards List */}
-              <div className="space-y-3 mb-6 max-h-[340px] overflow-y-auto pr-1">
+              <div className="space-y-2.5 sm:space-y-3 mb-5 sm:mb-6 max-h-[340px] overflow-y-auto pr-1">
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between p-3.5 rounded-2xl bg-gray-50/80 border border-gray-100 hover:border-mustard-200 hover:bg-white hover:shadow-xs transition-all"
+                    className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-gray-50/80 border border-gray-100 hover:border-mustard-200 hover:bg-white hover:shadow-xs transition-all gap-2"
                   >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-mustard-100/70 text-mustard-700 flex items-center justify-center font-bold text-sm shrink-0 shadow-inner">
+                    <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                      <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg sm:rounded-xl bg-mustard-100/70 text-mustard-700 flex items-center justify-center font-bold text-xs sm:text-sm shrink-0 shadow-inner">
                         {item.quantity}×
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <h4 className="font-bold text-[#2d2d2d] text-sm md:text-base truncate">
+                          <h4 className="font-bold text-[#2d2d2d] text-xs sm:text-sm md:text-base truncate">
                             {item.menuName}
                           </h4>
                           {item.price === 1 && (
-                            <span className="text-[10px] font-black bg-emerald-500 text-white px-2 py-0.5 rounded-md shadow-2xs">
+                            <span className="text-[9px] sm:text-[10px] font-black bg-emerald-500 text-white px-1.5 sm:px-2 py-0.5 rounded-md shadow-2xs shrink-0">
                               TEST 1฿
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-400 mt-0.5">
+                        <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5">
                           สำหรับ {item.servings} ท่าน
                         </p>
                       </div>
                     </div>
-                    <div className="text-right shrink-0 pl-3">
-                      <span className="font-extrabold text-[#2d2d2d] text-base font-mono">
+                    <div className="text-right shrink-0 pl-2 sm:pl-3">
+                      <span className="font-extrabold text-[#2d2d2d] text-sm sm:text-base font-mono">
                         ฿{(item.price * item.quantity).toLocaleString()}
                       </span>
                       {item.quantity > 1 && (
-                        <span className="block text-[11px] text-gray-400">
+                        <span className="block text-[10px] sm:text-[11px] text-gray-400">
                           (฿{item.price.toLocaleString()}/ชิ้น)
                         </span>
                       )}
@@ -623,32 +623,32 @@ export default function CheckoutPage() {
               </div>
 
               {/* Price Breakdown Card */}
-              <div className="bg-gray-50/70 rounded-2xl p-4 border border-gray-100 space-y-3 mb-6">
-                <div className="flex justify-between items-center text-sm">
+              <div className="bg-gray-50/70 rounded-2xl p-3.5 sm:p-4 border border-gray-100 space-y-2.5 sm:space-y-3 mb-5 sm:mb-6">
+                <div className="flex justify-between items-center text-xs sm:text-sm">
                   <span className="text-gray-500 font-medium">ค่าอาหารรวม ({cartItems.length} เมนู)</span>
                   <span className="font-bold text-[#2d2d2d] font-mono">
                     ฿{cartTotal.toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between items-center text-sm">
+                <div className="flex justify-between items-center text-xs sm:text-sm">
                   <span className="text-gray-500 font-medium flex items-center gap-1.5">
-                    <Truck className="w-4 h-4 text-emerald-600" /> ค่าจัดส่งแบบคุมอุณหภูมิ
+                    <Truck className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-emerald-600 shrink-0" /> ค่าจัดส่งแบบคุมอุณหภูมิ
                   </span>
-                  <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                  <span className="text-[11px] sm:text-xs font-bold text-emerald-700 bg-emerald-100 px-2 sm:px-2.5 py-0.5 rounded-full">
                     ฟรี (0 บาท)
                   </span>
                 </div>
                 <div className="border-t border-gray-200/60 pt-3 flex justify-between items-baseline">
                   <div>
-                    <span className="font-extrabold text-[#2d2d2d] text-base block">
+                    <span className="font-extrabold text-[#2d2d2d] text-sm sm:text-base block">
                       ยอดรวมทั้งสิ้น
                     </span>
-                    <span className="text-[11px] text-gray-400">
+                    <span className="text-[10px] sm:text-[11px] text-gray-400">
                       ราคารวมภาษีมูลค่าเพิ่มแล้ว
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="font-mono font-black text-2xl md:text-3xl text-amber-500 tracking-tight">
+                    <span className="font-mono font-black text-xl sm:text-2xl md:text-3xl text-amber-500 tracking-tight">
                       ฿{cartTotal.toLocaleString()}
                     </span>
                     <span className="text-xs font-bold text-[#2d2d2d] ml-1">บาท</span>
@@ -656,12 +656,12 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* Interactive Submit Button */}
+              {/* Interactive Submit Button - touch friendly 48px+ height for iOS/Android */}
               <button
                 type="submit"
                 form="checkout-form"
                 disabled={submitting || !isFormValid}
-                className={`w-full py-4 px-6 rounded-2xl font-bold text-base md:text-lg transition-all duration-300 flex items-center justify-center gap-2 ${
+                className={`w-full py-3.5 sm:py-4 px-4 sm:px-6 rounded-2xl font-bold text-sm sm:text-base md:text-lg transition-all duration-300 flex items-center justify-center gap-2 ${
                   isFormValid && !submitting
                     ? "bg-gradient-to-r from-emerald-500 via-green-600 to-emerald-600 hover:from-emerald-600 hover:to-green-700 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.01] active:scale-[0.99]"
                     : "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
@@ -675,31 +675,31 @@ export default function CheckoutPage() {
                 ) : (
                   <>
                     <span>ยืนยันการสั่งซื้อและชำระเงิน</span>
-                    <CheckCircle2 className="w-5 h-5" />
+                    <CheckCircle2 className="w-5 h-5 shrink-0" />
                   </>
                 )}
               </button>
 
               {/* Helpful Hint when Form is Incomplete */}
               {!isFormValid && (
-                <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-amber-600 font-medium bg-amber-50/80 py-2 px-3 rounded-xl border border-amber-200/60">
+                <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-amber-600 font-medium bg-amber-50/80 py-2 px-3 rounded-xl border border-amber-200/60 text-center">
                   <Info className="w-3.5 h-3.5 shrink-0" />
                   <span>กรุณากรอกชื่อ เบอร์โทร และที่อยู่จัดส่งให้ครบถ้วน</span>
                 </div>
               )}
 
-              {/* Security & Quality Trust Badges */}
-              <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-center gap-4 text-[11px] text-gray-400 font-medium">
+              {/* Security & Quality Trust Badges - flex-wrap for small phone screens */}
+              <div className="mt-5 pt-4 border-t border-gray-100 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[10px] sm:text-[11px] text-gray-400 font-medium">
                 <span className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> วัตถุดิบสดใหม่
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> วัตถุดิบสดใหม่
                 </span>
-                <span>•</span>
+                <span className="hidden sm:inline">•</span>
                 <span className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> ปลอดภัย 100%
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> ปลอดภัย 100%
                 </span>
-                <span>•</span>
+                <span className="hidden sm:inline">•</span>
                 <span className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> ส่งตรงเวลา
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> ส่งตรงเวลา
                 </span>
               </div>
             </div>
