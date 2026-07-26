@@ -563,7 +563,7 @@ export default function CheckoutPage() {
         </div>
 
         <div>
-          <div className="card bg-white shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl lg:sticky lg:top-24 overflow-hidden">
+          <div className="card bg-white shadow-2xl border border-gray-100 rounded-2xl sm:rounded-3xl overflow-hidden">
             {/* Premium Header */}
             <div className="bg-gradient-to-r from-[#193B68] to-[#142d50] p-5 sm:p-6 md:p-7 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-mustard-500/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
