@@ -127,7 +127,11 @@ export default function CheckoutPage() {
                 <span className="text-mustard-700 font-bold inline-flex items-center gap-1.5">
                   {paymentMethod === "promptpay" ? (
                     <>
-                      <QrCode className="w-4 h-4 inline" />
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/c/c5/PromptPay-logo.png"
+                        alt="PromptPay"
+                        className="h-4 w-auto object-contain inline-block"
+                      />
                       <span>สแกน QR พร้อมเพย์ (ฟรี 0%)</span>
                     </>
                   ) : (
@@ -308,7 +312,14 @@ export default function CheckoutPage() {
                           <div>
                             <span className="font-bold text-sm sm:text-base text-[#2d2d2d] flex flex-wrap items-center gap-1.5 sm:gap-2">
                               <QrCode className="w-4 h-4 sm:w-5 sm:h-5 text-mustard-600 shrink-0" />
-                              <span>สแกน QR พร้อมเพย์ (PromptPay)</span>
+                              <span>สแกน QR พร้อมเพย์</span>
+                              <div className="bg-white border border-gray-200 rounded-md px-1.5 py-0.5 flex items-center shadow-2xs">
+                                <img
+                                  src="https://upload.wikimedia.org/wikipedia/commons/c/c5/PromptPay-logo.png"
+                                  alt="PromptPay Logo"
+                                  className="h-3.5 sm:h-4 w-auto object-contain"
+                                />
+                              </div>
                               <span className="text-xs bg-emerald-500 text-white font-bold px-2.5 py-0.5 rounded-full shadow-sm">
                                 ฟรี 0%
                               </span>
@@ -329,15 +340,19 @@ export default function CheckoutPage() {
                           {/* Thai QR Payment Standard Style Header */}
                           <div className="bg-[#193B68] text-white rounded-2xl p-4 sm:p-5 shadow-lg max-w-full sm:max-w-sm mx-auto border border-blue-800">
                             <div className="flex items-center justify-between border-b border-blue-400/30 pb-3 mb-4">
-                              <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center font-black text-[#193B68] text-xs">
-                                  QR
+                              <div className="flex items-center gap-2.5">
+                                <div className="bg-white rounded-xl px-2.5 py-1.5 flex items-center justify-center shadow-sm shrink-0">
+                                  <img
+                                    src="https://upload.wikimedia.org/wikipedia/commons/c/c5/PromptPay-logo.png"
+                                    alt="PromptPay Logo"
+                                    className="h-6 sm:h-7 w-auto object-contain"
+                                  />
                                 </div>
                                 <div>
-                                  <h4 className="text-sm font-extrabold tracking-wide">
+                                  <h4 className="text-sm sm:text-base font-extrabold tracking-wide text-white">
                                     THAI QR PAYMENT
                                   </h4>
-                                  <p className="text-[10px] text-blue-200">
+                                  <p className="text-[11px] text-blue-200 font-medium">
                                     พร้อมเพย์ (PromptPay)
                                   </p>
                                 </div>
