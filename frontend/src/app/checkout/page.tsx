@@ -687,7 +687,7 @@ export default function CheckoutPage() {
               </div>
 
               {/* Items List */}
-              <div className="space-y-4 mb-6 max-h-[360px] overflow-y-auto pr-1">
+              <div className="space-y-4 mb-6">
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
