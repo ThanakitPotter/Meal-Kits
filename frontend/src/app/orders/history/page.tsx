@@ -11,27 +11,15 @@ import {
   Truck,
   Inbox,
   ArrowLeft,
-  Star,
   Calendar,
   Sparkles,
-  ArrowRight,
+  CheckCircle2,
 } from "lucide-react";
-import ReviewModal from "@/components/ReviewModal";
 
 const statusConfig: Record<
   string,
   { label: string; badge: string; icon: any }
 > = {
-  "รอดำเนินการ": {
-    label: "รอดำเนินการ",
-    badge: "bg-red-50 text-red-600 border border-red-200/80",
-    icon: Clock,
-  },
-  "กำลังจัดเตรียม": {
-    label: "กำลังจัดเตรียม",
-    badge: "bg-amber-50 text-amber-700 border border-amber-200/80",
-    icon: Package,
-  },
   "จัดส่งแล้ว": {
     label: "จัดส่งแล้ว",
     badge: "bg-emerald-50 text-emerald-700 border border-emerald-200/80",
@@ -39,13 +27,10 @@ const statusConfig: Record<
   },
 };
 
-export default function UserOrdersPage() {
+export default function OrderHistoryPage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedReviewOrder, setSelectedReviewOrder] = useState<string | null>(
-    null
-  );
 
   const fetchOrders = (userId: string) => {
     fetch(`/api/orders/user/${userId}`)
@@ -73,20 +58,21 @@ export default function UserOrdersPage() {
     return () => clearInterval(interval);
   }, [router]);
 
-  // Current active orders: status is pending, preparing, OR delivered but not yet reviewed
-  const currentOrders = useMemo(() => {
+  // Order history: ONLY orders that are delivered AND reviewed by customer
+  const historyOrders = useMemo(() => {
+    return orders.filter(
+      (o) => o.status === "จัดส่งแล้ว" && o.isReviewed
+    );
+  }, [orders]);
+
+  // Active orders count for link button
+  const activeCount = useMemo(() => {
     return orders.filter(
       (o) =>
         o.status === "รอดำเนินการ" ||
         o.status === "กำลังจัดเตรียม" ||
         (o.status === "จัดส่งแล้ว" && !o.isReviewed)
-    );
-  }, [orders]);
-
-  // Count of completed history orders to show on the navigation button
-  const historyCount = useMemo(() => {
-    return orders.filter((o) => o.status === "จัดส่งแล้ว" && o.isReviewed)
-      .length;
+    ).length;
   }, [orders]);
 
   const formatDate = (dateStr: string) => {
@@ -106,32 +92,28 @@ export default function UserOrdersPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-mustard-50 border border-mustard-200/60 text-mustard-800 text-xs font-semibold tracking-wide uppercase mb-2">
-                <Sparkles size={13} className="text-mustard-600" />
-                <span>MY ACTIVE ORDERS</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/60 text-emerald-800 text-xs font-semibold tracking-wide uppercase mb-2">
+                <Sparkles size={13} className="text-emerald-600" />
+                <span>MY COMPLETED ORDERS</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-[#2d2d2d] tracking-tight flex items-center gap-3">
-                <span>ออเดอร์ที่เพิ่งสั่ง</span>
-                <span className="text-sm font-mono font-bold bg-[#2d2d2d] text-white px-2.5 py-1 rounded-xl">
-                  {currentOrders.length}
+                <span>ประวัติการสั่งซื้อ</span>
+                <span className="text-sm font-mono font-bold bg-emerald-600 text-white px-2.5 py-1 rounded-xl">
+                  {historyOrders.length}
                 </span>
               </h1>
               <p className="text-sm text-gray-500 mt-1">
-                ติดตามสถานะอาหารที่กำลังจัดส่ง และออเดอร์ที่รอคุณรีวิว
+                รายการออเดอร์ Meal Kits ที่จัดส่งถึงมือคุณ และทำการรีวิวเสร็จสิ้นเรียบร้อยแล้ว
               </p>
             </div>
 
             <div className="flex items-center gap-3">
               <Link
-                href="/orders/history"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-white border border-gray-200/80 shadow-sm hover:bg-gray-50 text-[#2d2d2d] text-sm font-bold transition-all duration-200 group"
+                href="/orders"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-[#2d2d2d] text-white shadow-md hover:bg-[#3d3d3d] text-sm font-bold transition-all duration-200"
               >
-                <ShoppingBag size={16} className="text-emerald-600" />
-                <span>ประวัติการสั่งซื้อ ({historyCount})</span>
-                <ArrowRight
-                  size={15}
-                  className="text-gray-400 group-hover:translate-x-0.5 transition-transform"
-                />
+                <Clock size={16} className="text-mustard-400" />
+                <span>ออเดอร์ปัจจุบัน ({activeCount})</span>
               </Link>
 
               <Link
@@ -151,29 +133,27 @@ export default function UserOrdersPage() {
         <div className="bg-white rounded-3xl border border-gray-100 shadow-[0_4px_25px_rgba(0,0,0,0.03)] overflow-hidden animate-fade-in-up">
           {loading ? (
             <div className="py-20 flex flex-col items-center justify-center">
-              <span className="loading loading-spinner loading-lg text-mustard-500 mb-4"></span>
-              <p className="text-sm text-gray-400">กำลังโหลดคำสั่งซื้อ...</p>
+              <span className="loading loading-spinner loading-lg text-emerald-500 mb-4"></span>
+              <p className="text-sm text-gray-400">กำลังโหลดประวัติการสั่งซื้อ...</p>
             </div>
-          ) : currentOrders.length === 0 ? (
+          ) : historyOrders.length === 0 ? (
             <div className="py-20 flex flex-col items-center justify-center text-center px-4">
               <div className="w-16 h-16 rounded-3xl bg-gray-100 flex items-center justify-center text-gray-400 mb-4">
                 <Inbox size={32} />
               </div>
               <p className="text-base font-bold text-[#2d2d2d]">
-                ไม่มีออเดอร์ที่กำลังดำเนินการในขณะนี้
+                ยังไม่มีประวัติการสั่งซื้อที่เสร็จสิ้น
               </p>
               <p className="text-xs text-gray-400 mt-1 mb-6 max-w-sm">
-                ออเดอร์ที่จัดส่งและคุณทำการรีวิวเรียบร้อยแล้ว จะถูกย้ายไปเก็บที่หน้า &ldquo;ประวัติการสั่งซื้อ&rdquo; ครับ
+                เมื่อคุณได้รับอาหารจากออเดอร์ปัจจุบันและทำการเขียนรีวิวเมนูเรียบร้อยแล้ว ประวัติคำสั่งซื้อจะถูกย้ายมาแสดงที่นี่ครับ
               </p>
               <div className="flex items-center gap-3">
-                {historyCount > 0 && (
-                  <Link
-                    href="/orders/history"
-                    className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-bold text-[#2d2d2d] transition-colors"
-                  >
-                    ดูประวัติการสั่งซื้อ ({historyCount}) →
-                  </Link>
-                )}
+                <Link
+                  href="/orders"
+                  className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-bold text-[#2d2d2d] transition-colors"
+                >
+                  ← ดูออเดอร์ปัจจุบัน ({activeCount})
+                </Link>
                 <Link
                   href="/"
                   className="px-6 py-2.5 rounded-xl bg-mustard-500 hover:bg-mustard-600 text-white text-xs font-bold shadow-sm transition-all"
@@ -197,7 +177,7 @@ export default function UserOrdersPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 text-sm">
-                    {currentOrders.map((order) => {
+                    {historyOrders.map((order) => {
                       const status =
                         statusConfig[order.status] || {
                           label: order.status,
@@ -231,7 +211,7 @@ export default function UserOrdersPage() {
                                   key={i}
                                   className="flex items-center gap-2 text-xs"
                                 >
-                                  <span className="w-1.5 h-1.5 rounded-full bg-mustard-500 shrink-0" />
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
                                   <span className="font-semibold text-[#2d2d2d]">
                                     {item.menuName}
                                   </span>
@@ -263,23 +243,12 @@ export default function UserOrdersPage() {
                             </div>
                           </td>
 
-                          {/* Review Action */}
+                          {/* Reviewed status badge */}
                           <td className="px-6 py-4 align-top text-right">
-                            {order.status === "จัดส่งแล้ว" &&
-                              !order.isReviewed && (
-                                <button
-                                  onClick={() =>
-                                    setSelectedReviewOrder(order.id)
-                                  }
-                                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-mustard-500 hover:bg-mustard-600 text-white text-xs font-semibold shadow-sm hover:shadow transition-all duration-200 active:scale-[0.98] animate-pulse"
-                                >
-                                  <Star
-                                    size={14}
-                                    className="fill-white text-white"
-                                  />
-                                  <span>เขียนรีวิว</span>
-                                </button>
-                              )}
+                            <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-bold bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200/60 shadow-xs">
+                              <CheckCircle2 size={14} className="text-emerald-500" />
+                              <span>รีวิวเรียบร้อยแล้ว</span>
+                            </span>
                           </td>
                         </tr>
                       );
@@ -290,7 +259,7 @@ export default function UserOrdersPage() {
 
               {/* Mobile List View */}
               <div className="md:hidden divide-y divide-gray-100">
-                {currentOrders.map((order) => {
+                {historyOrders.map((order) => {
                   const status =
                     statusConfig[order.status] || {
                       label: order.status,
@@ -348,17 +317,12 @@ export default function UserOrdersPage() {
                         </span>
                       </div>
 
-                      {order.status === "จัดส่งแล้ว" && !order.isReviewed && (
-                        <div className="mt-4 pt-3 border-t border-gray-100">
-                          <button
-                            onClick={() => setSelectedReviewOrder(order.id)}
-                            className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-mustard-500 hover:bg-mustard-600 text-white text-xs font-semibold shadow-sm transition-all"
-                          >
-                            <Star size={15} className="fill-white" />
-                            <span>รีวิวเมนูนี้เลย</span>
-                          </button>
-                        </div>
-                      )}
+                      <div className="mt-3 pt-2 border-t border-gray-100 flex justify-end">
+                        <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-bold">
+                          <CheckCircle2 size={14} />
+                          <span>รีวิวเรียบร้อยแล้ว</span>
+                        </span>
+                      </div>
                     </div>
                   );
                 })}
@@ -367,19 +331,6 @@ export default function UserOrdersPage() {
           )}
         </div>
       </div>
-
-      <ReviewModal
-        orderId={selectedReviewOrder || ""}
-        isOpen={!!selectedReviewOrder}
-        onClose={() => setSelectedReviewOrder(null)}
-        onSuccess={() => {
-          const storedUser = localStorage.getItem("user");
-          if (storedUser) {
-            fetchOrders(JSON.parse(storedUser).id);
-          }
-        }}
-      />
     </div>
   );
 }
-

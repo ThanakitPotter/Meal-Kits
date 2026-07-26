@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { User, LogOut, LayoutDashboard, ShoppingBag, Menu as MenuIcon, ShoppingCart, ClipboardList, Info, Bell, Settings } from "lucide-react";
+import { User, LogOut, LayoutDashboard, ShoppingBag, Menu as MenuIcon, ShoppingCart, ClipboardList, Info, Bell, Settings, Clock } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import ReviewModal from "@/components/ReviewModal";
 
@@ -284,8 +284,13 @@ export default function Navbar() {
                 </li>
               )}
               <li>
-                <Link href="/orders" className="text-[#333333] mt-1 font-medium py-3 hover:bg-gray-100">
-                  <ShoppingBag size={18} /> ประวัติการสั่งซื้อ
+                <Link href="/orders" className="text-[#333333] mt-1 font-semibold py-3 hover:bg-gray-100 flex items-center gap-2">
+                  <Clock size={18} className="text-mustard-500" /> ออเดอร์ของฉัน (รอรีวิว / จัดเตรียม)
+                </Link>
+              </li>
+              <li>
+                <Link href="/orders/history" className="text-[#333333] mt-1 font-medium py-3 hover:bg-gray-100 flex items-center gap-2">
+                  <ShoppingBag size={18} className="text-emerald-600" /> ประวัติการสั่งซื้อ (เสร็จสิ้น)
                 </Link>
               </li>
               <li>
