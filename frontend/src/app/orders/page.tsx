@@ -189,8 +189,9 @@ export default function UserOrdersPage() {
     fetchOrders(user.id);
 
     const interval = setInterval(() => {
+      if (document.visibilityState !== "visible") return;
       fetchOrders(user.id);
-    }, 5000);
+    }, 60000);
 
     return () => clearInterval(interval);
   }, [router]);

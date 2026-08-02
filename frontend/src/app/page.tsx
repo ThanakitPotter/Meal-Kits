@@ -51,8 +51,9 @@ export default function Home() {
         setLoading(false);
       });
 
-    // Auto-refresh reviews every 5 seconds for a real-time feel
+    // Auto-refresh reviews every 60 seconds (only when tab is visible)
     const interval = setInterval(() => {
+      if (document.visibilityState !== "visible") return;
       fetch("/api/reviews")
         .then((res) => res.json())
         .then((reviewsData) => {
@@ -75,7 +76,7 @@ export default function Home() {
           }
         })
         .catch((err) => console.error("Error polling reviews:", err));
-    }, 5000);
+    }, 60000);
 
     return () => clearInterval(interval);
   }, []);

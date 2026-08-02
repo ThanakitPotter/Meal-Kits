@@ -54,7 +54,7 @@ export default function Navbar() {
         if (document.visibilityState === "visible") {
           fetchNotifications(user.id);
         }
-      }, 5000);
+      }, 60000);
       
       return () => clearInterval(interval);
     }

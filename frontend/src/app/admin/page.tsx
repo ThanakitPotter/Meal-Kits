@@ -159,10 +159,11 @@ export default function AdminPage() {
   useEffect(() => {
     fetchOrders(true);
 
-    // Auto-refresh every 5 seconds for real-time updates (silently without loader)
+    // Auto-refresh every 30 seconds for real-time updates (only when tab is visible)
     const interval = setInterval(() => {
+      if (document.visibilityState !== "visible") return;
       fetchOrders(false);
-    }, 5000);
+    }, 30000);
 
     return () => clearInterval(interval);
   }, []);
