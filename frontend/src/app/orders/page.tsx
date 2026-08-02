@@ -18,8 +18,127 @@ import {
   QrCode,
   Wallet,
   CheckCircle2,
+  MapPin,
+  ChefHat,
 } from "lucide-react";
 import ReviewModal from "@/components/ReviewModal";
+
+// ─── Order Tracking Timeline Component ───────────────────────────────────────
+const STEPS = [
+  {
+    key: "รอดำเนินการ",
+    label: "รับออเดอร์แล้ว",
+    sublabel: "ระบบได้รับคำสั่งซื้อของคุณ",
+    icon: CheckCircle2,
+    color: "text-red-500",
+    bg: "bg-red-50",
+    ring: "ring-red-400",
+    bar: "bg-red-400",
+    eta: "ทันที",
+  },
+  {
+    key: "กำลังจัดเตรียม",
+    label: "กำลังเตรียมวัตถุดิบ",
+    sublabel: "เชฟกำลังจัดชุดวัตถุดิบให้คุณ",
+    icon: ChefHat,
+    color: "text-amber-500",
+    bg: "bg-amber-50",
+    ring: "ring-amber-400",
+    bar: "bg-amber-400",
+    eta: "1–2 ชั่วโมง",
+  },
+  {
+    key: "จัดส่งแล้ว",
+    label: "จัดส่งแล้ว",
+    sublabel: "พัสดุกำลังมุ่งหน้าหาคุณ",
+    icon: MapPin,
+    color: "text-emerald-500",
+    bg: "bg-emerald-50",
+    ring: "ring-emerald-400",
+    bar: "bg-emerald-400",
+    eta: "ภายใน 24 ชม.",
+  },
+];
+
+function getStepIndex(status: string) {
+  return STEPS.findIndex((s) => s.key === status);
+}
+
+function OrderTimeline({ status }: { status: string }) {
+  const currentIdx = getStepIndex(status);
+
+  return (
+    <div className="mt-4 px-2 pb-1">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3 flex items-center gap-1.5">
+        <Truck size={11} />
+        ติดตามสถานะการจัดส่ง
+      </p>
+
+      <div className="relative flex items-start gap-0">
+        {STEPS.map((step, idx) => {
+          const isDone = idx <= currentIdx;
+          const isActive = idx === currentIdx;
+          const Icon = step.icon;
+
+          return (
+            <div key={step.key} className="flex-1 flex flex-col items-center relative">
+              {/* Connector bar between steps */}
+              {idx < STEPS.length - 1 && (
+                <div className="absolute top-4 left-1/2 w-full h-0.5 bg-gray-100 z-0">
+                  <div
+                    className={`h-full transition-all duration-700 ease-out ${
+                      idx < currentIdx ? step.bar : "bg-transparent"
+                    }`}
+                    style={{ width: idx < currentIdx ? "100%" : "0%" }}
+                  />
+                </div>
+              )}
+
+              {/* Step Icon Circle */}
+              <div
+                className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center ring-2 transition-all duration-500 ${
+                  isDone
+                    ? `${step.bg} ${step.ring} shadow-sm`
+                    : "bg-gray-100 ring-gray-200"
+                } ${isActive ? "scale-110 shadow-md" : ""}`}
+              >
+                {isActive ? (
+                  <>
+                    <span className={`absolute inset-0 rounded-full animate-ping opacity-30 ${step.bg}`} />
+                    <Icon size={14} className={isDone ? step.color : "text-gray-400"} />
+                  </>
+                ) : (
+                  <Icon size={14} className={isDone ? step.color : "text-gray-400"} />
+                )}
+              </div>
+
+              {/* Step label */}
+              <div className="mt-2 text-center px-1">
+                <p
+                  className={`text-[10px] font-bold leading-tight ${
+                    isDone ? "text-[#2d2d2d]" : "text-gray-400"
+                  } ${isActive ? "text-[#2d2d2d]" : ""}`}
+                >
+                  {step.label}
+                </p>
+                {isActive && (
+                  <p className="text-[9px] text-gray-400 mt-0.5 leading-tight hidden sm:block">
+                    {step.sublabel}
+                  </p>
+                )}
+                {isActive && (
+                  <span className="inline-block mt-1 text-[9px] font-semibold bg-[#E0A800]/10 text-[#b88a00] px-1.5 py-0.5 rounded-full">
+                    ~ {step.eta}
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 const statusConfig: Record<
   string,
@@ -187,133 +306,8 @@ export default function UserOrdersPage() {
             </div>
           ) : (
             <>
-              {/* Desktop Table View */}
-              <div className="hidden md:block overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-gray-50/80 text-gray-500 uppercase text-[11px] font-semibold tracking-wider border-b border-gray-100">
-                      <th className="px-6 py-4">รหัสออเดอร์</th>
-                      <th className="px-6 py-4">รายการเมนู</th>
-                      <th className="px-6 py-4">ยอดชำระ</th>
-                      <th className="px-6 py-4">สถานะ</th>
-                      <th className="px-6 py-4 text-right">การกระทำ</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100 text-sm">
-                    {currentOrders.map((order) => {
-                      const status =
-                        statusConfig[order.status] || {
-                          label: order.status,
-                          badge:
-                            "bg-gray-100 text-gray-700 border border-gray-200",
-                          icon: Clock,
-                        };
-                      const StatusIcon = status.icon;
-
-                      return (
-                        <tr
-                          key={order.id}
-                          className="hover:bg-gray-50/60 transition-colors group"
-                        >
-                          {/* Order ID & Date */}
-                          <td className="px-6 py-4 align-top">
-                            <div className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[#2d2d2d] bg-gray-100/90 px-2.5 py-1 rounded-lg">
-                              #{order.id.slice(0, 8)}
-                            </div>
-                            <div className="text-xs text-gray-400 flex items-center gap-1 mt-1.5">
-                              <Calendar size={12} />
-                              <span>{formatDate(order.createdAt)}</span>
-                            </div>
-                          </td>
-
-                          {/* Menu items */}
-                          <td className="px-6 py-4 align-top">
-                            <div className="space-y-1">
-                              {order.items?.map((item, i) => (
-                                <div
-                                  key={i}
-                                  className="flex items-center gap-2 text-xs"
-                                >
-                                  <span className="w-1.5 h-1.5 rounded-full bg-mustard-500 shrink-0" />
-                                  <span className="font-semibold text-[#2d2d2d]">
-                                    {item.menuName}
-                                  </span>
-                                  <span className="text-gray-400 font-mono">
-                                    ×{item.quantity}
-                                  </span>
-                                  <span className="text-[11px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">
-                                    {item.servings} คน
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </td>
-
-                          {/* Price */}
-                          <td className="px-6 py-4 align-top">
-                            <span className="font-bold text-[#2d2d2d] text-base block">
-                              ฿{order.totalPrice.toLocaleString()}
-                            </span>
-                            {order.paymentMethod && (
-                              <span className="inline-flex items-center gap-1 mt-1 text-[11px] font-semibold text-charcoal-700 bg-gray-100 px-2 py-0.5 rounded-md">
-                                {order.paymentMethod.includes("PromptPay") || order.paymentMethod.includes("พร้อมเพย์") ? (
-                                  <>
-                                    <QrCode className="w-3 h-3 text-mustard-600" />
-                                    <span>พร้อมเพย์ (QR)</span>
-                                  </>
-                                ) : (
-                                  <>
-                                    <Wallet className="w-3 h-3 text-mustard-600" />
-                                    <span>ปลายทาง COD</span>
-                                  </>
-                                )}
-                              </span>
-                            )}
-                            {order.paymentSlipUrl && (
-                              <span className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                                <span>แนบสลิปแล้ว</span>
-                              </span>
-                            )}
-                          </td>
-
-                          {/* Status Badge */}
-                          <td className="px-6 py-4 align-top">
-                            <div
-                              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold ${status.badge}`}
-                            >
-                              <StatusIcon size={14} />
-                              <span>{status.label}</span>
-                            </div>
-                          </td>
-
-                          {/* Review Action */}
-                          <td className="px-6 py-4 align-top text-right">
-                            {order.status === "จัดส่งแล้ว" &&
-                              !order.isReviewed && (
-                                <button
-                                  onClick={() =>
-                                    setSelectedReviewOrder(order.id)
-                                  }
-                                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-mustard-500 hover:bg-mustard-600 text-white text-xs font-semibold shadow-sm hover:shadow transition-all duration-200 active:scale-[0.98] animate-pulse"
-                                >
-                                  <Star
-                                    size={14}
-                                    className="fill-white text-white"
-                                  />
-                                  <span>เขียนรีวิว</span>
-                                </button>
-                              )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Mobile List View */}
-              <div className="md:hidden divide-y divide-gray-100">
+              {/* Unified Card View — All screen sizes */}
+              <div className="divide-y divide-gray-100">
                 {currentOrders.map((order) => {
                   const status =
                     statusConfig[order.status] || {
@@ -326,60 +320,85 @@ export default function UserOrdersPage() {
                   return (
                     <div
                       key={order.id}
-                      className="p-5 hover:bg-gray-50/50 transition-colors"
+                      className="p-5 sm:p-6 hover:bg-gray-50/50 transition-colors"
                     >
-                      <div className="flex justify-between items-start mb-3">
+                      {/* ─── Top Row: Order ID + Status Badge + Price ─── */}
+                      <div className="flex flex-wrap justify-between items-start gap-3 mb-4">
                         <div>
-                          <div className="inline-flex items-center gap-1 font-mono font-bold text-xs bg-gray-100 text-[#2d2d2d] px-2.5 py-1 rounded-lg">
+                          <div className="inline-flex items-center gap-1.5 font-mono font-bold text-xs bg-gray-100 text-[#2d2d2d] px-2.5 py-1 rounded-lg">
                             #{order.id.slice(0, 8)}
                           </div>
-                          <div className="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                          <div className="text-xs text-gray-400 mt-1.5 flex items-center gap-1">
                             <Calendar size={11} />
                             <span>{formatDate(order.createdAt)}</span>
                           </div>
                         </div>
 
-                        <div
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-semibold ${status.badge}`}
-                        >
-                          <StatusIcon size={13} />
-                          <span>{status.label}</span>
+                        <div className="flex items-center gap-2 flex-wrap justify-end">
+                          <span className="font-bold text-[#2d2d2d] text-base">
+                            ฿{order.totalPrice.toLocaleString()}
+                          </span>
+                          <div
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-semibold ${status.badge}`}
+                          >
+                            <StatusIcon size={13} />
+                            <span>{status.label}</span>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="bg-gray-50/70 rounded-2xl p-3 my-3 space-y-1.5">
+                      {/* ─── Menu Items ─── */}
+                      <div className="bg-gray-50/70 rounded-2xl p-3 space-y-1.5 mb-1">
                         {order.items?.map((item, i) => (
                           <div
                             key={i}
                             className="flex items-center justify-between text-xs"
                           >
-                            <span className="font-semibold text-[#2d2d2d]">
-                              {item.menuName}
-                            </span>
-                            <span className="text-gray-500">
-                              ×{item.quantity} ({item.servings} คน)
+                            <div className="flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#E0A800] shrink-0" />
+                              <span className="font-semibold text-[#2d2d2d]">
+                                {item.menuName}
+                              </span>
+                            </div>
+                            <span className="text-gray-500 font-mono">
+                              ×{item.quantity}
+                              <span className="text-gray-400 ml-1 font-sans">({item.servings} คน)</span>
                             </span>
                           </div>
                         ))}
+                        <div className="flex items-center gap-2 pt-1.5 mt-1.5 border-t border-gray-200/60">
+                          {order.paymentMethod && (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-gray-600 bg-white border border-gray-100 px-2 py-0.5 rounded-md shadow-sm">
+                              {order.paymentMethod.includes("PromptPay") || order.paymentMethod.includes("พร้อมเพย์") ? (
+                                <><QrCode className="w-3 h-3 text-[#E0A800]" /><span>พร้อมเพย์ (QR)</span></>
+                              ) : (
+                                <><Wallet className="w-3 h-3 text-[#E0A800]" /><span>ปลายทาง COD</span></>
+                              )}
+                            </span>
+                          )}
+                          {order.paymentSlipUrl && (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                              <span>แนบสลิปแล้ว</span>
+                            </span>
+                          )}
+                        </div>
                       </div>
 
-                      <div className="flex justify-between items-center pt-1">
-                        <span className="text-xs text-gray-500 font-medium">
-                          ยอดรวมทั้งสิ้น
-                        </span>
-                        <span className="font-bold text-[#2d2d2d] text-base">
-                          ฿{order.totalPrice.toLocaleString()}
-                        </span>
+                      {/* ─── 🚚 Order Tracking Timeline ─── */}
+                      <div className="bg-gradient-to-br from-gray-50/80 to-white border border-gray-100 rounded-2xl px-4 pt-4 pb-3 mt-3">
+                        <OrderTimeline status={order.status} />
                       </div>
 
+                      {/* ─── Review Button ─── */}
                       {order.status === "จัดส่งแล้ว" && !order.isReviewed && (
-                        <div className="mt-4 pt-3 border-t border-gray-100">
+                        <div className="mt-3 pt-3 border-t border-gray-100">
                           <button
                             onClick={() => setSelectedReviewOrder(order.id)}
-                            className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-mustard-500 hover:bg-mustard-600 text-white text-xs font-semibold shadow-sm transition-all"
+                            className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#E0A800] hover:bg-[#c98e10] text-white text-xs font-semibold shadow-sm transition-all animate-pulse"
                           >
                             <Star size={15} className="fill-white" />
-                            <span>รีวิวเมนูนี้เลย</span>
+                            <span>รีวิวเมนูนี้เลย ✨</span>
                           </button>
                         </div>
                       )}
